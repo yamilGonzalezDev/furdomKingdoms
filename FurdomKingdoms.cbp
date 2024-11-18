@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="FurdomKingdoms" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/gameName" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="src" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add library="sfml-graphics-d" />
+					<Add library="sfml-window-d" />
+					<Add library="sfml-system-d" />
+					<Add library="sfml-audio-d" />
+					<Add library="box2d" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/gameName" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="src" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="sfml-graphics" />
+					<Add library="sfml-window" />
+					<Add library="sfml-system" />
+					<Add library="sfml-audio" />
+					<Add library="box2d" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add directory="SFML/include" />
+			<Add directory="box2d-2.4.2/include" />
+		</Compiler>
+		<Linker>
+			<Add directory="SFML/lib" />
+			<Add directory="box2d-2.4.2/lib" />
+		</Linker>
+		<Unit filename="src/collisions.cpp" />
+		<Unit filename="src/collisions.hpp" />
+		<Unit filename="src/director.cpp" />
+		<Unit filename="src/director.hpp" />
+		<Unit filename="src/enemy.cpp" />
+		<Unit filename="src/enemy.hpp" />
+		<Unit filename="src/entity.cpp" />
+		<Unit filename="src/entity.hpp" />
+		<Unit filename="src/fooDraw.hpp" />
+		<Unit filename="src/limits.cpp" />
+		<Unit filename="src/limits.hpp" />
+		<Unit filename="src/main.cpp" />
+		<Unit filename="src/npc.cpp" />
+		<Unit filename="src/npc.hpp" />
+		<Unit filename="src/player.cpp" />
+		<Unit filename="src/player.hpp" />
+		<Unit filename="src/scene.cpp" />
+		<Unit filename="src/scene.hpp" />
+		<Unit filename="src/texts.cpp" />
+		<Unit filename="src/texts.hpp" />
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>
