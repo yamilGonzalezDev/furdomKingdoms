@@ -40,4 +40,6 @@ class Entity
         virtual void switchState(int newState);
 };
 
+
+
 #endif // ENTITY_HPP_INCLUDED

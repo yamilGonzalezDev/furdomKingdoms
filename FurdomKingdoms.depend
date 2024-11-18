@@ -620,7 +620,7 @@
 	<SFML/Graphics/Drawable.hpp>
 	<SFML/Window/GlResource.hpp>
 
-1731585654 d:\utn\programación ii\furdomkingdoms\src\entity.hpp
+1731894424 d:\utn\programación ii\furdomkingdoms\src\entity.hpp
 	<SFML/Graphics.hpp>
 	<box2d/box2d.h>
 
@@ -651,12 +651,12 @@
 	<SFML/Graphics.hpp>
 	<iostream>
 
-1730848661 source:d:\utn\programación ii\furdomkingdoms\src\enemy.cpp
+1731894327 source:d:\utn\programación ii\furdomkingdoms\src\enemy.cpp
 	"enemy.hpp"
 	"texts.hpp"
 	<iostream>
 
-1730848661 d:\utn\programación ii\furdomkingdoms\src\enemy.hpp
+1731894353 d:\utn\programación ii\furdomkingdoms\src\enemy.hpp
 	<SFML/Graphics.hpp>
 	<string>
 	"texts.hpp"
@@ -677,7 +677,7 @@
 1731814404 source:d:\utn\programación ii\furdomkingdoms\src\npc.cpp
 	"npc.hpp"
 
-1731857644 source:d:\utn\programación ii\furdomkingdoms\src\player.cpp
+1731894328 source:d:\utn\programación ii\furdomkingdoms\src\player.cpp
 	"player.hpp"
 	<iostream>
 
