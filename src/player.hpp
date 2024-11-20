@@ -5,6 +5,7 @@
 #include <box2d/box2d.h>
 #include <unordered_map>
 #include "entity.hpp"
+#include "observer.hpp"
 
 enum class PlayerState
 {
@@ -25,10 +26,9 @@ struct Animation
     Animation(std::vector<sf::IntRect> frames, float duration) : frames(frames), frameDuration(duration) {};
 };
 
-class Player
+class Player : public Observer
 {
     private:
-
         const sf::Vector2i CHARACTER_SIZE = {50, 37};
         const float PPM = 30.f;
         const float MOVE_SPEED = 10.f;
@@ -55,6 +55,7 @@ class Player
         sf::Texture texture;
 
     public:
+        void notify(ObserverEvents) override;
         Player();
         ~Player();
         b2Body* playerBody = nullptr;
@@ -67,10 +68,12 @@ class Player
         void updateAnimation(float);
         void draw(sf::RenderWindow&);
         void createPlayer(b2World*, float, float);
+        void setIsMoving(bool);
         void setIsJumping(bool);
         void setIsOnGround(bool);
         void setFall();
 
+        void getIsMoving() const;
         bool getIsOnGround() const;
         sf::Vector2f getPos() const;
         PlayerState getPlayerState() const;

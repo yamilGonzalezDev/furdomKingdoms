@@ -3,8 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "observer.hpp"
 
-class Scene
+class Scene : public Observer
 {
     protected:
         const float WIDTH = 1366;
@@ -26,11 +27,11 @@ class Scene
 class MenuScene : public Scene
 {
     public:
-        MenuScene();
         void init() override;
-        void update(sf::RenderWindow&, float) override;
-        void render(sf::RenderWindow&) override;
         void cleanup() override;
+        void render(sf::RenderWindow&) override;
+        void update(sf::RenderWindow&, float) override;
+        void notify(ObserverEvents) override;
         bool shouldTransition() override;
         sf::Texture backgroundTexture;
         sf::Sprite background;
@@ -47,6 +48,7 @@ class HouseScene : public Scene
         void update(sf::RenderWindow&, float) override;
         void render(sf::RenderWindow&) override;
         void cleanup() override;
+        void notify(ObserverEvents) override;
         bool shouldTransition() override;
         sf::Texture backgroundTexture, candleText, tableText, farTexture, midTexture, nearTexture;
         sf::Sprite background,candle, table, farSprite, midSprite, nearSprite;
@@ -62,6 +64,7 @@ class HouseScene : public Scene
 class CityScene : public Scene
 {
     public:
+        void notify(ObserverEvents) override;
         void init() override;
         void update(sf::RenderWindow&, float) override;
         void render(sf::RenderWindow&) override;

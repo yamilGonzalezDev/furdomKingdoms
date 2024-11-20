@@ -11,20 +11,23 @@
 #include<SFML/Graphics.hpp>
 #include<box2d/box2d.h>
 
+enum class Kind
+{
+    PLAYER,
+    FLOOR,
+    NPC,
+    SENSOR,
+    LIMITS,
+    WALLS
+};
+
 typedef struct
 {
-    int kind;
+    Kind kind;
     void* object;
 } UserdataTag;
 
-const int PLAYER = 1;
-const int FLOOR = 2;
-const int NPC = 3;
-const int SENSOR = 4;
-const int LIMITS = 5;
-const int WALLS = 6;
-
-void initBody(b2Body*, int, void*);
+void initBody(b2Body*, Kind, void*);
 
 class Entity
 {

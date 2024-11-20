@@ -12,12 +12,12 @@ class Ground
         void createGround(b2World*, float, float, float, float);
 };
 
-class Bounds
+class Limits
 {
     private:
         const float PPM;
     public:
-        Bounds() : PPM(30.f) {};
+        Limits() : PPM(30.f) {};
         void createWall(b2World*, float, float, float, float);
         void createFloor(b2World*, float, float, float, float);
 };
