@@ -1,6 +1,6 @@
 #include "entity.hpp"
 
-void initBody(b2Body* body, int entityKind, void* object)
+void initBody(b2Body* body, Kind entityKind, void* object)
 {
     UserdataTag* tag = new UserdataTag{entityKind, object};
 

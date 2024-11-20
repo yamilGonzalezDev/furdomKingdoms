@@ -9,6 +9,7 @@
 #include "collisions.hpp"
 #include "scene.hpp"
 #include "fooDraw.hpp"
+#include "observer.hpp"
 
 enum class SceneState
 {
@@ -25,12 +26,19 @@ class Director
         void run();
         void switchScene(SceneState newState);
     private:
-        FooDraw fooDrawInstance;
+        const float WIDTH;
+        const float HEIGHT;
+        const float timeStep = 1.f/60.f;
+        const float FLOORHEIGHT = 528.f;
+        const int velocityIterations = 6;
+        const int positionIterations = 2;
+        Subject subject;
         sf::Sprite test2S;
         sf::Texture test2;
         sf::RenderWindow window;
         sf::View view;
         sf::Clock clock;
+        FooDraw fooDrawInstance;
         SceneState nextScene;
         SceneState currentSceneState;
         bool pause;
@@ -48,20 +56,12 @@ class Director
 
         b2World* world = nullptr;
         b2Vec2 gravity;
-        Collision* collisionCheck = nullptr;
 
         Ground* ground = nullptr;
         Player* player = nullptr;
         Scene* currentScene = nullptr;
+        Collision* collisionCheck = nullptr;
 
-        const float timeStep = 1.f/60.f;
-        const int velocityIterations = 6;
-        const int positionIterations = 2;
-        const float WIDTH = 1366;
-        const float HEIGHT = 768;
-        const float FLOORHEIGHT = 528.f;
-
-        void init();
         void render();
         void fadeIn();
         void fadeOut();

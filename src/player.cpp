@@ -1,8 +1,14 @@
 #include "player.hpp"
 #include <iostream>
 
+void Player::notify(ObserverEvents event)
+{
+    if(event == ObserverEvents::Colision)
+        std::cout << "Avise al player" << std::endl;
+}
+
 Player::Player()
-    : isMoving(false), isJumping(false), isOnGround(true), isAttacking(false)
+    : isJumping(false), isOnGround(true), isAttacking(false)
 {
     loadTextures();
     animations.emplace(PlayerState::Idle, Animation{
@@ -73,7 +79,7 @@ void Player::createPlayer(b2World* world, float posX, float posY)
     fixtureDef.filter.maskBits = CATEGORY_LIMITS | CATEGORY_GROUND | CATEGORY_FLOOR;
     playerBody->CreateFixture(&fixtureDef);
 
-    initBody(playerBody, PLAYER, this);
+    initBody(playerBody, Kind::PLAYER, this);
 
     sprite.setTexture(texture);
     sprite.setScale(1.5f, 1.5f);
@@ -89,8 +95,6 @@ void Player::setAnimation(PlayerState state)
     {
         currentAnimation = &(it->second);
     }
-    currentFrame = 0;
-    elapsedTime = 0.f;
 }
 
 void Player::switchState(PlayerState state)
@@ -98,6 +102,9 @@ void Player::switchState(PlayerState state)
     if(currentState == state) return;
 
     currentState = state;
+
+    currentFrame = 0;
+    elapsedTime = 0.f;
 
     setAnimation(state);
 }
@@ -145,9 +152,8 @@ void Player::keyboardInput(float deltaTime)
         sprite.setOrigin(0.f, 0.f);
         isMoving = true;
     }
-    else if(!isJumping)
+    else
     {
-        velocity.x = 0;
         isMoving = false;
     }
 
@@ -187,11 +193,24 @@ void Player::setIsOnGround(bool v){ isOnGround = v; }
 
 void Player::setIsJumping(bool v){ isJumping = v; }
 
+void Player::setIsMoving(bool v) { isMoving = v; }
+
 PlayerState Player::getPlayerState() const { return currentState; }
 
 sf::Vector2f Player::getPos() const { return sprite.getPosition(); }
 
-bool Player::getIsOnGround() const { return isOnGround; }
+bool Player::getIsOnGround() const
+{
+    std::cout << "isOnGround: " << isOnGround << std::endl;
+    std::cout << "isJumping: " << isJumping << std::endl;
+    std::cout << "isMoving: " << isMoving << std::endl;
+    return false;
+}
+
+void Player::getIsMoving() const
+{
+    std::cout << "LinearVelocity: " << playerBody->GetLinearVelocity().y << std::endl;
+}
 
 void Player::debug() const { return; }
 

@@ -21,10 +21,10 @@ void Ground::createGround(b2World* world, float x, float y, float width, float h
 
     groundBody->CreateFixture(&fixtureDef);
 
-    initBody(groundBody, FLOOR, this);
+    initBody(groundBody, Kind::FLOOR, this);
 }
 
-void Bounds::createWall(b2World* world, float x, float y, float width, float height)
+void Limits::createWall(b2World* world, float x, float y, float width, float height)
 {
     b2BodyDef bodyDef;
     bodyDef.type = b2_staticBody;
@@ -43,10 +43,10 @@ void Bounds::createWall(b2World* world, float x, float y, float width, float hei
 
     body->CreateFixture(&fixtureDef);
 
-    initBody(body, WALLS, this);
+    initBody(body, Kind::WALLS, this);
 }
 
-void Bounds::createFloor(b2World* world, float x, float y, float width, float height)
+void Limits::createFloor(b2World* world, float x, float y, float width, float height)
 {
     b2BodyDef bodyDef;
     bodyDef.type = b2_staticBody;
@@ -65,5 +65,5 @@ void Bounds::createFloor(b2World* world, float x, float y, float width, float he
 
     body->CreateFixture(&fixtureDef);
 
-    initBody(body, FLOOR, this);
+    initBody(body, Kind::FLOOR, this);
 }

@@ -50,6 +50,8 @@
 			<Add directory="box2d-2.4.2/include" />
 		</Compiler>
 		<Linker>
+			<Add option="-static-libstdc++" />
+			<Add option="-static-libgcc" />
 			<Add directory="SFML/lib" />
 			<Add directory="box2d-2.4.2/lib" />
 		</Linker>
@@ -67,6 +69,7 @@
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/npc.cpp" />
 		<Unit filename="src/npc.hpp" />
+		<Unit filename="src/observer.hpp" />
 		<Unit filename="src/player.cpp" />
 		<Unit filename="src/player.hpp" />
 		<Unit filename="src/scene.cpp" />

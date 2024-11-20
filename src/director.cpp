@@ -1,9 +1,22 @@
 #include <iostream>
 #include "director.hpp"
+#include "collisions.hpp"
 
-Director::Director() : fooDrawInstance(window)
+Director::Director() : WIDTH(1366), HEIGHT(768), window(sf::VideoMode(WIDTH, HEIGHT), "Furdom Kingdoms"), fooDrawInstance(window)
 {
-    init();
+    window.setFramerateLimit(60);
+    currentSceneState = SceneState::MainMenu;
+    drawPlayer = false;
+    transitioning = false;
+    currentScene = nullptr;
+    view.setSize(/*window.getSize().x, window.getSize().y*/window.getSize().x * 0.5f, window.getSize().y * 0.5f);
+    alpha = 0;
+    oscureciendo = true;
+    aclarando = false;
+    cargando = false;
+    fadeRectangle.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));
+    fadeRectangle.setFillColor(sf::Color(0, 0, 0, alpha));
+    subject.addObserver(currentScene);
 }
 
 void Director::run() ///buclePrincipal();
@@ -15,11 +28,31 @@ void Director::run() ///buclePrincipal();
         {
             if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             {
+                if(currentScene != nullptr)
+                {
+                    delete currentScene;
+                    currentScene = nullptr;
+                }
                 window.close();
             }
         }
 
         float deltaTime = clock.restart().asSeconds();
+        if(player != nullptr)
+        {
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+            {
+                subject.eventTrigger(ObserverEvents::Default);
+            }
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+            {
+                subject.eventTrigger(ObserverEvents::Cinematic);
+            }
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+            {
+                subject.eventTrigger(ObserverEvents::Colision);
+            }
+        }
 
         updateScene(deltaTime);
         update(deltaTime);
@@ -30,29 +63,37 @@ void Director::run() ///buclePrincipal();
 
 Director::~Director()
 {
-    //delete npc;
-    delete world;
-    delete player;
-    delete ground;
-    delete collisionCheck;
-}
+    if(collisionCheck != nullptr)
+    {
+        delete collisionCheck;
+        collisionCheck = nullptr;
+    }
 
-void Director::init()
-{
-    window.create(sf::VideoMode(WIDTH, HEIGHT), "Furdom Kingdoms");
-    window.setFramerateLimit(60);
-    currentSceneState = SceneState::MainMenu;
-    drawPlayer = false;
-    transitioning = false;
-    window.setFramerateLimit(60);
-    currentScene = nullptr;
-    view.setSize(/*window.getSize().x, window.getSize().y*/window.getSize().x * 0.5f, window.getSize().y * 0.5f);
-    alpha = 0;
-    oscureciendo = true;
-    aclarando = false;
-    cargando = false;
-    fadeRectangle.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));
-    fadeRectangle.setFillColor(sf::Color(0, 0, 0, alpha));
+    if(player != nullptr)
+    {
+        delete player;
+        player = nullptr;
+    }
+
+    if(ground != nullptr)
+    {
+        delete ground;
+        ground = nullptr;
+    }
+
+    if(world != nullptr)
+    {
+        for (b2Body* body = world->GetBodyList(); body != nullptr; body = body->GetNext())
+        {
+            UserdataTag* tag = reinterpret_cast<UserdataTag*>(body->GetUserData().pointer);
+
+            delete tag;
+
+            world->DestroyBody(body);
+        }
+        delete world;
+        world = nullptr;
+    }
 }
 
 void Director::initMenuScene()
@@ -79,9 +120,13 @@ void Director::initMenuScene()
 
 void Director::initHouseScene()
 {
+    subject.removeObserver(currentScene);
+
     if(currentScene != nullptr) currentScene = nullptr;
 
     currentScene = new HouseScene;
+
+    subject.addObserver(currentScene);
 
     currentScene->init();
 
@@ -102,7 +147,7 @@ void Director::initHouseScene()
     ground = new Ground;
     ground->createGround(world, 0.f, 723.f, 3000.f, 0.f);
 
-    Bounds bounds;
+    Limits bounds;
 
     bounds.createWall(world, 361.f, 656.f, 8.f, 64.f);
 
@@ -112,6 +157,9 @@ void Director::initHouseScene()
 
     player = new Player;
     player->createPlayer(world, 400.f, 658.f);
+
+    subject.addObserver(player);
+    subject.addObserver(collisionCheck);
 }
 
 void Director::initCityScene()
@@ -143,28 +191,22 @@ void Director::createSensor(b2World* world, b2Body*& body, float x, float y)
 
     body->CreateFixture(&fixtureDef);
 
-    initBody(body, SENSOR, this);
+    initBody(body, Kind::SENSOR, this);
 }
 
 void Director::cleanScene(b2World* world)
 {
-    if(world == nullptr) return;
-
-    for (b2Body* body = world->GetBodyList(); body != nullptr; body = body->GetNext())
-    {
-        b2Body* nextBody = body->GetNext();
-
-        UserdataTag* tag = reinterpret_cast<UserdataTag*>(body->GetUserData().pointer);
-
-        delete tag;
-
-        world->DestroyBody(body);
-
-        body = nextBody;
-    }
-
     if(world != nullptr)
     {
+        for (b2Body* body = world->GetBodyList(); body != nullptr; body = body->GetNext())
+        {
+            UserdataTag* tag = reinterpret_cast<UserdataTag*>(body->GetUserData().pointer);
+
+            delete tag;
+
+            world->DestroyBody(body);
+        }
+
         delete world;
         world = nullptr;
     }
