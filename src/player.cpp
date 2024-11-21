@@ -1,4 +1,5 @@
 #include "player.hpp"
+#include "entity.hpp"
 #include <iostream>
 
 void Player::notify(ObserverEvents event)
@@ -81,9 +82,13 @@ void Player::createPlayer(b2World* world, float posX, float posY)
 
     initBody(playerBody, Kind::PLAYER, this);
 
+    std::cout << "PlayerBody cuando se crea: " << playerBody << std::endl;
+
     sprite.setTexture(texture);
     sprite.setScale(1.5f, 1.5f);
     sprite.setTextureRect(animations.at(currentState).frames[0]);
+    sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height / 2.f);
+    sprite.setPosition(playerBody->GetPosition().x * PPM, playerBody->GetPosition().y * PPM);
 
     playerBody->SetFixedRotation(true);
 }
@@ -130,7 +135,6 @@ void Player::keyboardInput(float deltaTime)
         return;
     }
 
-
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && isOnGround && !isJumping)
     {
         velocity.y = -10;
@@ -142,32 +146,26 @@ void Player::keyboardInput(float deltaTime)
     {
         velocity.x = -MOVE_SPEED;
         sprite.setScale(-1.5f, 1.5f);
-        sprite.setOrigin(sprite.getLocalBounds().width, 0.f);
-        isMoving = true;
+        setIsMoving(true);
     }
     else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
         velocity.x = MOVE_SPEED;
         sprite.setScale(1.5f, 1.5f);
-        sprite.setOrigin(0.f, 0.f);
-        isMoving = true;
+        setIsMoving(true);
     }
     else
     {
-        velocity.x = 0;
-        isMoving = false;
+        velocity.x = 0.f;
+        setIsMoving(false);
     }
 
     playerBody->SetLinearVelocity(velocity);
-
-    updatePhysics();
 }
 
 void Player::updatePhysics()
 {
-    sf::Vector2f spritePos((playerBody->GetPosition().x * PPM) - 36.f, (playerBody->GetPosition().y * PPM) - 29.f);
-
-    sprite.setPosition(spritePos);
+    sprite.setPosition(playerBody->GetPosition().x * PPM, playerBody->GetPosition().y * PPM);
 
     if(!isOnGround && playerBody->GetLinearVelocity().y > 0)
     {

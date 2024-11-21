@@ -45,11 +45,12 @@ class Director
         bool pause;
         bool start;
         bool drawNpcs;
-        bool drawPlayer;
-        bool transitioning;
-        bool oscureciendo;
-        bool aclarando;
         bool cargando;
+        bool aclarando;
+        bool drawPlayer;
+        bool drawEnemies;
+        bool oscureciendo;
+        bool transitioning;
         int alpha;
         float transitionTime;
         float maxTransitionTime;

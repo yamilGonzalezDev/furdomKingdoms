@@ -6,9 +6,16 @@
 #include <string>
 #include "texts.hpp"
 
+enum class EnemyState
+{
+    IDLE,
+    PATROLLING,
+    ATTACKING
+};
+
 class Enemy
 {
-    private:
+    protected:
         const float PPM = 30.f;
     public:
         virtual ~Enemy() = default;
@@ -17,7 +24,7 @@ class Enemy
         virtual void createBody() = 0;
         virtual void update(float) = 0;
         virtual void loadTextures() = 0;
-        virtual void render(sf::RenderWindow) = 0;
+        virtual void render(sf::RenderWindow&) = 0;
 };
 
 class EnemyFactory
@@ -30,6 +37,9 @@ class EnemyFactory
 class Ghost : public Enemy
 {
     private:
+        int currentFrame;
+        float elapsedTime;
+        float frameDuration = 0.f;
         sf::IntRect animations[4];
         sf::Sprite sprite;
         sf::Texture texture;
@@ -41,7 +51,7 @@ class Ghost : public Enemy
         void createBody() override;
         void update(float) override;
         void loadTextures() override;
-        void render(sf::RenderWindow) override;
+        void render(sf::RenderWindow&) override;
 };
 
 class Enemy2 : public Enemy
@@ -54,7 +64,7 @@ class Enemy2 : public Enemy
         void createBody() override;
         void update(float) override;
         void loadTextures() override;
-        void render(sf::RenderWindow) override;
+        void render(sf::RenderWindow&) override;
 };
 
 class Enemy3 : public Enemy
@@ -67,7 +77,7 @@ class Enemy3 : public Enemy
         void createBody() override;
         void update(float) override;
         void loadTextures() override;
-        void render(sf::RenderWindow) override;
+        void render(sf::RenderWindow&) override;
 };
 
 #endif // ENEMY_HPP_INCLUDED

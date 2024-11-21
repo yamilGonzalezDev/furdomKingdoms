@@ -1,19 +1,22 @@
 #include <iostream>
 #include "director.hpp"
 #include "collisions.hpp"
+#include "entity.hpp"
 
 Director::Director() : WIDTH(1366), HEIGHT(768), window(sf::VideoMode(WIDTH, HEIGHT), "Furdom Kingdoms"), fooDrawInstance(window)
 {
     window.setFramerateLimit(60);
     currentSceneState = SceneState::MainMenu;
+    drawNpcs = false;
+    cargando = false;
+    aclarando = false;
     drawPlayer = false;
+    oscureciendo = true;
+    drawEnemies = false;
     transitioning = false;
     currentScene = nullptr;
     view.setSize(/*window.getSize().x, window.getSize().y*/window.getSize().x * 0.5f, window.getSize().y * 0.5f);
     alpha = 0;
-    oscureciendo = true;
-    aclarando = false;
-    cargando = false;
     fadeRectangle.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));
     fadeRectangle.setFillColor(sf::Color(0, 0, 0, alpha));
     subject.addObserver(currentScene);
@@ -38,20 +41,22 @@ void Director::run() ///buclePrincipal();
         }
 
         float deltaTime = clock.restart().asSeconds();
-        if(player != nullptr)
+        if(world != nullptr)
         {
+            int n = 0;
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
             {
-                subject.eventTrigger(ObserverEvents::Default);
+                for(b2Body* body = world->GetBodyList(); body != nullptr; body = body->GetNext())
+                {
+                    n++;
+                    std::cout << "Llamada donde se encuentra el world declarado." << std::endl << "Body " << n << ": " << static_cast<unsigned int>(body->GetUserData().pointer) << std::endl;
+                }
             }
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::E))
-            {
-                subject.eventTrigger(ObserverEvents::Cinematic);
-            }
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-            {
-                subject.eventTrigger(ObserverEvents::Colision);
-            }
+        }
+
+        if(player != nullptr)
+        {
+            ///player->playerBody!=nullptr ? std::cout<<"Funciono"<<std::endl : std::cout<<"No funco"<<std::endl;
         }
 
         updateScene(deltaTime);
@@ -100,8 +105,9 @@ void Director::initMenuScene()
 {
     if(world != nullptr) world = nullptr;
     if(player != nullptr) player = nullptr;
-    drawPlayer = false;
     drawNpcs = false;
+    drawPlayer = false;
+    drawEnemies = false;
 
     currentScene = new MenuScene;
     currentScene->init();
@@ -134,6 +140,8 @@ void Director::initHouseScene()
 
     drawPlayer = true;
 
+    drawEnemies = true;
+
     world = new b2World(b2Vec2(0.f, 10.f));
     collisionCheck = new Collision();
     world->SetContactListener(collisionCheck);
@@ -151,14 +159,14 @@ void Director::initHouseScene()
 
     bounds.createWall(world, 361.f, 656.f, 8.f, 64.f);
 
-    bounds.createWall(world, 791.f, 597.f, 8.f, 56.f);
+    bounds.createWall(world, 791.f, 622.f, 8.f, 32.f);
 
     bounds.createFloor(world, 577.f, 712.f, 223.f, 8.f);
 
     player = new Player;
     player->createPlayer(world, 400.f, 658.f);
 
-    enemy = factory.createEnemy(world, 1, 600.f, 658.f, 27.f, 46.f);
+    /*enemy = new Ghost(world, 600.f, 500.f, 27.f, 23.f);*/
 
     subject.addObserver(player);
     subject.addObserver(collisionCheck);
@@ -236,7 +244,11 @@ void Director::render()
     if(world!=nullptr)
     {
         world->DebugDraw();
-        //std::cout << "Dibujando debug" << std::endl;
+    }
+
+    if(drawEnemies)
+    {
+        //enemy->render(window);
     }
 
     window.display();
@@ -341,11 +353,6 @@ void Director::updateScene(float deltaTime)
     {
         currentScene->update(window, deltaTime);
     }
-
-    if(drawPlayer)
-    {
-        player->updateAnimation(deltaTime);
-    }
 }
 
 void Director::gameEvents(float deltaTime)
@@ -354,11 +361,17 @@ void Director::gameEvents(float deltaTime)
     {
         player->debug();
     }
-    if(window.hasFocus() && player != nullptr)
+    if(window.hasFocus() && player != nullptr && drawPlayer)
     {
+        player->updatePhysics();
+        player->updateAnimation(deltaTime);
         player->keyboardInput(deltaTime);
     }
     if(drawNpcs)
     {
+    }
+    if(drawEnemies)
+    {
+        //enemy->update(deltaTime);
     }
 }

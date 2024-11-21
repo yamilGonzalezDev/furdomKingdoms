@@ -4,9 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include <box2d/box2d.h>
 #include <unordered_map>
-#include "entity.hpp"
-
-
 
 enum class NpcState
 {

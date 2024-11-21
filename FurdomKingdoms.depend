@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1732108053 source:d:\utn\programación ii\furdomkingdoms\src\collisions.cpp
+1732226413 source:d:\utn\programación ii\furdomkingdoms\src\collisions.cpp
 	"collisions.hpp"
 	"player.hpp"
 	"entity.hpp"
@@ -198,11 +198,10 @@
 	"b2_api.h"
 	"b2_joint.h"
 
-1732111871 d:\utn\programación ii\furdomkingdoms\src\player.hpp
+1732202071 d:\utn\programación ii\furdomkingdoms\src\player.hpp
 	<SFML/Graphics.hpp>
 	<box2d/box2d.h>
 	<unordered_map>
-	"entity.hpp"
 	"observer.hpp"
 
 1731167480 d:\utn\programación ii\furdomkingdoms\sfml\include\sfml\graphics.hpp
@@ -623,16 +622,17 @@
 	<SFML/Graphics/Drawable.hpp>
 	<SFML/Window/GlResource.hpp>
 
-1732138954 d:\utn\programación ii\furdomkingdoms\src\entity.hpp
+1732162212 d:\utn\programación ii\furdomkingdoms\src\entity.hpp
 	<SFML/Graphics.hpp>
 	<box2d/box2d.h>
 
-1732158684 source:d:\utn\programación ii\furdomkingdoms\src\director.cpp
+1732217369 source:d:\utn\programación ii\furdomkingdoms\src\director.cpp
 	<iostream>
 	"director.hpp"
 	"collisions.hpp"
+	"entity.hpp"
 
-1732139431 d:\utn\programación ii\furdomkingdoms\src\director.hpp
+1732160111 d:\utn\programación ii\furdomkingdoms\src\director.hpp
 	<SFML/Graphics.hpp>
 	<box2d/box2d.h>
 	"enemy.hpp"
@@ -644,11 +644,10 @@
 	"fooDraw.hpp"
 	"observer.hpp"
 
-1731814372 d:\utn\programación ii\furdomkingdoms\src\npc.hpp
+1732161084 d:\utn\programación ii\furdomkingdoms\src\npc.hpp
 	<SFML/Graphics.hpp>
 	<box2d/box2d.h>
 	<unordered_map>
-	"entity.hpp"
 
 1731948408 d:\utn\programación ii\furdomkingdoms\src\limits.hpp
 	<box2d/box2d.h>
@@ -658,11 +657,12 @@
 	<iostream>
 	"observer.hpp"
 
-1732158967 source:d:\utn\programación ii\furdomkingdoms\src\enemy.cpp
+1732166892 source:d:\utn\programación ii\furdomkingdoms\src\enemy.cpp
 	"enemy.hpp"
 	"entity.hpp"
+	<iostream>
 
-1732158861 d:\utn\programación ii\furdomkingdoms\src\enemy.hpp
+1732160242 d:\utn\programación ii\furdomkingdoms\src\enemy.hpp
 	<SFML/Graphics.hpp>
 	<box2d/box2d.h>
 	<string>
@@ -671,7 +671,7 @@
 1731585750 d:\utn\programación ii\furdomkingdoms\src\texts.hpp
 	<SFML/Graphics.hpp>
 
-1732030018 source:d:\utn\programación ii\furdomkingdoms\src\entity.cpp
+1732202071 source:d:\utn\programación ii\furdomkingdoms\src\entity.cpp
 	"entity.hpp"
 
 1732029912 source:d:\utn\programación ii\furdomkingdoms\src\limits.cpp
@@ -684,8 +684,9 @@
 1731814404 source:d:\utn\programación ii\furdomkingdoms\src\npc.cpp
 	"npc.hpp"
 
-1732158919 source:d:\utn\programación ii\furdomkingdoms\src\player.cpp
+1732212956 source:d:\utn\programación ii\furdomkingdoms\src\player.cpp
 	"player.hpp"
+	"entity.hpp"
 	<iostream>
 
 1732108239 source:d:\utn\programación ii\furdomkingdoms\src\scene.cpp

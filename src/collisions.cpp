@@ -16,6 +16,21 @@ void Collision::BeginContact(b2Contact* contact)
     b2Body* bA = fA->GetBody();
     b2Body* bB = fB->GetBody();
 
+    b2Body* pBody;
+
+    if(bA != nullptr)
+    {
+        b2World* world = bA->GetWorld();
+        for(b2Body* body = world->GetBodyList(); body != nullptr; body = body->GetNext())
+        {
+            UserdataTag* it = reinterpret_cast<UserdataTag*>(body->GetUserData().pointer);
+            if(it->kind == Kind::PLAYER)
+            {
+                pBody = body;
+            }
+        }
+    }
+
     UserdataTag* tagA = reinterpret_cast<UserdataTag*>(bA->GetUserData().pointer);
     UserdataTag* tagB = reinterpret_cast<UserdataTag*>(bB->GetUserData().pointer);
 
@@ -33,11 +48,22 @@ void Collision::BeginContact(b2Contact* contact)
     }
     if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::WALLS)
     {
-        notify(ObserverEvents::Cinematic);
+        b2Vec2 currentVelocity = pBody->GetLinearVelocity();
+        pBody->SetLinearVelocity(b2Vec2(-currentVelocity.x * 0.5f, 4.f));
     }
     if(tagB->kind == Kind::PLAYER && tagA->kind == Kind::WALLS)
     {
-        notify(ObserverEvents::Cinematic);
+        b2Vec2 currentVelocity = pBody->GetLinearVelocity();
+        pBody->SetLinearVelocity(b2Vec2(-currentVelocity.x * 0.5f, 4.f));
+    }
+
+    if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::ENEMY)
+    {
+        std::cout << "Enemigo detectado" << std::endl;
+    }
+    if(tagB->kind == Kind::PLAYER && tagA->kind == Kind::ENEMY)
+    {
+        std::cout << "Enemigo detectado" << std::endl;
     }
 }
 

@@ -4,7 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include <box2d/box2d.h>
 #include <unordered_map>
-#include "entity.hpp"
 #include "observer.hpp"
 
 enum class PlayerState
@@ -58,7 +57,7 @@ class Player : public Observer
         void notify(ObserverEvents) override;
         Player();
         ~Player();
-        b2Body* playerBody = nullptr;
+        b2Body* playerBody;
         sf::Sprite test;
         bool loadTextures();
         void update();
