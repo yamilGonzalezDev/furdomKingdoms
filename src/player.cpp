@@ -154,6 +154,7 @@ void Player::keyboardInput(float deltaTime)
     }
     else
     {
+        velocity.x = 0;
         isMoving = false;
     }
 

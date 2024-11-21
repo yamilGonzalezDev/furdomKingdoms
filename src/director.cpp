@@ -158,6 +158,8 @@ void Director::initHouseScene()
     player = new Player;
     player->createPlayer(world, 400.f, 658.f);
 
+    enemy = factory.createEnemy(world, 1, 600.f, 658.f, 27.f, 46.f);
+
     subject.addObserver(player);
     subject.addObserver(collisionCheck);
 }

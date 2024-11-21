@@ -2,6 +2,7 @@
 #define ENEMY_HPP_INCLUDED
 
 #include <SFML/Graphics.hpp>
+#include <box2d/box2d.h>
 #include <string>
 #include "texts.hpp"
 
@@ -13,30 +14,34 @@ class Enemy
         virtual ~Enemy() = default;
 
         virtual void logic() = 0;
-        virtual void render() = 0;
-        virtual void update() = 0;
         virtual void createBody() = 0;
-        virtual void loadTextures(std::string&) = 0;
+        virtual void update(float) = 0;
+        virtual void loadTextures() = 0;
+        virtual void render(sf::RenderWindow) = 0;
 };
 
 class EnemyFactory
 {
     public:
         virtual ~EnemyFactory();
-        Enemy* createEnemy();
+        Enemy* createEnemy(b2World*, int, float, float, float, float);
 };
 
-class Enemy1 : public Enemy
+class Ghost : public Enemy
 {
     private:
+        sf::IntRect animations[4];
         sf::Sprite sprite;
         sf::Texture texture;
+        b2Body* body;
     public:
+        Ghost();
+        Ghost(b2World*, float, float, float, float);
         void logic() override;
-        void render() override;
-        void update() override;
         void createBody() override;
-        void loadTextures(std::string&) override;
+        void update(float) override;
+        void loadTextures() override;
+        void render(sf::RenderWindow) override;
 };
 
 class Enemy2 : public Enemy
@@ -46,10 +51,10 @@ class Enemy2 : public Enemy
         sf::Texture texture;
     public:
         void logic() override;
-        void render() override;
-        void update() override;
         void createBody() override;
-        void loadTextures(std::string&) override;
+        void update(float) override;
+        void loadTextures() override;
+        void render(sf::RenderWindow) override;
 };
 
 class Enemy3 : public Enemy
@@ -59,10 +64,10 @@ class Enemy3 : public Enemy
         sf::Texture texture;
     public:
         void logic() override;
-        void render() override;
-        void update() override;
         void createBody() override;
-        void loadTextures(std::string&) override;
+        void update(float) override;
+        void loadTextures() override;
+        void render(sf::RenderWindow) override;
 };
 
 #endif // ENEMY_HPP_INCLUDED

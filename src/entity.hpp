@@ -14,11 +14,12 @@
 enum class Kind
 {
     PLAYER,
-    FLOOR,
+    ENEMY,
     NPC,
-    SENSOR,
+    FLOOR,
     LIMITS,
-    WALLS
+    WALLS,
+    SENSOR
 };
 
 typedef struct

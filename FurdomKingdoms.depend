@@ -623,18 +623,19 @@
 	<SFML/Graphics/Drawable.hpp>
 	<SFML/Window/GlResource.hpp>
 
-1732030018 d:\utn\programación ii\furdomkingdoms\src\entity.hpp
+1732138954 d:\utn\programación ii\furdomkingdoms\src\entity.hpp
 	<SFML/Graphics.hpp>
 	<box2d/box2d.h>
 
-1732108053 source:d:\utn\programación ii\furdomkingdoms\src\director.cpp
+1732158684 source:d:\utn\programación ii\furdomkingdoms\src\director.cpp
 	<iostream>
 	"director.hpp"
 	"collisions.hpp"
 
-1732107336 d:\utn\programación ii\furdomkingdoms\src\director.hpp
+1732139431 d:\utn\programación ii\furdomkingdoms\src\director.hpp
 	<SFML/Graphics.hpp>
 	<box2d/box2d.h>
+	"enemy.hpp"
 	"npc.hpp"
 	"player.hpp"
 	"limits.hpp"
@@ -657,13 +658,13 @@
 	<iostream>
 	"observer.hpp"
 
-1732109362 source:d:\utn\programación ii\furdomkingdoms\src\enemy.cpp
+1732158967 source:d:\utn\programación ii\furdomkingdoms\src\enemy.cpp
 	"enemy.hpp"
-	"texts.hpp"
-	<iostream>
+	"entity.hpp"
 
-1732111523 d:\utn\programación ii\furdomkingdoms\src\enemy.hpp
+1732158861 d:\utn\programación ii\furdomkingdoms\src\enemy.hpp
 	<SFML/Graphics.hpp>
+	<box2d/box2d.h>
 	<string>
 	"texts.hpp"
 
@@ -683,7 +684,7 @@
 1731814404 source:d:\utn\programación ii\furdomkingdoms\src\npc.cpp
 	"npc.hpp"
 
-1732108053 source:d:\utn\programación ii\furdomkingdoms\src\player.cpp
+1732158919 source:d:\utn\programación ii\furdomkingdoms\src\player.cpp
 	"player.hpp"
 	<iostream>
 

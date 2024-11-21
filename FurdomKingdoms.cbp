@@ -55,6 +55,7 @@
 			<Add directory="SFML/lib" />
 			<Add directory="box2d-2.4.2/lib" />
 		</Linker>
+		<Unit filename="src/animationManager.hpp" />
 		<Unit filename="src/collisions.cpp" />
 		<Unit filename="src/collisions.hpp" />
 		<Unit filename="src/director.cpp" />

@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <box2d/box2d.h>
+#include "enemy.hpp"
 #include "npc.hpp"
 #include "player.hpp"
 #include "limits.hpp"
@@ -57,6 +58,8 @@ class Director
         b2World* world = nullptr;
         b2Vec2 gravity;
 
+        EnemyFactory factory;
+        Enemy* enemy = nullptr;
         Ground* ground = nullptr;
         Player* player = nullptr;
         Scene* currentScene = nullptr;
