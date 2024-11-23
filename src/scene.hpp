@@ -5,6 +5,14 @@
 #include <iostream>
 #include "observer.hpp"
 
+enum class SceneState
+{
+    MainMenu,
+    House,
+    City,
+    Default
+};
+
 class Scene : public Observer
 {
     protected:
@@ -21,7 +29,9 @@ class Scene : public Observer
 
         virtual void cleanup() = 0;
 
-        virtual bool shouldTransition() = 0;
+        virtual bool shouldTransition() const { return false; };
+
+        virtual SceneState nextSceneState() const = 0;
 };
 
 class MenuScene : public Scene
@@ -32,7 +42,8 @@ class MenuScene : public Scene
         void render(sf::RenderWindow&) override;
         void update(sf::RenderWindow&, float) override;
         void notify(ObserverEvents) override;
-        bool shouldTransition() override;
+        bool shouldTransition() const override;
+        SceneState nextSceneState() const override;
         sf::Texture backgroundTexture;
         sf::Sprite background;
     private:
@@ -49,7 +60,8 @@ class HouseScene : public Scene
         void render(sf::RenderWindow&) override;
         void cleanup() override;
         void notify(ObserverEvents) override;
-        bool shouldTransition() override;
+        bool shouldTransition() const override;
+        SceneState nextSceneState() const override;
         sf::Texture backgroundTexture, candleText, tableText, farTexture, midTexture, nearTexture;
         sf::Sprite background,candle, table, farSprite, midSprite, nearSprite;
         sf::RectangleShape rect;
@@ -69,7 +81,8 @@ class CityScene : public Scene
         void update(sf::RenderWindow&, float) override;
         void render(sf::RenderWindow&) override;
         void cleanup() override;
-        bool shouldTransition() override;
+        bool shouldTransition() const override;
+        SceneState nextSceneState() const override;
         sf::Texture backgroundTexture;
         sf::Sprite background;
     private:

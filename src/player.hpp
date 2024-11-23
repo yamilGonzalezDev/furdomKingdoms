@@ -63,7 +63,7 @@ class Player : public Observer
         void update();
         void cinematic();
         void updatePhysics();
-        void keyboardInput(float);
+        void keyboardInput();
         void updateAnimation(float);
         void draw(sf::RenderWindow&);
         void createPlayer(b2World*, float, float);

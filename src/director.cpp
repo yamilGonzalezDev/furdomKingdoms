@@ -3,18 +3,22 @@
 #include "collisions.hpp"
 #include "entity.hpp"
 
+void debugA(std::string a)
+{
+    std::cout << "Mensaje de " + a << std::endl;
+}
+
 Director::Director() : WIDTH(1366), HEIGHT(768), window(sf::VideoMode(WIDTH, HEIGHT), "Furdom Kingdoms"), fooDrawInstance(window)
 {
     window.setFramerateLimit(60);
-    currentSceneState = SceneState::MainMenu;
+    nextScene = SceneState::MainMenu;
     drawNpcs = false;
     cargando = false;
     aclarando = false;
     drawPlayer = false;
     oscureciendo = true;
     drawEnemies = false;
-    transitioning = false;
-    currentScene = nullptr;
+    currentScene = new MenuScene;
     view.setSize(/*window.getSize().x, window.getSize().y*/window.getSize().x * 0.5f, window.getSize().y * 0.5f);
     alpha = 0;
     fadeRectangle.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));
@@ -29,76 +33,114 @@ void Director::run() ///buclePrincipal();
         sf::Event event;
         while(window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+            if(event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             {
-                if(currentScene != nullptr)
-                {
-                    delete currentScene;
-                    currentScene = nullptr;
-                }
                 window.close();
             }
         }
 
         float deltaTime = clock.restart().asSeconds();
-        if(world != nullptr)
+
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
         {
-            int n = 0;
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-            {
-                for(b2Body* body = world->GetBodyList(); body != nullptr; body = body->GetNext())
-                {
-                    n++;
-                    std::cout << "Llamada donde se encuentra el world declarado." << std::endl << "Body " << n << ": " << static_cast<unsigned int>(body->GetUserData().pointer) << std::endl;
-                }
-            }
+
         }
 
-        if(player != nullptr)
-        {
-            ///player->playerBody!=nullptr ? std::cout<<"Funciono"<<std::endl : std::cout<<"No funco"<<std::endl;
-        }
-
+        debugA("Comienzo");
         updateScene(deltaTime);
+        debugA("UpdateScene");
         update(deltaTime);
-        gameEvents(deltaTime);
+        debugA("update");        gameEvents(deltaTime);
+        debugA("gameEvents");
         render();
+        debugA("render");
     }
 }
 
-Director::~Director()
+void Director::update(float deltaTime)
 {
-    if(collisionCheck != nullptr)
+    if(drawPlayer && player != nullptr)
     {
-        delete collisionCheck;
-        collisionCheck = nullptr;
+        if(window.hasFocus() && player != nullptr && drawPlayer)
+        {
+            player->updatePhysics();
+            player->updateAnimation(deltaTime);
+            player->keyboardInput();
+        }
     }
-
-    if(player != nullptr)
+    debugA("player");
+    if(drawNpcs)
     {
-        delete player;
-        player = nullptr;
     }
-
-    if(ground != nullptr)
+    debugA("npcs");
+    if(drawEnemies)
     {
-        delete ground;
-        ground = nullptr;
     }
+    debugA("enemy");
+}
 
+void Director::updateScene(float deltaTime)
+{
+    debugA("Comienzo updateScene");
+    if(currentScene != nullptr && currentScene->shouldTransition()) changeScene = true;
+    debugA("transition");
+    if(changeScene)
+    {
+        switch(/*currentScene->*/ nextScene)
+        {
+            case SceneState::MainMenu:
+                setScene(new MenuScene);
+                break;
+            case SceneState::House:
+                setScene(new HouseScene);
+                break;
+            case SceneState::City:
+                setScene(new CityScene);
+                break;
+            case SceneState::Default:
+                break;
+        }
+    }
+    else if(currentScene != nullptr)
+    {
+        currentScene->update(window, deltaTime);
+    }
+}
+
+void Director::gameEvents(float deltaTime)
+{
     if(world != nullptr)
     {
-        for (b2Body* body = world->GetBodyList(); body != nullptr; body = body->GetNext())
-        {
-            UserdataTag* tag = reinterpret_cast<UserdataTag*>(body->GetUserData().pointer);
-
-            delete tag;
-
-            world->DestroyBody(body);
-        }
-        delete world;
-        world = nullptr;
+        world->Step(timeStep, velocityIterations, positionIterations);
     }
+}
+
+void Director::render()
+{
+    window.clear();
+    currentScene->render(window);
+    if(drawNpcs)
+    {
+    }
+    debugA("currentScene");
+    if(drawPlayer)
+    {
+        view.setCenter(player->getPos().x + 33.f, 570);
+        window.setView(view);
+        player->draw(window);
+    }
+    debugA("Player");
+    if(world!=nullptr)
+    {
+        world->DebugDraw();
+    }
+    debugA("debugDraw");
+    if(drawEnemies)
+    {
+        //enemy->render(window);
+    }
+    debugA("enemy");
+    window.display();
 }
 
 void Director::initMenuScene()
@@ -107,9 +149,9 @@ void Director::initMenuScene()
     if(player != nullptr) player = nullptr;
     drawNpcs = false;
     drawPlayer = false;
-    drawEnemies = false;
+    drawEnemies = true;
 
-    currentScene = new MenuScene;
+    setScene(new MenuScene);
     currentScene->init();
 
     sf::Texture texture;
@@ -228,150 +270,78 @@ void Director::cleanScene(b2World* world)
     }
 }
 
-void Director::render()
+void Director::fadeOut(float deltaTime)
 {
-    window.clear();
-    currentScene->render(window);
-    if(drawNpcs)
+    if (alpha < 255)
     {
+        alpha += static_cast<int>(speed * deltaTime);
+        fadeRectangle.setFillColor(sf::Color(0, 0, 0, alpha));
     }
-    if(drawPlayer)
+    else
     {
-        view.setCenter(player->getPos().x + 33.f, 570);
-        window.setView(view);
-        player->draw(window);
-    }
-    if(world!=nullptr)
-    {
-        world->DebugDraw();
-    }
-
-    if(drawEnemies)
-    {
-        //enemy->render(window);
-    }
-
-    window.display();
-}
-
-void Director::update(float deltaTime)
-{
-    if(currentScene->shouldTransition() && currentSceneState != SceneState::House)
-    {
-        switchScene(SceneState::House);
-    }
-    else if(currentScene->shouldTransition() && currentSceneState != SceneState::MainMenu)
-    {
-        switchScene(SceneState::MainMenu);
-    }
-
-    if(!oscureciendo)
-    {
-        currentScene->update(window, deltaTime);
+        oscureciendo = false;
+        aclarando = true;
+        initHouseScene();
+        alpha = 255;
+        std::cout << "Escena cambiada a House" << std::endl;
     }
 }
 
-void Director::fadeOut()
+void Director::fadeIn(float deltaTime)
 {
-    if(oscureciendo)
+    if(alpha > 0)
     {
-        if(alpha < 255)
-        {
-            alpha += 1;
-            fadeRectangle.setFillColor(sf::Color(0, 0, 0, alpha));
-        }
-        else
-        {
-            oscureciendo = false;
-            initHouseScene();
-            aclarando = true;
-            alpha = 255;
-        }
+        alpha -= 5;
+        fadeRectangle.setFillColor(sf::Color(0, 0, 0, alpha));
+    }
+    else
+    {
+        aclarando = false;
+        changeScene = false;
     }
 }
 
-void Director::fadeIn()
-{
-     if(aclarando)
-    {
-        if(alpha > 1)
-        {
-            alpha -= 1;
-            fadeRectangle.setFillColor(sf::Color(0, 0, 0, alpha));
-        }
-        else
-        {
-            aclarando = false;
-            transitioning = false;
-        }
-    }
-}
-
-void Director::switchScene(SceneState newScene)
+void Director::setScene(Scene* newScene)
 {
     if (currentScene != nullptr)
     {
         delete currentScene;
         currentScene = nullptr;
     }
-
-    currentSceneState = newScene;
-
-    switch(currentSceneState)
-    {
-        case SceneState::MainMenu:
-            initMenuScene();
-            break;
-        case SceneState::House:
-            fadeOut();
-            initHouseScene();
-            fadeIn();
-            break;
-        case SceneState::City:
-            initMenuScene();
-            break;
-    }
+    currentScene = newScene;
 }
 
-void Director::updateScene(float deltaTime)
+Director::~Director()
 {
+    if(collisionCheck != nullptr)
+    {
+        delete collisionCheck;
+        collisionCheck = nullptr;
+    }
+
+    if(player != nullptr)
+    {
+        delete player;
+        player = nullptr;
+    }
+
+    if(ground != nullptr)
+    {
+        delete ground;
+        ground = nullptr;
+    }
+
     if(world != nullptr)
     {
-        world->Step(timeStep, velocityIterations, positionIterations);
-    }
+        for (b2Body* body = world->GetBodyList(); body != nullptr; body = body->GetNext())
+        {
+            UserdataTag* tag = reinterpret_cast<UserdataTag*>(body->GetUserData().pointer);
 
-    if(currentSceneState == SceneState::MainMenu && currentScene == nullptr)
-    {
-        initMenuScene();
-    }
-    else if(currentSceneState == SceneState::House && currentScene == nullptr)
-    {
-        initHouseScene();
-    }
+            delete tag;
 
-    if(currentScene != nullptr)
-    {
-        currentScene->update(window, deltaTime);
-    }
-}
-
-void Director::gameEvents(float deltaTime)
-{
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-    {
-        player->debug();
-    }
-    if(window.hasFocus() && player != nullptr && drawPlayer)
-    {
-        player->updatePhysics();
-        player->updateAnimation(deltaTime);
-        player->keyboardInput(deltaTime);
-    }
-    if(drawNpcs)
-    {
-    }
-    if(drawEnemies)
-    {
-        //enemy->update(deltaTime);
+            world->DestroyBody(body);
+        }
+        delete world;
+        world = nullptr;
     }
 }

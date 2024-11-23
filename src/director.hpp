@@ -12,20 +12,12 @@
 #include "fooDraw.hpp"
 #include "observer.hpp"
 
-enum class SceneState
-{
-    MainMenu,
-    House,
-    City
-};
-
 class Director
 {
     public:
         Director();
         ~Director();
         void run();
-        void switchScene(SceneState newState);
     private:
         const float WIDTH;
         const float HEIGHT;
@@ -33,6 +25,7 @@ class Director
         const float FLOORHEIGHT = 528.f;
         const int velocityIterations = 6;
         const int positionIterations = 2;
+        const float speed = .5f;
         Subject subject;
         sf::Sprite test2S;
         sf::Texture test2;
@@ -41,18 +34,17 @@ class Director
         sf::Clock clock;
         FooDraw fooDrawInstance;
         SceneState nextScene;
-        SceneState currentSceneState;
         bool pause;
         bool start;
         bool drawNpcs;
         bool cargando;
         bool aclarando;
         bool drawPlayer;
+        bool changeScene;
         bool drawEnemies;
         bool oscureciendo;
-        bool transitioning;
         int alpha;
-        float transitionTime;
+        float transitionTime = 0.f;
         float maxTransitionTime;
         sf::RectangleShape fadeRectangle;
 
@@ -66,10 +58,11 @@ class Director
         Scene* currentScene = nullptr;
         Collision* collisionCheck = nullptr;
 
+        void setScene(Scene*);
         void render();
-        void fadeIn();
-        void fadeOut();
         void update(float);
+        void fadeIn(float);
+        void fadeOut(float);
         void initCityScene();
         void initMenuScene();
         void initHouseScene();

@@ -77,6 +77,7 @@ void MenuScene::update(sf::RenderWindow& window, float deltaTime)
         else
             menuOptions[i].setFillColor(sf::Color::White);
     }
+    //std::cout << currentOption << std::endl;
 }
 
 void MenuScene::render(sf::RenderWindow& window)
@@ -93,7 +94,7 @@ void MenuScene::cleanup()
 
 }
 
-bool MenuScene::shouldTransition()
+bool MenuScene::shouldTransition() const
 {
     if(currentOption == 0 && sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
     {
@@ -104,9 +105,12 @@ bool MenuScene::shouldTransition()
 
 void MenuScene::notify(ObserverEvents event)
 {
-    if(event == ObserverEvents::Cinematic) return;
 }
 
+SceneState MenuScene::nextSceneState() const
+{
+    return SceneState::House;
+}
 /**CASA**/
 
 void HouseScene::init()
@@ -209,8 +213,9 @@ void HouseScene::cleanup()
 
 }
 
-bool HouseScene::shouldTransition()
+bool HouseScene::shouldTransition() const
 {
+
     return false;
 }
 
@@ -222,6 +227,10 @@ void HouseScene::notify(ObserverEvents event)
     }
 }
 
+SceneState HouseScene::nextSceneState() const
+{
+    return SceneState::Default;
+}
 /**CIUDAD**/
 
 void CityScene::init()
@@ -249,7 +258,7 @@ void CityScene::cleanup()
 
 }
 
-bool CityScene::shouldTransition()
+bool CityScene::shouldTransition() const
 {
     return false;
 }
@@ -257,4 +266,9 @@ bool CityScene::shouldTransition()
 void CityScene::notify(ObserverEvents event)
 {
     if(event == ObserverEvents::Cinematic) return;
+}
+
+SceneState CityScene::nextSceneState() const
+{
+    return SceneState::Default;
 }

@@ -37,7 +37,7 @@ void Limits::createWall(b2World* world, float x, float y, float width, float hei
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &box;
     fixtureDef.density = 0.f;
-    fixtureDef.friction = 0.01f;
+    fixtureDef.friction = 0.f;
     fixtureDef.filter.categoryBits = CATEGORY_LIMITS;
     fixtureDef.filter.maskBits = 0xFFFF;
 

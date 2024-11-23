@@ -125,7 +125,7 @@ void Player::updateAnimation(float deltaTime)
     }
 }
 
-void Player::keyboardInput(float deltaTime)
+void Player::keyboardInput()
 {
     velocity = playerBody->GetLinearVelocity();
 
@@ -134,6 +134,7 @@ void Player::keyboardInput(float deltaTime)
         switchState(PlayerState::Attacking);
         return;
     }
+
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && isOnGround && !isJumping)
     {
