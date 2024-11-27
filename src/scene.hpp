@@ -49,7 +49,7 @@ class MenuScene : public Scene
     private:
         sf::Font font;
         sf::Text menuOptions[3];
-        int currentOption;
+        int currentOption = 0;
 };
 
 class HouseScene : public Scene
@@ -70,7 +70,8 @@ class HouseScene : public Scene
         float parallaxFactorFar = 0.05f;
         float parallaxFactorMid = 0.2f;
         float parallaxFactorNear = .5f;
-        bool cinematic;
+        bool transition;
+        bool cinematic = false;
 };
 
 class CityScene : public Scene

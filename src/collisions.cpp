@@ -1,11 +1,12 @@
 #include "collisions.hpp"
+#include <iostream>
 #include "player.hpp"
 #include "entity.hpp"
-#include <iostream>
+#include "limits.hpp"
 
 void Collision::notify(ObserverEvents event)
 {
-    if(event == ObserverEvents::Default) std::cout << "Avise a las colisiones" << std::endl;
+    if(event != ObserverEvents::DEFAULT) return;
 }
 
 void Collision::BeginContact(b2Contact* contact)
@@ -30,6 +31,18 @@ void Collision::BeginContact(b2Contact* contact)
         Player* player = reinterpret_cast<Player*>(tagB->object);
         player->setIsJumping(false);
         player->setIsOnGround(true);
+    }
+
+    if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::HOUSESENSOR)
+    {
+        Sensor* sensor = reinterpret_cast<Sensor*>(tagB->object);
+        sensor->sensorNotify(true);
+    }
+
+    if(tagB->kind == Kind::PLAYER && tagA->kind == Kind::HOUSESENSOR)
+    {
+        Sensor* sensor = reinterpret_cast<Sensor*>(tagB->object);
+        sensor->sensorNotify(true);
     }
 
     if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::ENEMY)

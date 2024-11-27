@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <box2d/box2d.h>
+#include <memory>
 #include "enemy.hpp"
 #include "npc.hpp"
 #include "player.hpp"
@@ -25,10 +26,8 @@ class Director
         const float FLOORHEIGHT = 528.f;
         const int velocityIterations = 6;
         const int positionIterations = 2;
-        const float speed = .5f;
+        const float speed = 200.f;
         Subject subject;
-        sf::Sprite test2S;
-        sf::Texture test2;
         sf::RenderWindow window;
         sf::View view;
         sf::Clock clock;
@@ -43,7 +42,7 @@ class Director
         bool changeScene;
         bool drawEnemies;
         bool oscureciendo;
-        int alpha;
+        int alpha = 255;
         float transitionTime = 0.f;
         float maxTransitionTime;
         sf::RectangleShape fadeRectangle;
@@ -51,26 +50,25 @@ class Director
         b2World* world = nullptr;
         b2Vec2 gravity;
 
-        EnemyFactory factory;
+        std::unique_ptr<BoundsFactory> boundFactory;
+        Bounds* sensor = nullptr;
         Enemy* enemy = nullptr;
-        Ground* ground = nullptr;
         Player* player = nullptr;
         Scene* currentScene = nullptr;
         Collision* collisionCheck = nullptr;
 
-        void setScene(Scene*);
-        void render();
         void update(float);
+        void updateScene(float);
+        void gameEvents(float);
+        void render();
+
         void fadeIn(float);
         void fadeOut(float);
         void initCityScene();
         void initMenuScene();
         void initHouseScene();
-        void transition(float);
-        void gameEvents(float);
-        void updateScene(float);
+        void setScene(Scene*);
         void cleanScene(b2World*);
-        void createSensor(b2World*, b2Body*&, float, float);
 };
 
 #endif // DIRECTOR_HPP_INCLUDED

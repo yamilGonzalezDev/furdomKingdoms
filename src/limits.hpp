@@ -2,24 +2,57 @@
 #define LIMITS_HPP_INCLUDED
 
 #include <box2d/box2d.h>
+#include <iostream>
+#include "entity.hpp"
+#include "observer.hpp"
 
-class Ground
+class Bounds
 {
-    private:
-        const float PPM;
+    protected:
+        const float PPM = 30.f;
+        b2Body* body;
     public:
-        Ground() : PPM(30.f) {};
-        void createGround(b2World*, float, float, float, float);
+        virtual ~Bounds() {};
+        bool sensorNotify(bool v) { return v; };
 };
 
-class Limits
+class Limits : public Bounds
 {
-    private:
-        const float PPM;
     public:
-        Limits() : PPM(30.f) {};
-        void createWall(b2World*, float, float, float, float);
-        void createFloor(b2World*, float, float, float, float);
+        Limits(b2World*, float, float, float, float, Kind);
+};
+
+class Wall : public Bounds
+{
+    public:
+        Wall(b2World*, float, float, float, float, Kind);
+};
+
+class Sensor : public Bounds, public Observer
+{
+    public:
+        Sensor(b2World*, float, float, float, float, Kind);
+        void notify(ObserverEvents) override {};
+};
+
+class BoundsFactory
+{
+    public:
+        virtual Bounds* createBound(b2World*, float, float, float, float, Kind) const = 0;
+        virtual Bounds* createWall(b2World*, float, float, float, float, Kind) const { return nullptr; };
+};
+
+class LimitsFactory : public BoundsFactory
+{
+    public:
+        Bounds* createBound(b2World*, float, float, float, float, Kind) const override;
+        Bounds* createWall(b2World*, float, float, float, float, Kind) const override;
+};
+
+class SensorFactory : public BoundsFactory
+{
+    public:
+        Bounds* createBound(b2World*, float, float, float, float, Kind) const override;
 };
 
 #endif // LIMITS_HPP_INCLUDED

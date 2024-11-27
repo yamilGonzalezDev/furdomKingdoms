@@ -7,14 +7,14 @@ void MenuScene::init()
     if(!backgroundTexture.loadFromFile("Textures/menu/scroll.png"))
     {
         std::cerr << "Error cargando las texturas del menu" << std::endl;
+        return;
     }
 
     if(!font.loadFromFile("Textures/font/menuFont.ttf"))
     {
         std::cerr << "Error al cargar la fuente del menú" << std::endl;
+        return;
     }
-
-    currentOption = 0;
 
     for(int i = 0; i < 3; i++)
     {
@@ -27,7 +27,7 @@ void MenuScene::init()
     float totalHeight = menuOptions[0].getGlobalBounds().height + 70.f;
 
     menuOptions[0].setString("Start");
-    menuOptions[0].setOrigin(menuOptions[0].getGlobalBounds().width / 2, menuOptions[1].getGlobalBounds().height / 2);
+    menuOptions[0].setOrigin(menuOptions[0].getGlobalBounds().width / 2, menuOptions[0].getGlobalBounds().height / 2);
     menuOptions[0].setPosition(WIDTH / 2, HEIGHT / 2 - totalHeight * 2);
 
     menuOptions[1].setString("Settings");
@@ -77,7 +77,6 @@ void MenuScene::update(sf::RenderWindow& window, float deltaTime)
         else
             menuOptions[i].setFillColor(sf::Color::White);
     }
-    //std::cout << currentOption << std::endl;
 }
 
 void MenuScene::render(sf::RenderWindow& window)
@@ -105,17 +104,19 @@ bool MenuScene::shouldTransition() const
 
 void MenuScene::notify(ObserverEvents event)
 {
+    if(event != ObserverEvents::DEFAULT) return;
 }
 
 SceneState MenuScene::nextSceneState() const
 {
     return SceneState::House;
 }
+
 /**CASA**/
 
 void HouseScene::init()
 {
-    cinematic = false;
+    transition = false;
     if(!backgroundTexture.loadFromFile("Textures/houseLevel/casaNueva.png"))
     {
         std::cerr << "Error cargando las texturas de la casa" << std::endl;
@@ -192,7 +193,9 @@ void HouseScene::update(sf::RenderWindow& window, float deltaTime)
             texturePositionXNear = 0;
         }
         nearSprite.setPosition(texturePositionXNear, 200.f);
-    }else{
+    }
+    else
+    {
         std::cout << "Empieza cinematica" << std::endl;
     }
 }
@@ -215,15 +218,16 @@ void HouseScene::cleanup()
 
 bool HouseScene::shouldTransition() const
 {
-
+    /*if(transition) return transition;*/
     return false;
 }
 
 void HouseScene::notify(ObserverEvents event)
 {
-    if(event == ObserverEvents::Cinematic)
+    if(transition) return;
+    if(event == ObserverEvents::TRANSITION)
     {
-        cinematic = true;
+        transition = true;
     }
 }
 
@@ -235,7 +239,7 @@ SceneState HouseScene::nextSceneState() const
 
 void CityScene::init()
 {
-    if(!backgroundTexture.loadFromFile("Textures/city.png"))
+    if(!backgroundTexture.loadFromFile("Textures/cityLevel/city.png"))
     {
         std::cerr << "Error al cargar las texturas de la ciudad" << std::endl;
     }
@@ -265,7 +269,7 @@ bool CityScene::shouldTransition() const
 
 void CityScene::notify(ObserverEvents event)
 {
-    if(event == ObserverEvents::Cinematic) return;
+    if(event == ObserverEvents::DEFAULT) return;
 }
 
 SceneState CityScene::nextSceneState() const

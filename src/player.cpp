@@ -4,8 +4,6 @@
 
 void Player::notify(ObserverEvents event)
 {
-    if(event == ObserverEvents::Colision)
-        std::cout << "Avise al player" << std::endl;
 }
 
 Player::Player()
@@ -54,6 +52,7 @@ bool Player::loadTextures()
 {
     if(!texture.loadFromFile("Textures/mainCharacter/charSheetNeeko.png"))
     {
+        std::cerr << "Error al cargar las texturas del player" << std::endl;
         return false;
     }
 
@@ -77,12 +76,10 @@ void Player::createPlayer(b2World* world, float posX, float posY)
     fixtureDef.density = 1.f;
     fixtureDef.friction = 0.3f;
     fixtureDef.filter.categoryBits = CATEGORY_PLAYER;
-    fixtureDef.filter.maskBits = CATEGORY_LIMITS | CATEGORY_GROUND | CATEGORY_FLOOR;
+    fixtureDef.filter.maskBits = CATEGORY_LIMITS | CATEGORY_GROUND | CATEGORY_FLOOR | CATEGORY_SENSOR;
     playerBody->CreateFixture(&fixtureDef);
 
     initBody(playerBody, Kind::PLAYER, this);
-
-    std::cout << "PlayerBody cuando se crea: " << playerBody << std::endl;
 
     sprite.setTexture(texture);
     sprite.setScale(1.5f, 1.5f);
@@ -117,6 +114,7 @@ void Player::switchState(PlayerState state)
 void Player::updateAnimation(float deltaTime)
 {
     elapsedTime += deltaTime;
+
     if(elapsedTime >= animations.at(currentState).frameDuration)
     {
         currentFrame = (currentFrame + 1) % animations.at(currentState).frames.size();
@@ -187,8 +185,6 @@ void Player::draw(sf::RenderWindow& window)
     window.draw(sprite);
 }
 
-//void Player::setFall(){ playerBody->SetLinearVelocity(); }
-
 void Player::setIsOnGround(bool v){ isOnGround = v; }
 
 void Player::setIsJumping(bool v){ isJumping = v; }
@@ -199,25 +195,6 @@ PlayerState Player::getPlayerState() const { return currentState; }
 
 sf::Vector2f Player::getPos() const { return sprite.getPosition(); }
 
-bool Player::getIsOnGround() const
-{
-    std::cout << "isOnGround: " << isOnGround << std::endl;
-    std::cout << "isJumping: " << isJumping << std::endl;
-    std::cout << "isMoving: " << isMoving << std::endl;
-    return false;
-}
-
-void Player::getIsMoving() const
-{
-    std::cout << "LinearVelocity: " << playerBody->GetLinearVelocity().y << std::endl;
-}
-
-void Player::debug() const { return; }
-
 Player::~Player()
 {
-    if(playerBody && playerBody->GetWorld())
-    {
-        playerBody->GetWorld()->DestroyBody(playerBody);
-    }
 }

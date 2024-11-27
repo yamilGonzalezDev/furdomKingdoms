@@ -21,17 +21,10 @@ class Enemy
         virtual ~Enemy() = default;
 
         virtual void logic() = 0;
-        virtual void createBody() = 0;
+        virtual void createBody(b2World*, float, float, float, float) = 0;
         virtual void update(float) = 0;
         virtual void loadTextures() = 0;
         virtual void render(sf::RenderWindow&) = 0;
-};
-
-class EnemyFactory
-{
-    public:
-        virtual ~EnemyFactory();
-        Enemy* createEnemy(b2World*, int, float, float, float, float);
 };
 
 class Ghost : public Enemy
@@ -46,9 +39,8 @@ class Ghost : public Enemy
         b2Body* body;
     public:
         Ghost();
-        Ghost(b2World*, float, float, float, float);
         void logic() override;
-        void createBody() override;
+        void createBody(b2World*, float, float, float, float) override;
         void update(float) override;
         void loadTextures() override;
         void render(sf::RenderWindow&) override;
@@ -61,7 +53,7 @@ class Enemy2 : public Enemy
         sf::Texture texture;
     public:
         void logic() override;
-        void createBody() override;
+        void createBody(b2World*, float, float, float, float) override;
         void update(float) override;
         void loadTextures() override;
         void render(sf::RenderWindow&) override;
@@ -74,10 +66,41 @@ class Enemy3 : public Enemy
         sf::Texture texture;
     public:
         void logic() override;
-        void createBody() override;
+        void createBody(b2World*, float, float, float, float) override;
         void update(float) override;
         void loadTextures() override;
         void render(sf::RenderWindow&) override;
+};
+
+class EnemyFactory
+{
+    public:
+        virtual ~EnemyFactory();
+        Enemy* createEnemy(b2World*, int, float, float, float, float);
+};
+
+class GhostFactory : public EnemyFactory
+{
+    Enemy* createEnemy(b2World*, int, float, float, float, float)
+    {
+        return new Ghost;
+    };
+};
+
+class Enemy2Factory : public EnemyFactory
+{
+    Enemy* createEnemy(b2World*, int, float, float, float, float)
+    {
+        return new Enemy2;
+    };
+};
+
+class Enemy3Factory : public EnemyFactory
+{
+    Enemy* createEnemy(b2World*, int, float, float, float, float)
+    {
+        return new Enemy3;
+    };
 };
 
 #endif // ENEMY_HPP_INCLUDED

@@ -5,25 +5,25 @@
 
 void debugA(std::string a)
 {
-    std::cout << "Mensaje de " + a << std::endl;
+    //std::cout << "Mensaje de " + a << std::endl;
 }
 
-Director::Director() : WIDTH(1366), HEIGHT(768), window(sf::VideoMode(WIDTH, HEIGHT), "Furdom Kingdoms"), fooDrawInstance(window)
+Director::Director() : WIDTH(1366), HEIGHT(768), fooDrawInstance(window)
 {
+    window.create(sf::VideoMode(WIDTH, HEIGHT), "Furdom Kingdoms");
     window.setFramerateLimit(60);
-    nextScene = SceneState::MainMenu;
+    nextScene = SceneState::House;
     drawNpcs = false;
     cargando = false;
     aclarando = false;
     drawPlayer = false;
     oscureciendo = true;
     drawEnemies = false;
-    currentScene = new MenuScene;
+    currentScene = new HouseScene;
     view.setSize(/*window.getSize().x, window.getSize().y*/window.getSize().x * 0.5f, window.getSize().y * 0.5f);
     alpha = 0;
     fadeRectangle.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));
     fadeRectangle.setFillColor(sf::Color(0, 0, 0, alpha));
-    subject.addObserver(currentScene);
 }
 
 void Director::run() ///buclePrincipal();
@@ -43,7 +43,6 @@ void Director::run() ///buclePrincipal();
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
         {
-
         }
 
         debugA("Comienzo");
@@ -61,7 +60,7 @@ void Director::update(float deltaTime)
 {
     if(drawPlayer && player != nullptr)
     {
-        if(window.hasFocus() && player != nullptr && drawPlayer)
+        if(window.hasFocus())
         {
             player->updatePhysics();
             player->updateAnimation(deltaTime);
@@ -82,24 +81,34 @@ void Director::update(float deltaTime)
 void Director::updateScene(float deltaTime)
 {
     debugA("Comienzo updateScene");
-    if(currentScene != nullptr && currentScene->shouldTransition()) changeScene = true;
+    if(currentScene != nullptr && currentScene->shouldTransition())
+    {
+        changeScene = true;
+        nextScene = currentScene->nextSceneState();
+    }
     debugA("transition");
     if(changeScene)
     {
-        switch(/*currentScene->*/ nextScene)
+        fadeIn(deltaTime);
+        switch(nextScene)
         {
             case SceneState::MainMenu:
                 setScene(new MenuScene);
+                initMenuScene();
                 break;
             case SceneState::House:
                 setScene(new HouseScene);
+                initHouseScene();
                 break;
             case SceneState::City:
                 setScene(new CityScene);
+                initCityScene();
                 break;
             case SceneState::Default:
                 break;
         }
+        changeScene = false;
+        fadeOut(deltaTime);
     }
     else if(currentScene != nullptr)
     {
@@ -109,21 +118,35 @@ void Director::updateScene(float deltaTime)
 
 void Director::gameEvents(float deltaTime)
 {
+    debugA("comienzo gameEvents");
     if(world != nullptr)
     {
         world->Step(timeStep, velocityIterations, positionIterations);
+        debugA("worldStep");
+        if(currentScene != nullptr)
+        {
+            subject.eventTrigger(ObserverEvents::TRANSITION);
+        }
+        debugA("eventTrigger");
     }
 }
 
 void Director::render()
 {
-    window.clear();
-    currentScene->render(window);
+    window.clear(sf::Color::Cyan);
+    if(changeScene)
+    {
+        window.draw(fadeRectangle);
+    }
+    if(currentScene != nullptr)
+    {
+        currentScene->render(window);
+    }
     if(drawNpcs)
     {
     }
     debugA("currentScene");
-    if(drawPlayer)
+    if(drawPlayer && player != nullptr)
     {
         view.setCenter(player->getPos().x + 33.f, 570);
         window.setView(view);
@@ -145,7 +168,11 @@ void Director::render()
 
 void Director::initMenuScene()
 {
-    if(world != nullptr) world = nullptr;
+    if(world != nullptr)
+    {
+        delete world;
+        world = nullptr;
+    }
     if(player != nullptr) player = nullptr;
     drawNpcs = false;
     drawPlayer = false;
@@ -154,35 +181,19 @@ void Director::initMenuScene()
     setScene(new MenuScene);
     currentScene->init();
 
-    sf::Texture texture;
-    sf::Sprite sprite;
-
-    if(!texture.loadFromFile("Textures/menu/scroll.png"))
+    if(currentScene != nullptr)
     {
-        return;
+        debugA("inicié correctamente");
     }
-
-    sprite.setTexture(texture);
-    sprite.setScale(5.f, 5.f);
 }
 
 void Director::initHouseScene()
 {
-    subject.removeObserver(currentScene);
-
-    if(currentScene != nullptr) currentScene = nullptr;
-
-    currentScene = new HouseScene;
-
-    subject.addObserver(currentScene);
+    setScene(new HouseScene);
 
     currentScene->init();
 
-    b2Body* sensorBody;
-
     drawPlayer = true;
-
-    drawEnemies = true;
 
     world = new b2World(b2Vec2(0.f, 10.f));
     collisionCheck = new Collision();
@@ -192,23 +203,24 @@ void Director::initHouseScene()
 
     world->SetDebugDraw( &fooDrawInstance );
 
-    createSensor(world, sensorBody, 1000.f, 506.f);
+    boundFactory = std::make_unique<LimitsFactory>();
 
-    ground = new Ground;
-    ground->createGround(world, 0.f, 723.f, 3000.f, 0.f);
+    boundFactory->createWall(world, 361.f, 656.f, 8.f, 64.f, Kind::WALLS);
 
-    Limits bounds;
+    boundFactory->createWall(world, 791.f, 622.f, 8.f, 32.f, Kind::WALLS);
 
-    bounds.createWall(world, 361.f, 656.f, 8.f, 64.f);
+    boundFactory->createWall(world, 576.f, 560.f, 272.f, 32.f, Kind::LIMITS);
 
-    bounds.createWall(world, 791.f, 622.f, 8.f, 32.f);
+    boundFactory->createBound(world, 577.f, 712.f, 223.f, 8.f, Kind::FLOOR);
 
-    bounds.createFloor(world, 577.f, 712.f, 223.f, 8.f);
+    boundFactory->createBound(world, 0.f, 723.f, 3000.f, 0.f, Kind::FLOOR);
 
-    player = new Player;
+    boundFactory = std::make_unique<SensorFactory>();
+
+    sensor = boundFactory->createBound(world, 1000.f, 670.f, 100.f, 50.f, Kind::HOUSESENSOR);
+
+    player = new Player();
     player->createPlayer(world, 400.f, 658.f);
-
-    /*enemy = new Ghost(world, 600.f, 500.f, 27.f, 23.f);*/
 
     subject.addObserver(player);
     subject.addObserver(collisionCheck);
@@ -216,34 +228,12 @@ void Director::initHouseScene()
 
 void Director::initCityScene()
 {
-    if(currentScene != nullptr) currentScene = nullptr;
-
-    currentScene = new CityScene;
+    setScene(new HouseScene);
 
     currentScene->init();
 
     drawNpcs = true;
     drawPlayer = true;
-}
-
-void Director::createSensor(b2World* world, b2Body*& body, float x, float y)
-{
-    b2BodyDef bodyDef;
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(x / 30.f, y / 30.f);
-    body = world->CreateBody(&bodyDef);
-    b2PolygonShape objectBox;
-    objectBox.SetAsBox(100.f / 30.f, 200.f / 30.f);
-
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape = &objectBox;
-    fixtureDef.isSensor = true;
-    fixtureDef.filter.categoryBits = CATEGORY_SENSOR;
-    fixtureDef.filter.maskBits = CATEGORY_PLAYER;
-
-    body->CreateFixture(&fixtureDef);
-
-    initBody(body, Kind::SENSOR, this);
 }
 
 void Director::cleanScene(b2World* world)
@@ -262,12 +252,6 @@ void Director::cleanScene(b2World* world)
         delete world;
         world = nullptr;
     }
-
-    if(ground != nullptr)
-    {
-        delete ground;
-        ground = nullptr;
-    }
 }
 
 void Director::fadeOut(float deltaTime)
@@ -279,11 +263,8 @@ void Director::fadeOut(float deltaTime)
     }
     else
     {
-        oscureciendo = false;
-        aclarando = true;
         initHouseScene();
         alpha = 255;
-        std::cout << "Escena cambiada a House" << std::endl;
     }
 }
 
@@ -296,39 +277,46 @@ void Director::fadeIn(float deltaTime)
     }
     else
     {
-        aclarando = false;
         changeScene = false;
     }
 }
 
 void Director::setScene(Scene* newScene)
 {
-    if (currentScene != nullptr)
+    if(currentScene)
     {
+        subject.removeObserver(currentScene);
         delete currentScene;
         currentScene = nullptr;
     }
     currentScene = newScene;
+    subject.addObserver(currentScene);
 }
 
 Director::~Director()
 {
-    if(collisionCheck != nullptr)
-    {
-        delete collisionCheck;
-        collisionCheck = nullptr;
-    }
-
     if(player != nullptr)
     {
         delete player;
         player = nullptr;
     }
 
-    if(ground != nullptr)
+    if(collisionCheck != nullptr)
     {
-        delete ground;
-        ground = nullptr;
+        delete collisionCheck;
+        collisionCheck = nullptr;
+    }
+
+    if(sensor != nullptr)
+    {
+        delete sensor;
+        sensor = nullptr;
+    }
+
+    if(currentScene != nullptr)
+    {
+        delete currentScene;
+        currentScene = nullptr;
     }
 
     if(world != nullptr)
