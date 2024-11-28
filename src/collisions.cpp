@@ -1,6 +1,13 @@
 #include "collisions.hpp"
+#include <iostream>
 #include "player.hpp"
 #include "entity.hpp"
+#include "limits.hpp"
+
+void Collision::notify(ObserverEvents event)
+{
+    if(event != ObserverEvents::DEFAULT) return;
+}
 
 void Collision::BeginContact(b2Contact* contact)
 {
@@ -13,22 +20,38 @@ void Collision::BeginContact(b2Contact* contact)
     UserdataTag* tagA = reinterpret_cast<UserdataTag*>(bA->GetUserData().pointer);
     UserdataTag* tagB = reinterpret_cast<UserdataTag*>(bB->GetUserData().pointer);
 
-    if(tagA->kind == PLAYER && tagB->kind == FLOOR)
+    if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::FLOOR)
     {
         Player* player = reinterpret_cast<Player*>(tagA->object);
         player->setIsJumping(false);
         player->setIsOnGround(true);
     }
-    if(tagB->kind == PLAYER && tagA->kind == FLOOR)
+    if(tagB->kind == Kind::PLAYER && tagA->kind == Kind::FLOOR)
     {
         Player* player = reinterpret_cast<Player*>(tagB->object);
         player->setIsJumping(false);
         player->setIsOnGround(true);
     }
-    if(tagA->kind == PLAYER && tagB->kind == WALLS)
+
+    if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::HOUSESENSOR)
     {
-        //Player* player = reinterpret_cast<Player*>(tagB->object);
-        //player->setFall();
+        Sensor* sensor = reinterpret_cast<Sensor*>(tagB->object);
+        sensor->sensorNotify(true);
+    }
+
+    if(tagB->kind == Kind::PLAYER && tagA->kind == Kind::HOUSESENSOR)
+    {
+        Sensor* sensor = reinterpret_cast<Sensor*>(tagB->object);
+        sensor->sensorNotify(true);
+    }
+
+    if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::ENEMY)
+    {
+        std::cout << "Enemigo detectado" << std::endl;
+    }
+    if(tagB->kind == Kind::PLAYER && tagA->kind == Kind::ENEMY)
+    {
+        std::cout << "Enemigo detectado" << std::endl;
     }
 }
 
@@ -43,13 +66,13 @@ void Collision::EndContact(b2Contact* contact)
     UserdataTag* tagA = reinterpret_cast<UserdataTag*>(bA->GetUserData().pointer);
     UserdataTag* tagB = reinterpret_cast<UserdataTag*>(bB->GetUserData().pointer);
 
-    if(tagA->kind == PLAYER && tagB->kind == FLOOR)
+    if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::FLOOR)
     {
         Player* player = reinterpret_cast<Player*>(tagA->object);
         player->setIsJumping(true);
         player->setIsOnGround(false);
     }
-    if(tagB->kind == PLAYER && tagA->kind == FLOOR)
+    if(tagB->kind == Kind::PLAYER && tagA->kind == Kind::FLOOR)
     {
         Player* player = reinterpret_cast<Player*>(tagB->object);
         player->setIsJumping(true);

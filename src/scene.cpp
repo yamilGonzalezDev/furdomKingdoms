@@ -1,23 +1,20 @@
 #include "scene.hpp"
 #include "entity.hpp"
 
-MenuScene::MenuScene()
-{
-}
 /**MENU**/
 void MenuScene::init()
 {
     if(!backgroundTexture.loadFromFile("Textures/menu/scroll.png"))
     {
         std::cerr << "Error cargando las texturas del menu" << std::endl;
+        return;
     }
 
     if(!font.loadFromFile("Textures/font/menuFont.ttf"))
     {
         std::cerr << "Error al cargar la fuente del menú" << std::endl;
+        return;
     }
-
-    currentOption = 0;
 
     for(int i = 0; i < 3; i++)
     {
@@ -30,7 +27,7 @@ void MenuScene::init()
     float totalHeight = menuOptions[0].getGlobalBounds().height + 70.f;
 
     menuOptions[0].setString("Start");
-    menuOptions[0].setOrigin(menuOptions[0].getGlobalBounds().width / 2, menuOptions[1].getGlobalBounds().height / 2);
+    menuOptions[0].setOrigin(menuOptions[0].getGlobalBounds().width / 2, menuOptions[0].getGlobalBounds().height / 2);
     menuOptions[0].setPosition(WIDTH / 2, HEIGHT / 2 - totalHeight * 2);
 
     menuOptions[1].setString("Settings");
@@ -96,7 +93,7 @@ void MenuScene::cleanup()
 
 }
 
-bool MenuScene::shouldTransition()
+bool MenuScene::shouldTransition() const
 {
     if(currentOption == 0 && sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
     {
@@ -105,11 +102,21 @@ bool MenuScene::shouldTransition()
     return false;
 }
 
+void MenuScene::notify(ObserverEvents event)
+{
+    if(event != ObserverEvents::DEFAULT) return;
+}
+
+SceneState MenuScene::nextSceneState() const
+{
+    return SceneState::House;
+}
+
 /**CASA**/
 
 void HouseScene::init()
 {
-    cinematic = false;
+    transition = false;
     if(!backgroundTexture.loadFromFile("Textures/houseLevel/casaNueva.png"))
     {
         std::cerr << "Error cargando las texturas de la casa" << std::endl;
@@ -151,39 +158,46 @@ void HouseScene::init()
 
 void HouseScene::update(sf::RenderWindow& window, float deltaTime)
 {
-    sf::Vector2f cameraPos = window.getView().getCenter();
-
-    float thresholdX = window.getSize().x * 0.50f;
-
-    float texturePositionXFar = 0.f;
-    if(cameraPos.x > thresholdX)
+    if(!cinematic)
     {
-        texturePositionXFar = (cameraPos.x - thresholdX) * parallaxFactorFar;
-    }
-    if(texturePositionXFar < 0)
-    {
-        texturePositionXFar = 0;
-    }
-    farSprite.setPosition(texturePositionXFar, 200.f);
+        sf::Vector2f cameraPos = window.getView().getCenter();
 
-    float texturePositionXMid = 0.f;
-    if(cameraPos.x > thresholdX)
-    {
-        texturePositionXMid = (cameraPos.x - thresholdX) * parallaxFactorMid;
-    }
-    midSprite.setPosition(texturePositionXMid, 200.f);
+        float thresholdX = window.getSize().x * 0.50f;
 
-    float texturePositionXNear = 0.f;
-    if(cameraPos.x > thresholdX)
-    {
-        texturePositionXNear = (cameraPos.x - thresholdX) * parallaxFactorNear;
-    }
+        float texturePositionXFar = 0.f;
+        if(cameraPos.x > thresholdX)
+        {
+            texturePositionXFar = (cameraPos.x - thresholdX) * parallaxFactorFar;
+        }
+        if(texturePositionXFar < 0)
+        {
+            texturePositionXFar = 0;
+        }
+        farSprite.setPosition(texturePositionXFar, 200.f);
 
-    if(texturePositionXNear < 0)
-    {
-        texturePositionXNear = 0;
+        float texturePositionXMid = 0.f;
+        if(cameraPos.x > thresholdX)
+        {
+            texturePositionXMid = (cameraPos.x - thresholdX) * parallaxFactorMid;
+        }
+        midSprite.setPosition(texturePositionXMid, 200.f);
+
+        float texturePositionXNear = 0.f;
+        if(cameraPos.x > thresholdX)
+        {
+            texturePositionXNear = (cameraPos.x - thresholdX) * parallaxFactorNear;
+        }
+
+        if(texturePositionXNear < 0)
+        {
+            texturePositionXNear = 0;
+        }
+        nearSprite.setPosition(texturePositionXNear, 200.f);
     }
-    nearSprite.setPosition(texturePositionXNear, 200.f);
+    else
+    {
+        std::cout << "Empieza cinematica" << std::endl;
+    }
 }
 
 void HouseScene::render(sf::RenderWindow& window)
@@ -202,19 +216,30 @@ void HouseScene::cleanup()
 
 }
 
-bool HouseScene::shouldTransition()
+bool HouseScene::shouldTransition() const
 {
-
+    /*if(transition) return transition;*/
     return false;
 }
 
-void HouseScene::startCinematic(bool v) { cinematic = true; }
+void HouseScene::notify(ObserverEvents event)
+{
+    if(transition) return;
+    if(event == ObserverEvents::TRANSITION)
+    {
+        transition = true;
+    }
+}
 
+SceneState HouseScene::nextSceneState() const
+{
+    return SceneState::Default;
+}
 /**CIUDAD**/
 
 void CityScene::init()
 {
-    if(!backgroundTexture.loadFromFile("Textures/city.png"))
+    if(!backgroundTexture.loadFromFile("Textures/cityLevel/city.png"))
     {
         std::cerr << "Error al cargar las texturas de la ciudad" << std::endl;
     }
@@ -237,7 +262,17 @@ void CityScene::cleanup()
 
 }
 
-bool CityScene::shouldTransition()
+bool CityScene::shouldTransition() const
 {
     return false;
+}
+
+void CityScene::notify(ObserverEvents event)
+{
+    if(event == ObserverEvents::DEFAULT) return;
+}
+
+SceneState CityScene::nextSceneState() const
+{
+    return SceneState::Default;
 }

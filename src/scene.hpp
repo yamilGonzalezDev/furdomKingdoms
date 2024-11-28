@@ -3,8 +3,17 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "observer.hpp"
 
-class Scene
+enum class SceneState
+{
+    MainMenu,
+    House,
+    City,
+    Default
+};
+
+class Scene : public Observer
 {
     protected:
         const float WIDTH = 1366;
@@ -20,24 +29,27 @@ class Scene
 
         virtual void cleanup() = 0;
 
-        virtual bool shouldTransition() = 0;
+        virtual bool shouldTransition() const { return false; };
+
+        virtual SceneState nextSceneState() const = 0;
 };
 
 class MenuScene : public Scene
 {
     public:
-        MenuScene();
         void init() override;
-        void update(sf::RenderWindow&, float) override;
-        void render(sf::RenderWindow&) override;
         void cleanup() override;
-        bool shouldTransition() override;
+        void render(sf::RenderWindow&) override;
+        void update(sf::RenderWindow&, float) override;
+        void notify(ObserverEvents) override;
+        bool shouldTransition() const override;
+        SceneState nextSceneState() const override;
         sf::Texture backgroundTexture;
         sf::Sprite background;
     private:
         sf::Font font;
         sf::Text menuOptions[3];
-        int currentOption;
+        int currentOption = 0;
 };
 
 class HouseScene : public Scene
@@ -47,7 +59,9 @@ class HouseScene : public Scene
         void update(sf::RenderWindow&, float) override;
         void render(sf::RenderWindow&) override;
         void cleanup() override;
-        bool shouldTransition() override;
+        void notify(ObserverEvents) override;
+        bool shouldTransition() const override;
+        SceneState nextSceneState() const override;
         sf::Texture backgroundTexture, candleText, tableText, farTexture, midTexture, nearTexture;
         sf::Sprite background,candle, table, farSprite, midSprite, nearSprite;
         sf::RectangleShape rect;
@@ -56,17 +70,20 @@ class HouseScene : public Scene
         float parallaxFactorFar = 0.05f;
         float parallaxFactorMid = 0.2f;
         float parallaxFactorNear = .5f;
-        bool cinematic;
+        bool transition;
+        bool cinematic = false;
 };
 
 class CityScene : public Scene
 {
     public:
+        void notify(ObserverEvents) override;
         void init() override;
         void update(sf::RenderWindow&, float) override;
         void render(sf::RenderWindow&) override;
         void cleanup() override;
-        bool shouldTransition() override;
+        bool shouldTransition() const override;
+        SceneState nextSceneState() const override;
         sf::Texture backgroundTexture;
         sf::Sprite background;
     private:

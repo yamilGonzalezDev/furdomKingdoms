@@ -1,8 +1,13 @@
 #include "player.hpp"
+#include "entity.hpp"
 #include <iostream>
 
+void Player::notify(ObserverEvents event)
+{
+}
+
 Player::Player()
-    : isMoving(false), isJumping(false), isOnGround(true), isAttacking(false)
+    : isJumping(false), isOnGround(true), isAttacking(false)
 {
     loadTextures();
     animations.emplace(PlayerState::Idle, Animation{
@@ -47,6 +52,7 @@ bool Player::loadTextures()
 {
     if(!texture.loadFromFile("Textures/mainCharacter/charSheetNeeko.png"))
     {
+        std::cerr << "Error al cargar las texturas del player" << std::endl;
         return false;
     }
 
@@ -70,14 +76,16 @@ void Player::createPlayer(b2World* world, float posX, float posY)
     fixtureDef.density = 1.f;
     fixtureDef.friction = 0.3f;
     fixtureDef.filter.categoryBits = CATEGORY_PLAYER;
-    fixtureDef.filter.maskBits = CATEGORY_LIMITS | CATEGORY_GROUND | CATEGORY_FLOOR;
+    fixtureDef.filter.maskBits = CATEGORY_LIMITS | CATEGORY_GROUND | CATEGORY_FLOOR | CATEGORY_SENSOR;
     playerBody->CreateFixture(&fixtureDef);
 
-    initBody(playerBody, PLAYER, this);
+    initBody(playerBody, Kind::PLAYER, this);
 
     sprite.setTexture(texture);
     sprite.setScale(1.5f, 1.5f);
     sprite.setTextureRect(animations.at(currentState).frames[0]);
+    sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height / 2.f);
+    sprite.setPosition(playerBody->GetPosition().x * PPM, playerBody->GetPosition().y * PPM);
 
     playerBody->SetFixedRotation(true);
 }
@@ -89,8 +97,6 @@ void Player::setAnimation(PlayerState state)
     {
         currentAnimation = &(it->second);
     }
-    currentFrame = 0;
-    elapsedTime = 0.f;
 }
 
 void Player::switchState(PlayerState state)
@@ -99,12 +105,16 @@ void Player::switchState(PlayerState state)
 
     currentState = state;
 
+    currentFrame = 0;
+    elapsedTime = 0.f;
+
     setAnimation(state);
 }
 
 void Player::updateAnimation(float deltaTime)
 {
     elapsedTime += deltaTime;
+
     if(elapsedTime >= animations.at(currentState).frameDuration)
     {
         currentFrame = (currentFrame + 1) % animations.at(currentState).frames.size();
@@ -113,7 +123,7 @@ void Player::updateAnimation(float deltaTime)
     }
 }
 
-void Player::keyboardInput(float deltaTime)
+void Player::keyboardInput()
 {
     velocity = playerBody->GetLinearVelocity();
 
@@ -135,32 +145,26 @@ void Player::keyboardInput(float deltaTime)
     {
         velocity.x = -MOVE_SPEED;
         sprite.setScale(-1.5f, 1.5f);
-        sprite.setOrigin(sprite.getLocalBounds().width, 0.f);
-        isMoving = true;
+        setIsMoving(true);
     }
     else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
         velocity.x = MOVE_SPEED;
         sprite.setScale(1.5f, 1.5f);
-        sprite.setOrigin(0.f, 0.f);
-        isMoving = true;
+        setIsMoving(true);
     }
-    else if(!isJumping)
+    else
     {
-        velocity.x = 0;
-        isMoving = false;
+        velocity.x = 0.f;
+        setIsMoving(false);
     }
 
     playerBody->SetLinearVelocity(velocity);
-
-    updatePhysics();
 }
 
 void Player::updatePhysics()
 {
-    sf::Vector2f spritePos((playerBody->GetPosition().x * PPM) - 36.f, (playerBody->GetPosition().y * PPM) - 29.f);
-
-    sprite.setPosition(spritePos);
+    sprite.setPosition(playerBody->GetPosition().x * PPM, playerBody->GetPosition().y * PPM);
 
     if(!isOnGround && playerBody->GetLinearVelocity().y > 0)
     {
@@ -181,24 +185,16 @@ void Player::draw(sf::RenderWindow& window)
     window.draw(sprite);
 }
 
-//void Player::setFall(){ playerBody->SetLinearVelocity(); }
-
 void Player::setIsOnGround(bool v){ isOnGround = v; }
 
 void Player::setIsJumping(bool v){ isJumping = v; }
+
+void Player::setIsMoving(bool v) { isMoving = v; }
 
 PlayerState Player::getPlayerState() const { return currentState; }
 
 sf::Vector2f Player::getPos() const { return sprite.getPosition(); }
 
-bool Player::getIsOnGround() const { return isOnGround; }
-
-void Player::debug() const { return; }
-
 Player::~Player()
 {
-    if(playerBody && playerBody->GetWorld())
-    {
-        playerBody->GetWorld()->DestroyBody(playerBody);
-    }
 }
