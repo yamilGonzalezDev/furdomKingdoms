@@ -195,6 +195,8 @@ PlayerState Player::getPlayerState() const { return currentState; }
 
 sf::Vector2f Player::getPos() const { return sprite.getPosition(); }
 
+b2Body* Player::getBody() { return playerBody; }
+
 Player::~Player()
 {
 

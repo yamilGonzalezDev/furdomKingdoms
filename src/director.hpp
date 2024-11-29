@@ -67,6 +67,7 @@ class Director
         void initMenuScene();
         void initHouseScene();
         void setScene(Scene*);
+        void cleanScene(b2World*);
 };
 
 #endif // DIRECTOR_HPP_INCLUDED

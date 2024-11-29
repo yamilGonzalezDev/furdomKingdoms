@@ -20,7 +20,7 @@ Director::Director() : WIDTH(1366), HEIGHT(768), fooDrawInstance(window)
     oscureciendo = true;
     drawEnemies = false;
     currentScene = new MenuScene;
-    view.setSize(/*window.getSize().x, window.getSize().y*/window.getSize().x * 0.5f, window.getSize().y * 0.5f);
+    view.setSize(window.getSize().x, window.getSize().y/*window.getSize().x * 0.5f, window.getSize().y * 0.5f*/);
     alpha = 0;
     fadeRectangle.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));
     fadeRectangle.setFillColor(sf::Color(0, 0, 0, alpha));
@@ -43,7 +43,14 @@ void Director::run() ///buclePrincipal();
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
         {
-            std::cout << "Estoy apretando espacio, creeme" << std::endl;
+            if (player)
+            {
+                b2Body* body = player->getBody(); // Asignación dentro del bloque si el jugador existe.
+                if(body) // Verificamos que body no sea nulo.
+                {
+                    body->SetTransform(b2Vec2(400.f / 30.f, 658.f / 30.f), 0.0f); // Mover el cuerpo del jugador
+                }
+            }
         }
 
         debugA("Comienzo");
@@ -277,6 +284,25 @@ void Director::setScene(Scene* newScene)
         currentScene = nullptr;
     }
     currentScene = newScene;
+}
+
+void Director::cleanScene(b2World* world)
+{
+    if(world != nullptr)
+    {
+        b2Body* playerBody = player ? player->getBody() : nullptr;
+        for (b2Body* body = world->GetBodyList(); body != nullptr; body = body->GetNext())
+        {
+            if(body == playerBody) std::cout << "Body del player" << std::endl;
+            UserdataTag* tag = reinterpret_cast<UserdataTag*>(body->GetUserData().pointer);
+
+            delete tag;
+
+            world->DestroyBody(body);
+        }
+        delete world;
+        world = nullptr;
+    }
 }
 
 Director::~Director()

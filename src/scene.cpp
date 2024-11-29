@@ -158,7 +158,7 @@ void HouseScene::init()
 
 void HouseScene::update(sf::RenderWindow& window, float deltaTime)
 {
-    sf::Vector2f cameraPos = window.getView().getCenter();
+    /*sf::Vector2f cameraPos = window.getView().getCenter();
 
     float thresholdX = window.getSize().x * 0.50f;
 
@@ -190,7 +190,7 @@ void HouseScene::update(sf::RenderWindow& window, float deltaTime)
     {
         texturePositionXNear = 0;
     }
-    nearSprite.setPosition(texturePositionXNear, 200.f);
+    nearSprite.setPosition(texturePositionXNear, 200.f);*/
 }
 
 void HouseScene::render(sf::RenderWindow& window)
@@ -216,6 +216,8 @@ bool HouseScene::shouldTransition() const
 
 void HouseScene::notify(ObserverEvents event)
 {
+
+    if(event == ObserverEvents::DEFAULT) std::cout << "Mensaje" << std::endl;
     if(transition) return;
 
     if(event == ObserverEvents::TRANSITION)
@@ -239,7 +241,7 @@ void CityScene::init()
     }
 
     background.setTexture(backgroundTexture);
-    background.setPosition(0.f, 0.f);
+    background.setPosition(0.f, 450.f);
 }
 
 void CityScene::update(sf::RenderWindow& window, float deltaTime)

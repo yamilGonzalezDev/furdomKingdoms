@@ -63,6 +63,7 @@ class Player : public Observer
 
         sf::Vector2f getPos() const;
         PlayerState getPlayerState() const;
+        b2Body* getBody();
 };
 
 #endif // PLAYER_HPP_INCLUDED
