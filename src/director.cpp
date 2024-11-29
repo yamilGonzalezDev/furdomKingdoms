@@ -41,14 +41,14 @@ void Director::run() ///buclePrincipal();
 
         float deltaTime = clock.restart().asSeconds();
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
         {
             if (player)
             {
-                b2Body* body = player->getBody(); // Asignación dentro del bloque si el jugador existe.
-                if(body) // Verificamos que body no sea nulo.
+                b2Body* body = player->getBody();
+                if(body)
                 {
-                    body->SetTransform(b2Vec2(400.f / 30.f, 658.f / 30.f), 0.0f); // Mover el cuerpo del jugador
+                    body->SetTransform(b2Vec2(400.f / 30.f, 658.f / 30.f), 0.0f);
                 }
             }
         }
