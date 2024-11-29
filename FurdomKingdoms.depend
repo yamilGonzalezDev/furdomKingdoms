@@ -906,7 +906,7 @@
 	"b2_api.h"
 	"b2_joint.h"
 
-1732712508 d:\utn\progra2\furdomkingdoms\src\observer.hpp
+1732837891 d:\utn\progra2\furdomkingdoms\src\observer.hpp
 	<iostream>
 	<vector>
 	<algorithm>
@@ -1357,11 +1357,11 @@
 1732202071 source:d:\utn\progra2\furdomkingdoms\src\entity.cpp
 	"entity.hpp"
 
-1732634674 source:d:\utn\progra2\furdomkingdoms\src\limits.cpp
+1732762527 source:d:\utn\progra2\furdomkingdoms\src\limits.cpp
 	"limits.hpp"
 	"entity.hpp"
 
-1732655742 d:\utn\progra2\furdomkingdoms\src\limits.hpp
+1732765540 d:\utn\progra2\furdomkingdoms\src\limits.hpp
 	<box2d/box2d.h>
 	<iostream>
 	"entity.hpp"
@@ -1370,7 +1370,7 @@
 1732669782 source:d:\utn\progra2\furdomkingdoms\src\main.cpp
 	"director.hpp"
 
-1732712508 d:\utn\progra2\furdomkingdoms\src\director.hpp
+1732790492 d:\utn\progra2\furdomkingdoms\src\director.hpp
 	<SFML/Graphics.hpp>
 	<box2d/box2d.h>
 	<memory>
@@ -1378,7 +1378,7 @@
 	"npc.hpp"
 	"player.hpp"
 	"limits.hpp"
-	"collisions.hpp"
+	"colisions.hpp"
 	"scene.hpp"
 	"fooDraw.hpp"
 	"observer.hpp"
@@ -1388,7 +1388,7 @@
 	<box2d/box2d.h>
 	<unordered_map>
 
-1732716449 d:\utn\progra2\furdomkingdoms\src\scene.hpp
+1732764871 d:\utn\progra2\furdomkingdoms\src\scene.hpp
 	<SFML/Graphics.hpp>
 	<iostream>
 	"observer.hpp"
@@ -1401,21 +1401,32 @@
 1731814404 source:d:\utn\progra2\furdomkingdoms\src\npc.cpp
 	"npc.hpp"
 
-1732677759 source:d:\utn\progra2\furdomkingdoms\src\player.cpp
+1732762358 source:d:\utn\progra2\furdomkingdoms\src\player.cpp
 	"player.hpp"
 	"entity.hpp"
 	<iostream>
 
-1732716449 source:d:\utn\progra2\furdomkingdoms\src\scene.cpp
+1732839138 source:d:\utn\progra2\furdomkingdoms\src\scene.cpp
 	"scene.hpp"
 	"entity.hpp"
 
 1730848689 source:d:\utn\progra2\furdomkingdoms\src\texts.cpp
 	"texts.hpp"
 
-1732717339 source:d:\utn\progra2\furdomkingdoms\src\director.cpp
+1732838102 source:d:\utn\progra2\furdomkingdoms\src\director.cpp
 	<iostream>
 	"director.hpp"
-	"collisions.hpp"
+	"colisions.hpp"
 	"entity.hpp"
+
+1732837964 source:d:\utn\progra2\furdomkingdoms\src\colisions.cpp
+	"colisions.hpp"
+	<iostream>
+	"player.hpp"
+	"entity.hpp"
+	"limits.hpp"
+
+1732763184 d:\utn\progra2\furdomkingdoms\src\colisions.hpp
+	<box2d/box2d.h>
+	"observer.hpp"
 

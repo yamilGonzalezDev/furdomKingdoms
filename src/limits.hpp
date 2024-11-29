@@ -6,7 +6,7 @@
 #include "entity.hpp"
 #include "observer.hpp"
 
-class Bounds
+class Bounds : public Subject
 {
     protected:
         const float PPM = 30.f;
@@ -28,11 +28,14 @@ class Wall : public Bounds
         Wall(b2World*, float, float, float, float, Kind);
 };
 
-class Sensor : public Bounds, public Observer
+class Sensor : public Bounds
 {
     public:
         Sensor(b2World*, float, float, float, float, Kind);
-        void notify(ObserverEvents) override {};
+        void debugSensor()
+        {
+            std::cout << "Funciono" << std::endl;
+        }
 };
 
 class BoundsFactory

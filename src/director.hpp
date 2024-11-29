@@ -8,7 +8,7 @@
 #include "npc.hpp"
 #include "player.hpp"
 #include "limits.hpp"
-#include "collisions.hpp"
+#include "colisions.hpp"
 #include "scene.hpp"
 #include "fooDraw.hpp"
 #include "observer.hpp"
@@ -27,7 +27,6 @@ class Director
         const int velocityIterations = 6;
         const int positionIterations = 2;
         const float speed = 200.f;
-        Subject subject;
         sf::RenderWindow window;
         sf::View view;
         sf::Clock clock;
@@ -55,7 +54,7 @@ class Director
         Enemy* enemy = nullptr;
         Player* player = nullptr;
         Scene* currentScene = nullptr;
-        Collision* collisionCheck = nullptr;
+        Colision* colisionCheck = nullptr;
 
         void update(float);
         void updateScene(float);
@@ -68,7 +67,6 @@ class Director
         void initMenuScene();
         void initHouseScene();
         void setScene(Scene*);
-        void cleanScene(b2World*);
 };
 
 #endif // DIRECTOR_HPP_INCLUDED

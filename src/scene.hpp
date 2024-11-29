@@ -70,8 +70,7 @@ class HouseScene : public Scene
         float parallaxFactorFar = 0.05f;
         float parallaxFactorMid = 0.2f;
         float parallaxFactorNear = .5f;
-        bool transition;
-        bool cinematic = false;
+        bool transition = false;
 };
 
 class CityScene : public Scene

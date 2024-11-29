@@ -197,4 +197,5 @@ sf::Vector2f Player::getPos() const { return sprite.getPosition(); }
 
 Player::~Player()
 {
+
 }

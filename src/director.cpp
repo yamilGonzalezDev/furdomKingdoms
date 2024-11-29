@@ -1,6 +1,6 @@
 #include <iostream>
 #include "director.hpp"
-#include "collisions.hpp"
+#include "colisions.hpp"
 #include "entity.hpp"
 
 void debugA(std::string a)
@@ -12,14 +12,14 @@ Director::Director() : WIDTH(1366), HEIGHT(768), fooDrawInstance(window)
 {
     window.create(sf::VideoMode(WIDTH, HEIGHT), "Furdom Kingdoms");
     window.setFramerateLimit(60);
-    nextScene = SceneState::House;
+    nextScene = SceneState::MainMenu;
     drawNpcs = false;
     cargando = false;
     aclarando = false;
     drawPlayer = false;
     oscureciendo = true;
     drawEnemies = false;
-    currentScene = new HouseScene;
+    currentScene = new MenuScene;
     view.setSize(/*window.getSize().x, window.getSize().y*/window.getSize().x * 0.5f, window.getSize().y * 0.5f);
     alpha = 0;
     fadeRectangle.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));
@@ -41,8 +41,9 @@ void Director::run() ///buclePrincipal();
 
         float deltaTime = clock.restart().asSeconds();
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
         {
+            std::cout << "Estoy apretando espacio, creeme" << std::endl;
         }
 
         debugA("Comienzo");
@@ -84,6 +85,7 @@ void Director::updateScene(float deltaTime)
     if(currentScene != nullptr && currentScene->shouldTransition())
     {
         changeScene = true;
+        std::cout << "ChangeScene primero " << changeScene << std::endl;
         nextScene = currentScene->nextSceneState();
     }
     debugA("transition");
@@ -93,26 +95,31 @@ void Director::updateScene(float deltaTime)
         switch(nextScene)
         {
             case SceneState::MainMenu:
-                setScene(new MenuScene);
                 initMenuScene();
                 break;
             case SceneState::House:
-                setScene(new HouseScene);
                 initHouseScene();
                 break;
             case SceneState::City:
-                setScene(new CityScene);
                 initCityScene();
                 break;
             case SceneState::Default:
                 break;
         }
-        changeScene = false;
         fadeOut(deltaTime);
+        changeScene = false;
+        std::cout << "ChangeScene después " << changeScene << std::endl;
     }
     else if(currentScene != nullptr)
     {
-        currentScene->update(window, deltaTime);
+        if (currentScene)
+            {
+                currentScene->update(window, deltaTime);
+            }
+            else
+            {
+                debugA("currentScene es nullptr");
+            }
     }
 }
 
@@ -121,19 +128,15 @@ void Director::gameEvents(float deltaTime)
     debugA("comienzo gameEvents");
     if(world != nullptr)
     {
+        debugA("entro");
         world->Step(timeStep, velocityIterations, positionIterations);
         debugA("worldStep");
-        if(currentScene != nullptr)
-        {
-            subject.eventTrigger(ObserverEvents::TRANSITION);
-        }
-        debugA("eventTrigger");
     }
 }
 
 void Director::render()
 {
-    window.clear(sf::Color::Cyan);
+    window.clear();
     if(changeScene)
     {
         window.draw(fadeRectangle);
@@ -189,15 +192,21 @@ void Director::initMenuScene()
 
 void Director::initHouseScene()
 {
+    world = new b2World(b2Vec2(0.f, 10.f));
+    colisionCheck = new Colision();
+    world->SetContactListener(colisionCheck);
+
+    boundFactory = std::make_unique<SensorFactory>();
+
+    sensor = boundFactory->createBound(world, 1000.f, 670.f, 100.f, 50.f, Kind::HOUSESENSOR);
+
     setScene(new HouseScene);
 
     currentScene->init();
 
-    drawPlayer = true;
+    sensor->addObserver(currentScene);
 
-    world = new b2World(b2Vec2(0.f, 10.f));
-    collisionCheck = new Collision();
-    world->SetContactListener(collisionCheck);
+    drawPlayer = true;
 
     fooDrawInstance.SetFlags( b2Draw::e_shapeBit );
 
@@ -215,43 +224,22 @@ void Director::initHouseScene()
 
     boundFactory->createBound(world, 0.f, 723.f, 3000.f, 0.f, Kind::FLOOR);
 
-    boundFactory = std::make_unique<SensorFactory>();
-
-    sensor = boundFactory->createBound(world, 1000.f, 670.f, 100.f, 50.f, Kind::HOUSESENSOR);
-
     player = new Player();
     player->createPlayer(world, 400.f, 658.f);
-
-    subject.addObserver(player);
-    subject.addObserver(collisionCheck);
 }
 
 void Director::initCityScene()
 {
-    setScene(new HouseScene);
+    setScene(new CityScene);
+
+    if(currentScene) std::cout << "CurrentScene " << std::endl;
 
     currentScene->init();
 
     drawNpcs = true;
     drawPlayer = true;
-}
 
-void Director::cleanScene(b2World* world)
-{
-    if(world != nullptr)
-    {
-        for (b2Body* body = world->GetBodyList(); body != nullptr; body = body->GetNext())
-        {
-            UserdataTag* tag = reinterpret_cast<UserdataTag*>(body->GetUserData().pointer);
-
-            delete tag;
-
-            world->DestroyBody(body);
-        }
-
-        delete world;
-        world = nullptr;
-    }
+    debugA("inicio bien");
 }
 
 void Director::fadeOut(float deltaTime)
@@ -285,12 +273,10 @@ void Director::setScene(Scene* newScene)
 {
     if(currentScene)
     {
-        subject.removeObserver(currentScene);
         delete currentScene;
         currentScene = nullptr;
     }
     currentScene = newScene;
-    subject.addObserver(currentScene);
 }
 
 Director::~Director()
@@ -301,10 +287,10 @@ Director::~Director()
         player = nullptr;
     }
 
-    if(collisionCheck != nullptr)
+    if(colisionCheck != nullptr)
     {
-        delete collisionCheck;
-        collisionCheck = nullptr;
+        delete colisionCheck;
+        colisionCheck = nullptr;
     }
 
     if(sensor != nullptr)

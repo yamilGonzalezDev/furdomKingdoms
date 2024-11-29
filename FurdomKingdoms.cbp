@@ -56,8 +56,8 @@
 			<Add directory="box2d-2.4.2/lib" />
 		</Linker>
 		<Unit filename="src/animationManager.hpp" />
-		<Unit filename="src/collisions.cpp" />
-		<Unit filename="src/collisions.hpp" />
+		<Unit filename="src/colisions.cpp" />
+		<Unit filename="src/colisions.hpp" />
 		<Unit filename="src/director.cpp" />
 		<Unit filename="src/director.hpp" />
 		<Unit filename="src/enemy.cpp" />

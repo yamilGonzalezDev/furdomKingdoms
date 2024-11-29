@@ -158,46 +158,39 @@ void HouseScene::init()
 
 void HouseScene::update(sf::RenderWindow& window, float deltaTime)
 {
-    if(!cinematic)
+    sf::Vector2f cameraPos = window.getView().getCenter();
+
+    float thresholdX = window.getSize().x * 0.50f;
+
+    float texturePositionXFar = 0.f;
+    if(cameraPos.x > thresholdX)
     {
-        sf::Vector2f cameraPos = window.getView().getCenter();
-
-        float thresholdX = window.getSize().x * 0.50f;
-
-        float texturePositionXFar = 0.f;
-        if(cameraPos.x > thresholdX)
-        {
-            texturePositionXFar = (cameraPos.x - thresholdX) * parallaxFactorFar;
-        }
-        if(texturePositionXFar < 0)
-        {
-            texturePositionXFar = 0;
-        }
-        farSprite.setPosition(texturePositionXFar, 200.f);
-
-        float texturePositionXMid = 0.f;
-        if(cameraPos.x > thresholdX)
-        {
-            texturePositionXMid = (cameraPos.x - thresholdX) * parallaxFactorMid;
-        }
-        midSprite.setPosition(texturePositionXMid, 200.f);
-
-        float texturePositionXNear = 0.f;
-        if(cameraPos.x > thresholdX)
-        {
-            texturePositionXNear = (cameraPos.x - thresholdX) * parallaxFactorNear;
-        }
-
-        if(texturePositionXNear < 0)
-        {
-            texturePositionXNear = 0;
-        }
-        nearSprite.setPosition(texturePositionXNear, 200.f);
+        texturePositionXFar = (cameraPos.x - thresholdX) * parallaxFactorFar;
     }
-    else
+    if(texturePositionXFar < 0)
     {
-        std::cout << "Empieza cinematica" << std::endl;
+        texturePositionXFar = 0;
     }
+    farSprite.setPosition(texturePositionXFar, 200.f);
+
+    float texturePositionXMid = 0.f;
+    if(cameraPos.x > thresholdX)
+    {
+        texturePositionXMid = (cameraPos.x - thresholdX) * parallaxFactorMid;
+    }
+    midSprite.setPosition(texturePositionXMid, 200.f);
+
+    float texturePositionXNear = 0.f;
+    if(cameraPos.x > thresholdX)
+    {
+        texturePositionXNear = (cameraPos.x - thresholdX) * parallaxFactorNear;
+    }
+
+    if(texturePositionXNear < 0)
+    {
+        texturePositionXNear = 0;
+    }
+    nearSprite.setPosition(texturePositionXNear, 200.f);
 }
 
 void HouseScene::render(sf::RenderWindow& window)
@@ -218,13 +211,13 @@ void HouseScene::cleanup()
 
 bool HouseScene::shouldTransition() const
 {
-    /*if(transition) return transition;*/
-    return false;
+    return transition;
 }
 
 void HouseScene::notify(ObserverEvents event)
 {
     if(transition) return;
+
     if(event == ObserverEvents::TRANSITION)
     {
         transition = true;
@@ -233,8 +226,9 @@ void HouseScene::notify(ObserverEvents event)
 
 SceneState HouseScene::nextSceneState() const
 {
-    return SceneState::Default;
+    return SceneState::City;
 }
+
 /**CIUDAD**/
 
 void CityScene::init()
@@ -245,6 +239,7 @@ void CityScene::init()
     }
 
     background.setTexture(backgroundTexture);
+    background.setPosition(0.f, 0.f);
 }
 
 void CityScene::update(sf::RenderWindow& window, float deltaTime)
@@ -254,7 +249,7 @@ void CityScene::update(sf::RenderWindow& window, float deltaTime)
 
 void CityScene::render(sf::RenderWindow& window)
 {
-
+    window.draw(background);
 }
 
 void CityScene::cleanup()

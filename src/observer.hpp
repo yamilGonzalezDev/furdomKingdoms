@@ -31,6 +31,11 @@ class Subject
 
         void addObserver(Observer* observer)
         {
+            if(observer == nullptr)
+            {
+                std::cerr << "Error: Intentaste agregar un observador nulo" << std::endl;
+                return;
+            }
             observers.push_back(observer);
         }
 
@@ -39,9 +44,23 @@ class Subject
             observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
         }
 
+        void debugSubject()
+        {
+            std::cout << "Funciono" << std::endl;
+            for(auto* observer : observers)
+            {
+                std::cout << "Ingreso al for" << std::endl;
+                std::cout << "Puntero observer: " << observer << std::endl;
+                if(observer == nullptr)
+                {
+                    std::cerr << "Error: Observador nulo en la lista" << std::endl;
+                }
+            }
+        }
+
         void eventTrigger(ObserverEvents event)
         {
-            for(Observer* observer : observers)
+            for (Observer* observer : observers)
             {
                 observer->notify(event);
             }
