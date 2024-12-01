@@ -20,7 +20,6 @@ void MenuScene::init()
     {
         menuOptions[i].setFont(font);
         menuOptions[i].setCharacterSize(50);
-        menuOptions[i].setFillColor(sf::Color::White);
         menuOptions[i].setOutlineThickness(2.f);
     }
 
@@ -29,14 +28,17 @@ void MenuScene::init()
     menuOptions[0].setString("Start");
     menuOptions[0].setOrigin(menuOptions[0].getGlobalBounds().width / 2, menuOptions[0].getGlobalBounds().height / 2);
     menuOptions[0].setPosition(WIDTH / 2, HEIGHT / 2 - totalHeight * 2);
+    menuOptions[0].setFillColor(sf::Color::Yellow);
 
     menuOptions[1].setString("Settings");
     menuOptions[1].setOrigin(menuOptions[1].getGlobalBounds().width / 2, menuOptions[1].getGlobalBounds().height / 2);
     menuOptions[1].setPosition(WIDTH / 2, HEIGHT / 2 - 25);
+    menuOptions[1].setFillColor(sf::Color::White);
 
     menuOptions[2].setString("Exit");
     menuOptions[2].setOrigin(menuOptions[2].getGlobalBounds().width / 2, menuOptions[1].getGlobalBounds().height / 2);
     menuOptions[2].setPosition(WIDTH / 2, HEIGHT / 2 + totalHeight);
+    menuOptions[2].setFillColor(sf::Color::White);
 
     background.setTexture(backgroundTexture);
     background.setScale(13.f, 13.f);

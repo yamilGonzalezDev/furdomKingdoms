@@ -13,6 +13,14 @@
 #include "fooDraw.hpp"
 #include "observer.hpp"
 
+enum class TransitionState
+{
+    NONE,
+    FADINGOUT,
+    LOADING,
+    FADINGIN
+};
+
 class Director
 {
     public:
@@ -32,8 +40,11 @@ class Director
         sf::Clock clock;
         FooDraw fooDrawInstance;
         SceneState nextScene;
+        TransitionState transitionState;
         bool pause;
         bool start;
+        bool fadingIn;
+        bool fadingOut;
         bool drawNpcs;
         bool cargando;
         bool aclarando;
@@ -41,6 +52,7 @@ class Director
         bool changeScene;
         bool drawEnemies;
         bool oscureciendo;
+        bool transitioning;
         int alpha = 255;
         float transitionTime = 0.f;
         float maxTransitionTime;
@@ -61,13 +73,13 @@ class Director
         void gameEvents(float);
         void render();
 
-        void fadeIn(float);
-        void fadeOut(float);
         void initCityScene();
         void initMenuScene();
         void initHouseScene();
         void setScene(Scene*);
         void cleanScene(b2World*);
+        void fadeOut(float);
+        void fadeIn(float);
 };
 
 #endif // DIRECTOR_HPP_INCLUDED
