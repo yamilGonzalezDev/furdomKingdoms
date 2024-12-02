@@ -1388,7 +1388,7 @@
 	<box2d/box2d.h>
 	<unordered_map>
 
-1733096851 d:\utn\progra2\furdomkingdoms\src\scene.hpp
+1733116438 d:\utn\progra2\furdomkingdoms\src\scene.hpp
 	<SFML/Graphics.hpp>
 	<iostream>
 	"observer.hpp"
@@ -1406,14 +1406,14 @@
 	"entity.hpp"
 	<iostream>
 
-1733015857 source:d:\utn\progra2\furdomkingdoms\src\scene.cpp
+1733116098 source:d:\utn\progra2\furdomkingdoms\src\scene.cpp
 	"scene.hpp"
 	"entity.hpp"
 
 1730848689 source:d:\utn\progra2\furdomkingdoms\src\texts.cpp
 	"texts.hpp"
 
-1733113086 source:d:\utn\progra2\furdomkingdoms\src\director.cpp
+1733115998 source:d:\utn\progra2\furdomkingdoms\src\director.cpp
 	<iostream>
 	"director.hpp"
 	"colisions.hpp"

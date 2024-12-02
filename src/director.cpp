@@ -45,7 +45,9 @@ void Director::run() ///buclePrincipal();
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
         {
-            view.setSize(WIDTH, HEIGHT);
+            b2Body* body = player->getBody();
+
+            std::cout << "x: " << body->GetPosition().x << ", y: " << body->GetPosition().y << std::endl;
         }
 
         debugA("Comienzo");
@@ -224,7 +226,7 @@ void Director::initCityScene()
 
     boundFactory = std::make_unique<SensorFactory>();
 
-    sensor = boundFactory->createBound(world, 700.f, 640.f, 100.f, 100.f, Kind::DOOR);
+    sensor = boundFactory->createBound(world, 137.f, 672.f, 20.f, 28.f, Kind::DOOR);
 
     boundFactory = std::make_unique<LimitsFactory>();
 
@@ -236,12 +238,12 @@ void Director::initCityScene()
 
     if(player != nullptr)
     {
-        player->playerBody->SetTransform(b2Vec2(0.f / 30.f, 658.f / 30.f), 0.0f);
+        player->playerBody->SetTransform(b2Vec2(0.f / 30.f, 676.f / 30.f), 0.0f);
     }
     else
     {
         player = new Player;
-        player->createPlayer(world, 400.f, 658.f);
+        player->createPlayer(world, 4.f, 676.f);
     }
 }
 
@@ -266,8 +268,6 @@ void Director::initWorld()
     fooDrawInstance.SetFlags(b2Draw::e_shapeBit);
 
     world->SetDebugDraw(&fooDrawInstance);
-
-    std::cout << "World initialized." << std::endl;
 }
 
 void Director::loadScene()
@@ -283,8 +283,6 @@ void Director::setScene(Scene* newScene)
         currentScene = nullptr;
     }
     currentScene = newScene;
-
-    currentScene->init();
 }
 
 void Director::cleanScene(b2World* world)
@@ -379,4 +377,5 @@ Director::~Director()
         }
         world = nullptr;
     }
+    std::cout << "Finalizo correctamente" << std::endl;
 }

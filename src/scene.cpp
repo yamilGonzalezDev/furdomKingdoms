@@ -2,7 +2,7 @@
 #include "entity.hpp"
 
 /**MENU**/
-void MenuScene::init()
+MenuScene::MenuScene()
 {
     if(!backgroundTexture.loadFromFile("Textures/menu/scroll.png"))
     {
@@ -90,11 +90,6 @@ void MenuScene::render(sf::RenderWindow& window)
     window.draw(menuOptions[2]);
 }
 
-void MenuScene::cleanup()
-{
-
-}
-
 bool MenuScene::shouldTransition() const
 {
     if(currentOption == 0 && sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
@@ -116,9 +111,8 @@ SceneState MenuScene::nextSceneState() const
 
 /**CASA**/
 
-void HouseScene::init()
+HouseScene::HouseScene()
 {
-    transition = false;
     if(!backgroundTexture.loadFromFile("Textures/houseLevel/casaNueva.png"))
     {
         std::cerr << "Error cargando las texturas de la casa" << std::endl;
@@ -160,7 +154,7 @@ void HouseScene::init()
 
 void HouseScene::update(sf::RenderWindow& window, float deltaTime)
 {
-    /*sf::Vector2f cameraPos = window.getView().getCenter();
+    sf::Vector2f cameraPos = window.getView().getCenter();
 
     float thresholdX = window.getSize().x * 0.50f;
 
@@ -192,7 +186,7 @@ void HouseScene::update(sf::RenderWindow& window, float deltaTime)
     {
         texturePositionXNear = 0;
     }
-    nearSprite.setPosition(texturePositionXNear, 200.f);*/
+    nearSprite.setPosition(texturePositionXNear, 200.f);
 }
 
 void HouseScene::render(sf::RenderWindow& window)
@@ -204,11 +198,6 @@ void HouseScene::render(sf::RenderWindow& window)
     window.draw(background);
     window.draw(rect);
     window.draw(candle);
-}
-
-void HouseScene::cleanup()
-{
-
 }
 
 bool HouseScene::shouldTransition() const
@@ -235,7 +224,7 @@ SceneState HouseScene::nextSceneState() const
 
 /**CIUDAD**/
 
-void CityScene::init()
+CityScene::CityScene()
 {
     if(!backgroundTexture.loadFromFile("Textures/cityLevel/city.png"))
     {
@@ -256,11 +245,6 @@ void CityScene::render(sf::RenderWindow& window)
     window.draw(background);
 }
 
-void CityScene::cleanup()
-{
-
-}
-
 bool CityScene::shouldTransition() const
 {
     return false;
@@ -272,6 +256,38 @@ void CityScene::notify(ObserverEvents event)
 }
 
 SceneState CityScene::nextSceneState() const
+{
+    return SceneState::Default;
+}
+
+/**FOREST**/
+
+ForestScene::ForestScene()
+{
+    //if(backgroundTexture.loadFromFile())
+}
+
+void ForestScene::update(sf::RenderWindow&, float)
+{
+
+}
+
+void ForestScene::render(sf::RenderWindow&)
+{
+
+}
+
+bool ForestScene::shouldTransition() const
+{
+    return false;
+}
+
+void ForestScene::notify(ObserverEvents)
+{
+
+}
+
+SceneState ForestScene::nextSceneState() const
 {
     return SceneState::Default;
 }

@@ -10,6 +10,7 @@ enum class SceneState
     Menu,
     House,
     City,
+    //Forest,
     Default
 };
 
@@ -19,15 +20,11 @@ class Scene : public Observer
         const float WIDTH = 1366;
         const float HEIGHT = 768;
     public:
-        virtual ~Scene(){}
-
-        virtual void init() = 0;
+        virtual ~Scene() = default;
 
         virtual void update(sf::RenderWindow&, float) = 0;
 
         virtual void render(sf::RenderWindow&) = 0;
-
-        virtual void cleanup() = 0;
 
         virtual bool shouldTransition() const { return false; };
 
@@ -37,8 +34,8 @@ class Scene : public Observer
 class MenuScene : public Scene
 {
     public:
-        void init() override;
-        void cleanup() override;
+        MenuScene();
+
         void render(sf::RenderWindow&) override;
         void update(sf::RenderWindow&, float) override;
         void notify(ObserverEvents) override;
@@ -55,10 +52,10 @@ class MenuScene : public Scene
 class HouseScene : public Scene
 {
     public:
-        void init() override;
+        HouseScene();
+
         void update(sf::RenderWindow&, float) override;
         void render(sf::RenderWindow&) override;
-        void cleanup() override;
         void notify(ObserverEvents) override;
         bool shouldTransition() const override;
         SceneState nextSceneState() const override;
@@ -76,11 +73,26 @@ class HouseScene : public Scene
 class CityScene : public Scene
 {
     public:
+        CityScene();
+
         void notify(ObserverEvents) override;
-        void init() override;
         void update(sf::RenderWindow&, float) override;
         void render(sf::RenderWindow&) override;
-        void cleanup() override;
+        bool shouldTransition() const override;
+        SceneState nextSceneState() const override;
+        sf::Texture backgroundTexture;
+        sf::Sprite background;
+    private:
+};
+
+class ForestScene : public Scene
+{
+    public:
+        ForestScene();
+
+        void notify(ObserverEvents) override;
+        void update(sf::RenderWindow&, float) override;
+        void render(sf::RenderWindow&) override;
         bool shouldTransition() const override;
         SceneState nextSceneState() const override;
         sf::Texture backgroundTexture;
