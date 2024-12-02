@@ -5,14 +5,15 @@
 
 void debugA(std::string a)
 {
-    //std::cout << "Mensaje de " + a << std::endl;
+    ///std::cout << "Mensaje de " + a << std::endl;
 }
 
 Director::Director() : WIDTH(1366), HEIGHT(768), fooDrawInstance(window)
 {
     window.create(sf::VideoMode(WIDTH, HEIGHT), "Furdom Kingdoms");
     window.setFramerateLimit(60);
-    nextScene = SceneState::MainMenu;
+    nextScene = SceneState::City;
+    loaded = false;
     drawNpcs = false;
     cargando = false;
     aclarando = false;
@@ -53,7 +54,8 @@ void Director::run() ///buclePrincipal();
         if(!transitioning)
         {
             update(deltaTime);
-            debugA("update");            gameEvents(deltaTime);
+            debugA("update");
+            gameEvents();
             debugA("gameEvents");
         }
         render();
@@ -91,6 +93,7 @@ void Director::updateScene(float deltaTime)
         nextScene = currentScene->nextSceneState();
         transitionState = TransitionState::FADINGOUT;
     }
+
     if(transitioning)
     {
         switch(transitionState)
@@ -101,7 +104,7 @@ void Director::updateScene(float deltaTime)
             case TransitionState::LOADING:
                 switch(nextScene)
                 {
-                    case SceneState::MainMenu:
+                    case SceneState::Menu:
                         initMenuScene();
                         break;
                     case SceneState::House:
@@ -130,7 +133,7 @@ void Director::updateScene(float deltaTime)
     }
 }
 
-void Director::gameEvents(float deltaTime)
+void Director::gameEvents()
 {
     if(world != nullptr)
     {
@@ -148,27 +151,24 @@ void Director::render()
     if(drawNpcs)
     {
     }
-    debugA("currentScene");
     if(drawPlayer && player != nullptr)
     {
         view.setCenter(player->getPos().x + 33.f, 570);
         window.setView(view);
         player->draw(window);
     }
-    debugA("Player");
     if(world)
     {
         world->DebugDraw();
     }
-    debugA("debugDraw");
     if(drawEnemies)
     {
     }
-    debugA("enemy");
     if(transitioning)
     {
         window.draw(fadeRectangle);
     }
+
     window.display();
 }
 
@@ -184,16 +184,11 @@ void Director::initMenuScene()
     drawEnemies = true;
 
     setScene(new MenuScene);
-    currentScene->init();
 }
 
 void Director::initHouseScene()
 {
-    if(world) cleanScene(world);
-
-    world = new b2World(b2Vec2(0.f, 10.f));
-    colisionCheck = new Colision();
-    world->SetContactListener(colisionCheck);
+    initWorld();
 
     boundFactory = std::make_unique<SensorFactory>();
 
@@ -201,15 +196,9 @@ void Director::initHouseScene()
 
     setScene(new HouseScene);
 
-    currentScene->init();
-
     sensor->addObserver(currentScene);
 
     drawPlayer = true;
-
-    fooDrawInstance.SetFlags( b2Draw::e_shapeBit );
-
-    world->SetDebugDraw( &fooDrawInstance );
 
     boundFactory = std::make_unique<LimitsFactory>();
 
@@ -224,32 +213,66 @@ void Director::initHouseScene()
     boundFactory->createBound(world, 0.f, 723.f, 3000.f, 0.f, Kind::FLOOR);
 
     player = new Player();
-    player->createPlayer(world, 400.f, 658.f);
+    player->createPlayer(world, 400.f, 680.f);
 }
 
 void Director::initCityScene()
 {
-    if(world) cleanScene(world);
-
-    world = new b2World(b2Vec2(0.f, 10.f));
-    colisionCheck = new Colision();
-    world->SetContactListener(colisionCheck);
+    initWorld();
 
     setScene(new CityScene);
 
-    currentScene->init();
-
     boundFactory = std::make_unique<SensorFactory>();
+
+    sensor = boundFactory->createBound(world, 700.f, 640.f, 100.f, 100.f, Kind::DOOR);
 
     boundFactory = std::make_unique<LimitsFactory>();
 
     boundFactory->createBound(world, 100.f, 100.f, 100.f, 100.f, Kind::LIMITS);
 
-    boundFactory->createBound(world, 0.f, 723.f, 3000.f, 0.f, Kind::FLOOR);
+    boundFactory->createBound(world, 650.f, 701.f, 1000.f, 0.f, Kind::FLOOR);
 
     drawPlayer = true;
 
-    player->playerBody->SetTransform(b2Vec2(400.f / 30.f, 658.f / 30.f), 0.0f);
+    if(player != nullptr)
+    {
+        player->playerBody->SetTransform(b2Vec2(0.f / 30.f, 658.f / 30.f), 0.0f);
+    }
+    else
+    {
+        player = new Player;
+        player->createPlayer(world, 400.f, 658.f);
+    }
+}
+
+void Director::initWorld()
+{
+    if(world != nullptr)
+    {
+        cleanScene(world);
+    }
+    else
+    {
+        world = new b2World(b2Vec2(0.f, 10.f));
+    }
+
+    if(colisionCheck == nullptr)
+    {
+        colisionCheck = new Colision();
+    }
+
+    world->SetContactListener(colisionCheck);
+
+    fooDrawInstance.SetFlags(b2Draw::e_shapeBit);
+
+    world->SetDebugDraw(&fooDrawInstance);
+
+    std::cout << "World initialized." << std::endl;
+}
+
+void Director::loadScene()
+{
+
 }
 
 void Director::setScene(Scene* newScene)
@@ -260,6 +283,8 @@ void Director::setScene(Scene* newScene)
         currentScene = nullptr;
     }
     currentScene = newScene;
+
+    currentScene->init();
 }
 
 void Director::cleanScene(b2World* world)
@@ -270,7 +295,7 @@ void Director::cleanScene(b2World* world)
         {
             UserdataTag* tag = reinterpret_cast<UserdataTag*>(body->GetUserData().pointer);
 
-            if(tag->kind == Kind::PLAYER)
+            if(body == player->getBody())
             {
                 continue;
             }
@@ -313,8 +338,8 @@ void Director::fadeIn(float deltaTime)
     }
     else
     {
-            transitionState = TransitionState::NONE;
-            transitioning = false;
+        transitionState = TransitionState::NONE;
+        transitioning = false;
     }
 }
 

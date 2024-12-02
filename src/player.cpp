@@ -10,6 +10,19 @@ Player::Player()
     : isJumping(false), isOnGround(true), isAttacking(false)
 {
     loadTextures();
+
+}
+
+bool Player::loadTextures()
+{
+    if(!texture.loadFromFile("Textures/mainCharacter/charSheetNeeko.png"))
+    {
+        std::cerr << "Error al cargar las texturas del player" << std::endl;
+        return false;
+    }
+
+    sprite.setTexture(texture);
+
     animations.emplace(PlayerState::Idle, Animation{
         { sf::IntRect(0, 0, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
           sf::IntRect(50, 0, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
@@ -46,17 +59,6 @@ Player::Player()
         { sf::IntRect(0, 148, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
           sf::IntRect(50, 148, CHARACTER_SIZE.x, CHARACTER_SIZE.y) }, 0.08f
     });
-}
-
-bool Player::loadTextures()
-{
-    if(!texture.loadFromFile("Textures/mainCharacter/charSheetNeeko.png"))
-    {
-        std::cerr << "Error al cargar las texturas del player" << std::endl;
-        return false;
-    }
-
-    sprite.setTexture(texture);
 
     return true;
 }
@@ -195,7 +197,7 @@ PlayerState Player::getPlayerState() const { return currentState; }
 
 sf::Vector2f Player::getPos() const { return sprite.getPosition(); }
 
-b2Body* Player::getBody() { return playerBody; }
+b2Body* Player::getBody() { if(playerBody) return playerBody; else return nullptr; }
 
 Player::~Player()
 {

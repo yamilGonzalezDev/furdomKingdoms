@@ -41,8 +41,7 @@ class Director
         FooDraw fooDrawInstance;
         SceneState nextScene;
         TransitionState transitionState;
-        bool pause;
-        bool start;
+        bool loaded;
         bool fadingIn;
         bool fadingOut;
         bool drawNpcs;
@@ -70,9 +69,10 @@ class Director
 
         void update(float);
         void updateScene(float);
-        void gameEvents(float);
+        void gameEvents();
         void render();
 
+        void initWorld();
         void initCityScene();
         void initMenuScene();
         void initHouseScene();
@@ -80,6 +80,7 @@ class Director
         void cleanScene(b2World*);
         void fadeOut(float);
         void fadeIn(float);
+        void loadScene();
 };
 
 #endif // DIRECTOR_HPP_INCLUDED

@@ -7,7 +7,7 @@
 
 enum class SceneState
 {
-    MainMenu,
+    Menu,
     House,
     City,
     Default
