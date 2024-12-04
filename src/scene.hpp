@@ -10,7 +10,7 @@ enum class SceneState
     Menu,
     House,
     City,
-    //Forest,
+    Bar,
     Default
 };
 
@@ -75,6 +75,7 @@ class CityScene : public Scene
     public:
         CityScene();
 
+        void sensorNotify(bool) override;
         void notify(ObserverEvents) override;
         void update(sf::RenderWindow&, float) override;
         void render(sf::RenderWindow&) override;
@@ -83,6 +84,8 @@ class CityScene : public Scene
         sf::Texture backgroundTexture;
         sf::Sprite background;
     private:
+        bool transition = false;
+        bool sensorActive = false;
 };
 
 class ForestScene : public Scene
@@ -98,6 +101,23 @@ class ForestScene : public Scene
         sf::Texture backgroundTexture;
         sf::Sprite background;
     private:
+};
+
+class BarScene : public Scene
+{
+    public:
+        BarScene();
+
+        void notify(ObserverEvents) override;
+        void update(sf::RenderWindow&, float) override;
+        void render(sf::RenderWindow&) override;
+        bool shouldTransition() const override;
+        SceneState nextSceneState() const override;
+        sf::Texture barTexture;
+        sf::Sprite bar;
+    private:
+        bool transition = false;
+
 };
 
 #endif // SCENE_HPP_INCLUDED

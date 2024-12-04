@@ -12,7 +12,7 @@ Director::Director() : WIDTH(1366), HEIGHT(768), fooDrawInstance(window)
 {
     window.create(sf::VideoMode(WIDTH, HEIGHT), "Furdom Kingdoms");
     window.setFramerateLimit(60);
-    nextScene = SceneState::City;
+    nextScene = SceneState::House;
     loaded = false;
     drawNpcs = false;
     cargando = false;
@@ -45,9 +45,7 @@ void Director::run() ///buclePrincipal();
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
         {
-            b2Body* body = player->getBody();
-
-            std::cout << "x: " << body->GetPosition().x << ", y: " << body->GetPosition().y << std::endl;
+            sensor->sensorTrigger(true);
         }
 
         debugA("Comienzo");
@@ -114,6 +112,9 @@ void Director::updateScene(float deltaTime)
                         break;
                     case SceneState::City:
                         initCityScene();
+                        break;
+                    case SceneState::Bar:
+                        initBarScene();
                         break;
                     case SceneState::Default:
                         break;
@@ -226,7 +227,7 @@ void Director::initCityScene()
 
     boundFactory = std::make_unique<SensorFactory>();
 
-    sensor = boundFactory->createBound(world, 137.f, 672.f, 20.f, 28.f, Kind::DOOR);
+    sensor = boundFactory->createBound(world, 137.f, 672.f, 20.f, 28.f, Kind::BARDOOR);
 
     boundFactory = std::make_unique<LimitsFactory>();
 
@@ -235,6 +236,33 @@ void Director::initCityScene()
     boundFactory->createBound(world, 650.f, 701.f, 1000.f, 0.f, Kind::FLOOR);
 
     drawPlayer = true;
+
+    if(player != nullptr)
+    {
+        player->playerBody->SetTransform(b2Vec2(0.f / 30.f, 676.f / 30.f), 0.0f);
+    }
+    else
+    {
+        player = new Player;
+        player->createPlayer(world, 4.f, 676.f);
+    }
+
+    sensor->addObserver(currentScene);
+}
+
+void Director::initBarScene()
+{
+    initWorld();
+
+    setScene(new BarScene);
+
+    boundFactory = std::make_unique<SensorFactory>();
+
+    boundFactory = std::make_unique<LimitsFactory>();
+
+    boundFactory->createBound(world, 100.f, 700.f, 700.f, 1.f, Kind::FLOOR);
+
+    drawPlayer = false;
 
     if(player != nullptr)
     {
@@ -268,11 +296,6 @@ void Director::initWorld()
     fooDrawInstance.SetFlags(b2Draw::e_shapeBit);
 
     world->SetDebugDraw(&fooDrawInstance);
-}
-
-void Director::loadScene()
-{
-
 }
 
 void Director::setScene(Scene* newScene)
@@ -343,15 +366,29 @@ void Director::fadeIn(float deltaTime)
 
 Director::~Director()
 {
+
+    if(world != nullptr)
+    {
+        if(world->GetBodyCount() != 0)
+        {
+            for(b2Body* body = world->GetBodyList(); body != nullptr;body = body->GetNext())
+            {
+                UserdataTag* tag = reinterpret_cast<UserdataTag*>(body->GetUserData().pointer);
+
+                std::cout << "Tag kind: " << static_cast<int>(tag->kind) << std::endl;
+
+                delete tag;
+
+                world->DestroyBody(body);
+            }
+            delete world;
+        }
+        world = nullptr;
+    }
     if(player != nullptr)
     {
         delete player;
         player = nullptr;
-    }
-    if(colisionCheck != nullptr)
-    {
-        delete colisionCheck;
-        colisionCheck = nullptr;
     }
     if(sensor != nullptr)
     {
@@ -363,19 +400,11 @@ Director::~Director()
         delete currentScene;
         currentScene = nullptr;
     }
-    if(world != nullptr)
+    if(colisionCheck != nullptr)
     {
-        if(world->GetBodyCount() != 0)
-        {
-            for(b2Body* body = world->GetBodyList(); body != nullptr; body = body->GetNext())
-            {
-                UserdataTag* tag = reinterpret_cast<UserdataTag*>(body->GetUserData().pointer);
-                delete tag;
-                world->DestroyBody(body);
-            }
-            delete world;
-        }
-        world = nullptr;
+        delete colisionCheck;
+        colisionCheck = nullptr;
     }
+
     std::cout << "Finalizo correctamente" << std::endl;
 }

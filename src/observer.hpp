@@ -9,6 +9,7 @@
 enum class ObserverEvents
 {
     TRANSITION,
+    SENSOR,
     DEFAULT
 };
 
@@ -17,6 +18,7 @@ class Observer
     public:
         virtual ~Observer() = default;
         virtual void notify(ObserverEvents) = 0;
+        virtual void sensorNotify(bool) {};
 };
 
 class Subject
@@ -44,6 +46,15 @@ class Subject
             for(Observer* observer : observers)
             {
                 observer->notify(event);
+            }
+        }
+
+        void sensorTrigger(bool v)
+        {
+            for(Observer* observer : observers)
+            {
+                std::cout << "Funciono" << std::endl;
+                observer->sensorNotify(v);
             }
         }
 };

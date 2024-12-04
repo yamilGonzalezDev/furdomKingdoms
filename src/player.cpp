@@ -2,10 +2,6 @@
 #include "entity.hpp"
 #include <iostream>
 
-void Player::notify(ObserverEvents event)
-{
-}
-
 Player::Player()
     : isJumping(false), isOnGround(true), isAttacking(false)
 {

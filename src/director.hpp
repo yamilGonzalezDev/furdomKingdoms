@@ -1,8 +1,6 @@
 #ifndef DIRECTOR_HPP_INCLUDED
 #define DIRECTOR_HPP_INCLUDED
 
-#include <SFML/Graphics.hpp>
-#include <box2d/box2d.h>
 #include <memory>
 #include "enemy.hpp"
 #include "npc.hpp"
@@ -76,11 +74,11 @@ class Director
         void initCityScene();
         void initMenuScene();
         void initHouseScene();
+        void initBarScene();
         void setScene(Scene*);
         void cleanScene(b2World*);
         void fadeOut(float);
         void fadeIn(float);
-        void loadScene();
 };
 
 #endif // DIRECTOR_HPP_INCLUDED

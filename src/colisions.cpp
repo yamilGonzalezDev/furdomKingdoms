@@ -4,11 +4,6 @@
 #include "entity.hpp"
 #include "limits.hpp"
 
-void Colision::notify(ObserverEvents event)
-{
-    if(event != ObserverEvents::DEFAULT) return;
-}
-
 void Colision::BeginContact(b2Contact* contact)
 {
     b2Fixture* fA = contact->GetFixtureA();
@@ -52,6 +47,18 @@ void Colision::BeginContact(b2Contact* contact)
     {
         std::cout << "Enemigo detectado" << std::endl;
     }
+
+    if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::BARDOOR)
+    {
+        Sensor* sensor = reinterpret_cast<Sensor*>(tagA->object);
+        sensor->sensorTrigger(true);
+    }
+
+    if(tagB->kind == Kind::PLAYER && tagA->kind == Kind::BARDOOR)
+    {
+        Sensor* sensor = reinterpret_cast<Sensor*>(tagA->object);
+        sensor->sensorTrigger(true);
+    }
 }
 
 void Colision::EndContact(b2Contact* contact)
@@ -76,5 +83,17 @@ void Colision::EndContact(b2Contact* contact)
         Player* player = reinterpret_cast<Player*>(tagB->object);
         player->setIsJumping(true);
         player->setIsOnGround(false);
+    }
+
+    if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::BARDOOR)
+    {
+        Sensor* sensor = reinterpret_cast<Sensor*>(tagA->object);
+        sensor->sensorTrigger(false);
+    }
+
+    if(tagB->kind == Kind::PLAYER && tagA->kind == Kind::BARDOOR)
+    {
+        Sensor* sensor = reinterpret_cast<Sensor*>(tagA->object);
+        sensor->sensorTrigger(false);
     }
 }

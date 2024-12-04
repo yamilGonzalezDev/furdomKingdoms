@@ -207,8 +207,6 @@ bool HouseScene::shouldTransition() const
 
 void HouseScene::notify(ObserverEvents event)
 {
-
-    if(event == ObserverEvents::DEFAULT) std::cout << "Mensaje" << std::endl;
     if(transition) return;
 
     if(event == ObserverEvents::TRANSITION)
@@ -237,7 +235,10 @@ CityScene::CityScene()
 
 void CityScene::update(sf::RenderWindow& window, float deltaTime)
 {
-
+    if(sensorActive && sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+    {
+        transition = true;
+    }
 }
 
 void CityScene::render(sf::RenderWindow& window)
@@ -247,47 +248,57 @@ void CityScene::render(sf::RenderWindow& window)
 
 bool CityScene::shouldTransition() const
 {
-    return false;
+    return transition;
+}
+
+void CityScene::sensorNotify(bool v)
+{
+    sensorActive = v;
 }
 
 void CityScene::notify(ObserverEvents event)
 {
-    if(event == ObserverEvents::DEFAULT) return;
+    if(event == ObserverEvents::DEFAULT) std::cout << "Default" << std::endl;
 }
 
 SceneState CityScene::nextSceneState() const
 {
-    return SceneState::Default;
+    return SceneState::Bar;
 }
 
-/**FOREST**/
+/**BAR**/
 
-ForestScene::ForestScene()
+BarScene::BarScene()
 {
-    //if(backgroundTexture.loadFromFile())
+    if(!barTexture.loadFromFile("Textures/barLevel/bar.png"))
+    {
+        std::cerr << "Error al cargar la textura" << std::endl;
+    }
+
+    bar.setTexture(barTexture);
 }
 
-void ForestScene::update(sf::RenderWindow&, float)
-{
-
-}
-
-void ForestScene::render(sf::RenderWindow&)
-{
-
-}
-
-bool ForestScene::shouldTransition() const
-{
-    return false;
-}
-
-void ForestScene::notify(ObserverEvents)
+void BarScene::update(sf::RenderWindow& window, float deltaTime)
 {
 
 }
 
-SceneState ForestScene::nextSceneState() const
+void BarScene::render(sf::RenderWindow& window)
+{
+    window.draw(bar);
+}
+
+SceneState BarScene::nextSceneState() const
 {
     return SceneState::Default;
+}
+
+void BarScene::notify(ObserverEvents event)
+{
+    if(event == ObserverEvents::TRANSITION) transition = true;
+}
+
+bool BarScene::shouldTransition() const
+{
+    return transition;
 }

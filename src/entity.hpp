@@ -26,7 +26,7 @@ enum class Kind
     LIMITS,
     WALLS,
     HOUSESENSOR,
-    DOOR
+    BARDOOR
 };
 
 typedef struct

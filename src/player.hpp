@@ -25,7 +25,7 @@ struct Animation
     Animation(std::vector<sf::IntRect> frames, float duration)  : frames(frames), frameDuration(duration){};
 };
 
-class Player : public Observer
+class Player
 {
     private:
         const sf::Vector2i CHARACTER_SIZE = {50, 37};
@@ -47,7 +47,6 @@ class Player : public Observer
         sf::Texture texture;
 
     public:
-        void notify(ObserverEvents) override;
         Player();
         ~Player();
         b2Body* playerBody;
