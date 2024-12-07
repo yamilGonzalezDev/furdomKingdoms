@@ -255,12 +255,13 @@ void CityScene::update(sf::RenderWindow& window, float deltaTime)
 
 void CityScene::updatePlayer(float deltaTime, b2Vec2 pos, sf::Vector2f spriteScale, PlayerState state)
 {
-
+    playerAnimations.update(deltaTime, pos, spriteScale, state);
 }
 
 void CityScene::render(sf::RenderWindow& window)
 {
     window.draw(background);
+    playerAnimations.draw(window);
 }
 
 bool CityScene::shouldTransition() const
@@ -302,12 +303,13 @@ void BarScene::update(sf::RenderWindow& window, float deltaTime)
 
 void BarScene::updatePlayer(float deltaTime, b2Vec2 pos, sf::Vector2f spriteScale, PlayerState state)
 {
-
+    playerAnimations.update(deltaTime, pos, spriteScale, state);
 }
 
 void BarScene::render(sf::RenderWindow& window)
 {
     window.draw(bar);
+    playerAnimations.draw(window);
 }
 
 SceneState BarScene::nextSceneState() const

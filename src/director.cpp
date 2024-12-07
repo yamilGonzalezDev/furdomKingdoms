@@ -262,11 +262,11 @@ void Director::initBarScene()
 
     boundFactory->createBound(world, 100.f, 700.f, 700.f, 1.f, Kind::FLOOR);
 
-    drawPlayer = false;
+    drawPlayer = true;
 
     if(player != nullptr)
     {
-        player->playerBody->SetTransform(b2Vec2(0.f / 30.f, 676.f / 30.f), 0.0f);
+        player->playerBody->SetTransform(b2Vec2(0.f / PPM, 670.f / PPM), 0.0f);
     }
     else
     {

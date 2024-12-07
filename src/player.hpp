@@ -52,7 +52,7 @@ class Player
         bool isOnGround;
         bool isAttacking;
         b2Vec2 velocity;
-        sf::Vector2f spriteScale;
+        sf::Vector2f spriteScale = {1.5f, 1.5f};
         void switchState(PlayerState);
 };
 

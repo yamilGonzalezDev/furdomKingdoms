@@ -29,6 +29,8 @@ void Player::createPlayer(b2World* world, float posX, float posY)
     initBody(playerBody, Kind::PLAYER, this);
 
     playerBody->SetFixedRotation(true);
+
+    std::cerr << "Player Position: " << playerBody->GetPosition().x << ", " << playerBody->GetPosition().y << std::endl;
 }
 
 void Player::switchState(PlayerState state)
@@ -52,6 +54,7 @@ void Player::keyboardInput()
     {
         velocity.y = -10;
         switchState(PlayerState::Jumping);
+        spriteScale = {1.5f, 1.5f};
         isJumping = true;
     }
 
@@ -155,9 +158,12 @@ PlayerAnimations::PlayerAnimations()
         { sf::IntRect(0, 148, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
           sf::IntRect(50, 148, CHARACTER_SIZE.x, CHARACTER_SIZE.y) }, 0.08f
     });
-    sprite.setScale(1.5f, 1.5f);
+
     sprite.setTextureRect(animations.at(currentState).frames[0]);
     sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height / 2.f);
+    sprite.setScale(1.5f, 1.5f);
+
+    std::cerr << "Sprite scale: " << sprite.getScale().x << ", " << sprite.getScale().y << std::endl;
 }
 
 void PlayerAnimations::setAnimation(PlayerState state)
