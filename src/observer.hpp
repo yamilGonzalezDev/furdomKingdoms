@@ -4,7 +4,6 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include "observer.hpp"
 
 enum class ObserverEvents
 {
@@ -53,7 +52,6 @@ class Subject
         {
             for(Observer* observer : observers)
             {
-                std::cout << "Funciono" << std::endl;
                 observer->sensorNotify(v);
             }
         }

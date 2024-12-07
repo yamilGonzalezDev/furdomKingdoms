@@ -59,6 +59,18 @@ void Colision::BeginContact(b2Contact* contact)
         Sensor* sensor = reinterpret_cast<Sensor*>(tagA->object);
         sensor->sensorTrigger(true);
     }
+
+    if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::GAMESENSOR)
+    {
+        Sensor* sensor = reinterpret_cast<Sensor*>(tagB->object);
+        sensor->sensorTrigger(true);
+    }
+
+    if(tagB->kind == Kind::PLAYER && tagA->kind == Kind::GAMESENSOR)
+    {
+        Sensor* sensor = reinterpret_cast<Sensor*>(tagA->object);
+        sensor->sensorTrigger(true);
+    }
 }
 
 void Colision::EndContact(b2Contact* contact)

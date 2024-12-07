@@ -906,13 +906,12 @@
 	"b2_api.h"
 	"b2_joint.h"
 
-1733327238 d:\utn\progra2\furdomkingdoms\src\observer.hpp
+1733537253 d:\utn\progra2\furdomkingdoms\src\observer.hpp
 	<iostream>
 	<vector>
 	<algorithm>
-	"observer.hpp"
 
-1733326522 d:\utn\progra2\furdomkingdoms\src\player.hpp
+1733538138 d:\utn\progra2\furdomkingdoms\src\player.hpp
 	<SFML/Graphics.hpp>
 	<box2d/box2d.h>
 	<unordered_map>
@@ -1336,7 +1335,7 @@
 	<SFML/Graphics/Drawable.hpp>
 	<SFML/Window/GlResource.hpp>
 
-1733188196 d:\utn\progra2\furdomkingdoms\src\entity.hpp
+1733455460 d:\utn\progra2\furdomkingdoms\src\entity.hpp
 	<SFML/Graphics.hpp>
 	<box2d/box2d.h>
 
@@ -1367,7 +1366,7 @@
 	"entity.hpp"
 	"observer.hpp"
 
-1733268817 source:d:\utn\progra2\furdomkingdoms\src\main.cpp
+1733500656 source:d:\utn\progra2\furdomkingdoms\src\main.cpp
 	"director.hpp"
 
 1733268873 d:\utn\progra2\furdomkingdoms\src\director.hpp
@@ -1386,10 +1385,11 @@
 	<box2d/box2d.h>
 	<unordered_map>
 
-1733326544 d:\utn\progra2\furdomkingdoms\src\scene.hpp
+1733537438 d:\utn\progra2\furdomkingdoms\src\scene.hpp
 	<SFML/Graphics.hpp>
 	<iostream>
 	"observer.hpp"
+	"player.hpp"
 
 1731599551 d:\utn\progra2\furdomkingdoms\src\foodraw.hpp
 	<SFML/Graphics.hpp>
@@ -1399,25 +1399,25 @@
 1731814404 source:d:\utn\progra2\furdomkingdoms\src\npc.cpp
 	"npc.hpp"
 
-1733326522 source:d:\utn\progra2\furdomkingdoms\src\player.cpp
+1733544024 source:d:\utn\progra2\furdomkingdoms\src\player.cpp
 	"player.hpp"
 	"entity.hpp"
 	<iostream>
 
-1733327413 source:d:\utn\progra2\furdomkingdoms\src\scene.cpp
+1733544054 source:d:\utn\progra2\furdomkingdoms\src\scene.cpp
 	"scene.hpp"
 	"entity.hpp"
 
 1730848689 source:d:\utn\progra2\furdomkingdoms\src\texts.cpp
 	"texts.hpp"
 
-1733327468 source:d:\utn\progra2\furdomkingdoms\src\director.cpp
+1733543743 source:d:\utn\progra2\furdomkingdoms\src\director.cpp
 	<iostream>
 	"director.hpp"
 	"colisions.hpp"
 	"entity.hpp"
 
-1733327339 source:d:\utn\progra2\furdomkingdoms\src\colisions.cpp
+1733455788 source:d:\utn\progra2\furdomkingdoms\src\colisions.cpp
 	"colisions.hpp"
 	<iostream>
 	"player.hpp"

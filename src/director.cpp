@@ -45,7 +45,9 @@ void Director::run() ///buclePrincipal();
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
         {
-            sensor->sensorTrigger(true);
+            /*view.setSize(WIDTH, HEIGHT);*/
+
+            if(drawPlayer) std::cout << static_cast<int>(player->getPlayerState()) << std::endl;
         }
 
         debugA("Comienzo");
@@ -69,8 +71,6 @@ void Director::update(float deltaTime)
     {
         if(window.hasFocus())
         {
-            player->updatePhysics();
-            player->updateAnimation(deltaTime);
             player->keyboardInput();
         }
     }
@@ -132,6 +132,7 @@ void Director::updateScene(float deltaTime)
     }
     else if(currentScene != nullptr)
     {
+        if(drawPlayer) currentScene->updatePlayer(deltaTime, player->getPos(), player->getScale(), player->getPlayerState());
         currentScene->update(window, deltaTime);
     }
 }
@@ -156,9 +157,8 @@ void Director::render()
     }
     if(drawPlayer && player != nullptr)
     {
-        view.setCenter(player->getPos().x + 33.f, 570);
+        view.setCenter(player->getPos().x * PPM, player->getPos().y * PPM);
         window.setView(view);
-        player->draw(window);
     }
     if(world)
     {

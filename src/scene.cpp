@@ -4,6 +4,8 @@
 /**MENU**/
 MenuScene::MenuScene()
 {
+    drawPlayer = false;
+
     if(!backgroundTexture.loadFromFile("Textures/menu/scroll.png"))
     {
         std::cerr << "Error cargando las texturas del menu" << std::endl;
@@ -154,6 +156,8 @@ HouseScene::HouseScene()
 
 void HouseScene::update(sf::RenderWindow& window, float deltaTime)
 {
+    //playerAnimations.update(deltaTime);
+
     sf::Vector2f cameraPos = window.getView().getCenter();
 
     float thresholdX = window.getSize().x * 0.50f;
@@ -189,6 +193,11 @@ void HouseScene::update(sf::RenderWindow& window, float deltaTime)
     nearSprite.setPosition(texturePositionXNear, 200.f);
 }
 
+void HouseScene::updatePlayer(float deltaTime, b2Vec2 pos, sf::Vector2f spriteScale, PlayerState state)
+{
+    playerAnimations.update(deltaTime, pos, spriteScale, state);
+}
+
 void HouseScene::render(sf::RenderWindow& window)
 {
     window.draw(farSprite);
@@ -198,6 +207,7 @@ void HouseScene::render(sf::RenderWindow& window)
     window.draw(background);
     window.draw(rect);
     window.draw(candle);
+    playerAnimations.draw(window);
 }
 
 bool HouseScene::shouldTransition() const
@@ -224,6 +234,8 @@ SceneState HouseScene::nextSceneState() const
 
 CityScene::CityScene()
 {
+    drawPlayer = false;
+
     if(!backgroundTexture.loadFromFile("Textures/cityLevel/city.png"))
     {
         std::cerr << "Error al cargar las texturas de la ciudad" << std::endl;
@@ -239,6 +251,11 @@ void CityScene::update(sf::RenderWindow& window, float deltaTime)
     {
         transition = true;
     }
+}
+
+void CityScene::updatePlayer(float deltaTime, b2Vec2 pos, sf::Vector2f spriteScale, PlayerState state)
+{
+
 }
 
 void CityScene::render(sf::RenderWindow& window)
@@ -279,6 +296,11 @@ BarScene::BarScene()
 }
 
 void BarScene::update(sf::RenderWindow& window, float deltaTime)
+{
+
+}
+
+void BarScene::updatePlayer(float deltaTime, b2Vec2 pos, sf::Vector2f spriteScale, PlayerState state)
 {
 
 }

@@ -3,18 +3,118 @@
 #include <iostream>
 
 Player::Player()
-    : isJumping(false), isOnGround(true), isAttacking(false)
+    : isMoving(false), isJumping(false), isOnGround(true), isAttacking(false)
 {
-    loadTextures();
 
 }
 
-bool Player::loadTextures()
+void Player::createPlayer(b2World* world, float posX, float posY)
+{
+    b2BodyDef playerBodyDef;
+    playerBodyDef.type = b2_dynamicBody;
+    playerBodyDef.position.Set(posX / PPM, posY / PPM);
+    playerBody = world->CreateBody(&playerBodyDef);
+
+    b2PolygonShape playerBox;
+    playerBox.SetAsBox(17.f / PPM, 24.f / PPM);
+
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &playerBox;
+    fixtureDef.density = 1.f;
+    fixtureDef.friction = 0.3f;
+    fixtureDef.filter.categoryBits = CATEGORY_PLAYER;
+    fixtureDef.filter.maskBits = CATEGORY_LIMITS | CATEGORY_GROUND | CATEGORY_FLOOR | CATEGORY_SENSOR;
+    playerBody->CreateFixture(&fixtureDef);
+
+    initBody(playerBody, Kind::PLAYER, this);
+
+    playerBody->SetFixedRotation(true);
+}
+
+void Player::switchState(PlayerState state)
+{
+    if(currentState == state) return;
+
+    currentState = state;
+}
+
+void Player::keyboardInput()
+{
+    velocity = playerBody->GetLinearVelocity();
+
+    if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && !isAttacking && isOnGround)
+    {
+        switchState(PlayerState::Attacking);
+        return;
+    }
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && isOnGround && !isJumping)
+    {
+        velocity.y = -10;
+        switchState(PlayerState::Jumping);
+        isJumping = true;
+    }
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+    {
+        velocity.x = -MOVE_SPEED;
+        spriteScale = {-1.5, 1.5};
+        setIsMoving(true);
+    }
+    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    {
+        velocity.x = MOVE_SPEED;
+        spriteScale = {1.5f, 1.5f};
+        setIsMoving(true);
+    }
+    else
+    {
+        velocity.x = 0.f;
+        setIsMoving(false);
+    }
+
+    if (velocity.y > 0 && !isOnGround)
+    {
+        switchState(PlayerState::Falling);
+    }
+    else if (!isMoving && isOnGround && !isJumping)
+    {
+        switchState(PlayerState::Idle);
+    }
+    else if (isMoving && isOnGround && !isJumping)
+    {
+        switchState(PlayerState::Running);
+    }
+
+    playerBody->SetLinearVelocity(velocity);
+}
+
+void Player::setIsOnGround(bool v){ isOnGround = v; }
+
+void Player::setIsJumping(bool v){ isJumping = v; }
+
+void Player::setIsMoving(bool v) { isMoving = v; }
+
+PlayerState Player::getPlayerState() const { return currentState; }
+
+b2Vec2 Player::getPos() const { return playerBody->GetPosition(); }
+
+sf::Vector2f Player::getScale() const { return spriteScale; }
+
+b2Body* Player::getBody() { if(playerBody) return playerBody; else return nullptr; }
+
+Player::~Player()
+{
+
+}
+
+/**PlayerAnimations**/
+
+PlayerAnimations::PlayerAnimations()
 {
     if(!texture.loadFromFile("Textures/mainCharacter/charSheetNeeko.png"))
     {
         std::cerr << "Error al cargar las texturas del player" << std::endl;
-        return false;
     }
 
     sprite.setTexture(texture);
@@ -55,62 +155,34 @@ bool Player::loadTextures()
         { sf::IntRect(0, 148, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
           sf::IntRect(50, 148, CHARACTER_SIZE.x, CHARACTER_SIZE.y) }, 0.08f
     });
-
-    return true;
-}
-
-void Player::createPlayer(b2World* world, float posX, float posY)
-{
-    b2BodyDef playerBodyDef;
-    playerBodyDef.type = b2_dynamicBody;
-    playerBodyDef.position.Set(posX / PPM, posY / PPM);
-    playerBody = world->CreateBody(&playerBodyDef);
-
-    b2PolygonShape playerBox;
-    playerBox.SetAsBox(17.f / PPM, 24.f / PPM);
-
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape = &playerBox;
-    fixtureDef.density = 1.f;
-    fixtureDef.friction = 0.3f;
-    fixtureDef.filter.categoryBits = CATEGORY_PLAYER;
-    fixtureDef.filter.maskBits = CATEGORY_LIMITS | CATEGORY_GROUND | CATEGORY_FLOOR | CATEGORY_SENSOR;
-    playerBody->CreateFixture(&fixtureDef);
-
-    initBody(playerBody, Kind::PLAYER, this);
-
-    sprite.setTexture(texture);
     sprite.setScale(1.5f, 1.5f);
     sprite.setTextureRect(animations.at(currentState).frames[0]);
     sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height / 2.f);
-    sprite.setPosition(playerBody->GetPosition().x * PPM, playerBody->GetPosition().y * PPM);
-
-    playerBody->SetFixedRotation(true);
 }
 
-void Player::setAnimation(PlayerState state)
+void PlayerAnimations::setAnimation(PlayerState state)
 {
-    auto it = animations.find(state);
+    currentState = state;
+    auto it = animations.find(currentState);
     if(it != animations.end())
     {
         currentAnimation = &(it->second);
+        currentFrame = 0;
+        elapsedTime = 0.0f;
     }
 }
 
-void Player::switchState(PlayerState state)
+void PlayerAnimations::update(float deltaTime, b2Vec2 pos, sf::Vector2f spriteScale, PlayerState state)
 {
-    if(currentState == state) return;
+    sprite.setPosition(pos.x * PPM, pos.y * PPM);
 
-    currentState = state;
+    sprite.setScale(spriteScale);
 
-    currentFrame = 0;
-    elapsedTime = 0.f;
+    if (currentState != state)
+    {
+        setAnimation(state);
+    }
 
-    setAnimation(state);
-}
-
-void Player::updateAnimation(float deltaTime)
-{
     elapsedTime += deltaTime;
 
     if(elapsedTime >= animations.at(currentState).frameDuration)
@@ -121,81 +193,12 @@ void Player::updateAnimation(float deltaTime)
     }
 }
 
-void Player::keyboardInput()
+void PlayerAnimations::draw(sf::RenderWindow& window)
 {
-    velocity = playerBody->GetLinearVelocity();
+    /*sf::View view;
 
-    if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && !isAttacking && isOnGround)
-    {
-        switchState(PlayerState::Attacking);
-        return;
-    }
+    view.setCenter(sprite.getPosition());
 
-
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && isOnGround && !isJumping)
-    {
-        velocity.y = -10;
-        switchState(PlayerState::Jumping);
-        isJumping = true;
-    }
-
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-    {
-        velocity.x = -MOVE_SPEED;
-        sprite.setScale(-1.5f, 1.5f);
-        setIsMoving(true);
-    }
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-    {
-        velocity.x = MOVE_SPEED;
-        sprite.setScale(1.5f, 1.5f);
-        setIsMoving(true);
-    }
-    else
-    {
-        velocity.x = 0.f;
-        setIsMoving(false);
-    }
-
-    playerBody->SetLinearVelocity(velocity);
-}
-
-void Player::updatePhysics()
-{
-    sprite.setPosition(playerBody->GetPosition().x * PPM, playerBody->GetPosition().y * PPM);
-
-    if(!isOnGround && playerBody->GetLinearVelocity().y > 0)
-    {
-        switchState(PlayerState::Falling);
-    }
-    else if(isMoving && !isJumping)
-    {
-        switchState(PlayerState::Running);
-    }
-    else if(isOnGround && !isJumping && !isMoving)
-    {
-        switchState(PlayerState::Idle);
-    }
-}
-
-void Player::draw(sf::RenderWindow& window)
-{
+    window.setView(view);*/
     window.draw(sprite);
-}
-
-void Player::setIsOnGround(bool v){ isOnGround = v; }
-
-void Player::setIsJumping(bool v){ isJumping = v; }
-
-void Player::setIsMoving(bool v) { isMoving = v; }
-
-PlayerState Player::getPlayerState() const { return currentState; }
-
-sf::Vector2f Player::getPos() const { return sprite.getPosition(); }
-
-b2Body* Player::getBody() { if(playerBody) return playerBody; else return nullptr; }
-
-Player::~Player()
-{
-
 }
