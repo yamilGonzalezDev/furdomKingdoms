@@ -66,14 +66,15 @@ class HouseScene : public Scene
         void updatePlayer(float, b2Vec2, sf::Vector2f, PlayerState) override;
         bool shouldTransition() const override;
         SceneState nextSceneState() const override;
-        sf::Texture backgroundTexture, candleText, tableText, farTexture, midTexture, nearTexture;
-        sf::Sprite background,candle, table, farSprite, midSprite, nearSprite;
-        sf::RectangleShape rect;
+        sf::Texture candleText, tableText, houseText, bedText, layerTexture1, layerTexture2, layerTexture3, layerTexture4, layerTexture5;
+        sf::Sprite candle, table, house, bed, layer1, layer2, layer3, layer4, layer5;
         void startCinematic(bool);
     private:
-        float parallaxFactorFar = 0.05f;
-        float parallaxFactorMid = 0.2f;
-        float parallaxFactorNear = .5f;
+        float parallaxFactor5 = .04f;
+        float parallaxFactor4 = .08f;
+        float parallaxFactor3 = .032f;
+        float parallaxFactor2 = .018f;
+        float parallaxFactor1 = .020f;
         bool transition = false;
 };
 
@@ -140,6 +141,17 @@ class BarScene : public Scene
     private:
         bool transition = false;
 
+};
+
+class TestScene : public Scene
+{
+    public:
+        void notify(ObserverEvents) override;
+        void render(sf::RenderWindow&) override;
+        void update(sf::RenderWindow&, float) override;
+        void updatePlayer(float, b2Vec2, sf::Vector2f, PlayerState) override;
+        bool shouldTransition() const override;
+        SceneState nextSceneState() const override;
 };
 
 #endif // SCENE_HPP_INCLUDED

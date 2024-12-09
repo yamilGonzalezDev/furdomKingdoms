@@ -26,6 +26,12 @@ Director::Director() : WIDTH(1366), HEIGHT(768), fooDrawInstance(window)
     alpha = 0;
     fadeRectangle.setSize(sf::Vector2f(WIDTH, HEIGHT));
     fadeRectangle.setFillColor(sf::Color(0, 0, 0, alpha));
+    fadeRectangle.setOrigin(WIDTH / 2.f, HEIGHT / 2.f);
+
+    center.setSize(sf::Vector2f(1.f, HEIGHT));
+    center.setOrigin(0.f, HEIGHT / 2.f);
+    center.setOutlineColor(sf::Color::Red);
+    center.setOutlineThickness(2.f);
 }
 
 void Director::run() ///buclePrincipal();
@@ -43,12 +49,22 @@ void Director::run() ///buclePrincipal();
 
         float deltaTime = clock.restart().asSeconds();
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
         {
-            /*view.setSize(WIDTH, HEIGHT);*/
+            /*static float cd = 0.f;
+            cd += deltaTime;
+                if(cd >= 2.f)
+                {
+                    if(someBool) someBool = false;
+                    else someBool = true;
+                    cd = 0.f;
+                }*/
 
-            if(drawPlayer) std::cout << static_cast<int>(player->getPlayerState()) << std::endl;
+                /*sf::Vector2f imprimir = window.getView().getCenter();
+                std::cout << "x: " << imprimir.x << ", y: " << imprimir.y << std::endl;*/
+                view.setSize(WIDTH, HEIGHT);
         }
+
 
         debugA("Comienzo");
         updateScene(deltaTime);
@@ -147,7 +163,7 @@ void Director::gameEvents()
 
 void Director::render()
 {
-    window.clear();
+    window.clear(sf::Color::Cyan);
     if(currentScene != nullptr)
     {
         currentScene->render(window);
@@ -157,8 +173,15 @@ void Director::render()
     }
     if(drawPlayer && player != nullptr)
     {
-        view.setCenter(player->getPos().x * PPM, player->getPos().y * PPM);
-        window.setView(view);
+        if(someBool)
+        {
+            view.setCenter(player->getPos().x * PPM, (player->getPos().y * PPM) - 50);
+            window.setView(view);
+        }        else
+        {
+            float deltuvieja = clock.restart().asSeconds();
+            zoomOut(window, 1.5f, 0.1f * deltuvieja);
+        }
     }
     if(world)
     {
@@ -167,11 +190,12 @@ void Director::render()
     if(drawEnemies)
     {
     }
+
     if(transitioning)
     {
+        fadeRectangle.setPosition(view.getCenter());
         window.draw(fadeRectangle);
     }
-
     window.display();
 }
 
@@ -193,13 +217,13 @@ void Director::initHouseScene()
 {
     initWorld();
 
-    boundFactory = std::make_unique<SensorFactory>();
-
-    sensor = boundFactory->createBound(world, 1000.f, 670.f, 100.f, 50.f, Kind::HOUSESENSOR);
-
     setScene(new HouseScene);
 
-    sensor->addObserver(currentScene);
+    boundFactory = std::make_unique<SensorFactory>();
+
+    /*sensor = boundFactory->createBound(world, 1000.f, 670.f, 100.f, 50.f, Kind::HOUSESENSOR);
+
+    sensor->addObserver(currentScene);*/
 
     drawPlayer = true;
 
@@ -364,6 +388,25 @@ void Director::fadeIn(float deltaTime)
     }
 }
 
+void Director::zoomOut(sf::RenderWindow& window, float zoomTarget, float zoomSpeed)
+{
+    static float currentZoom = 1.0f;
+
+    if(currentZoom < zoomTarget)
+    {
+        currentZoom += zoomSpeed;
+
+        if (currentZoom > zoomTarget)
+        {
+            currentZoom = zoomTarget;
+        }
+
+        sf::View view = window.getView();
+        view.setSize(window.getDefaultView().getSize() * currentZoom);
+        window.setView(view);
+    }
+}
+
 Director::~Director()
 {
 
@@ -375,7 +418,7 @@ Director::~Director()
             {
                 UserdataTag* tag = reinterpret_cast<UserdataTag*>(body->GetUserData().pointer);
 
-                std::cout << "Tag kind: " << static_cast<int>(tag->kind) << std::endl;
+                //std::cout << "Tag kind: " << static_cast<int>(tag->kind) << std::endl;
 
                 delete tag;
 

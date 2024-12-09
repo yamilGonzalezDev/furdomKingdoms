@@ -53,7 +53,7 @@ class Director
         int alpha = 255;
         float transitionTime = 0.f;
         float maxTransitionTime;
-        sf::RectangleShape fadeRectangle;
+        sf::RectangleShape fadeRectangle, center;
 
         b2World* world = nullptr;
         b2Vec2 gravity;
@@ -79,6 +79,9 @@ class Director
         void cleanScene(b2World*);
         void fadeOut(float);
         void fadeIn(float);
+
+        void zoomOut(sf::RenderWindow&, float, float);
+        bool someBool = true;
 };
 
 #endif // DIRECTOR_HPP_INCLUDED

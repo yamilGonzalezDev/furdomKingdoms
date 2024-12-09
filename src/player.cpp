@@ -29,8 +29,6 @@ void Player::createPlayer(b2World* world, float posX, float posY)
     initBody(playerBody, Kind::PLAYER, this);
 
     playerBody->SetFixedRotation(true);
-
-    std::cerr << "Player Position: " << playerBody->GetPosition().x << ", " << playerBody->GetPosition().y << std::endl;
 }
 
 void Player::switchState(PlayerState state)
@@ -162,8 +160,6 @@ PlayerAnimations::PlayerAnimations()
     sprite.setTextureRect(animations.at(currentState).frames[0]);
     sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height / 2.f);
     sprite.setScale(1.5f, 1.5f);
-
-    std::cerr << "Sprite scale: " << sprite.getScale().x << ", " << sprite.getScale().y << std::endl;
 }
 
 void PlayerAnimations::setAnimation(PlayerState state)
@@ -184,7 +180,7 @@ void PlayerAnimations::update(float deltaTime, b2Vec2 pos, sf::Vector2f spriteSc
 
     sprite.setScale(spriteScale);
 
-    if (currentState != state)
+    if(currentState != state)
     {
         setAnimation(state);
     }
@@ -201,10 +197,5 @@ void PlayerAnimations::update(float deltaTime, b2Vec2 pos, sf::Vector2f spriteSc
 
 void PlayerAnimations::draw(sf::RenderWindow& window)
 {
-    /*sf::View view;
-
-    view.setCenter(sprite.getPosition());
-
-    window.setView(view);*/
     window.draw(sprite);
 }

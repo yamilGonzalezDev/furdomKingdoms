@@ -911,7 +911,7 @@
 	<vector>
 	<algorithm>
 
-1733545733 d:\utn\progra2\furdomkingdoms\src\player.hpp
+1733546210 d:\utn\progra2\furdomkingdoms\src\player.hpp
 	<SFML/Graphics.hpp>
 	<box2d/box2d.h>
 	<unordered_map>
@@ -1369,7 +1369,7 @@
 1733500656 source:d:\utn\progra2\furdomkingdoms\src\main.cpp
 	"director.hpp"
 
-1733268873 d:\utn\progra2\furdomkingdoms\src\director.hpp
+1733710818 d:\utn\progra2\furdomkingdoms\src\director.hpp
 	<memory>
 	"enemy.hpp"
 	"npc.hpp"
@@ -1385,7 +1385,7 @@
 	<box2d/box2d.h>
 	<unordered_map>
 
-1733537438 d:\utn\progra2\furdomkingdoms\src\scene.hpp
+1733711204 d:\utn\progra2\furdomkingdoms\src\scene.hpp
 	<SFML/Graphics.hpp>
 	<iostream>
 	"observer.hpp"
@@ -1399,19 +1399,19 @@
 1731814404 source:d:\utn\progra2\furdomkingdoms\src\npc.cpp
 	"npc.hpp"
 
-1733545582 source:d:\utn\progra2\furdomkingdoms\src\player.cpp
+1733680018 source:d:\utn\progra2\furdomkingdoms\src\player.cpp
 	"player.hpp"
 	"entity.hpp"
 	<iostream>
 
-1733545805 source:d:\utn\progra2\furdomkingdoms\src\scene.cpp
+1733711616 source:d:\utn\progra2\furdomkingdoms\src\scene.cpp
 	"scene.hpp"
 	"entity.hpp"
 
 1730848689 source:d:\utn\progra2\furdomkingdoms\src\texts.cpp
 	"texts.hpp"
 
-1733543743 source:d:\utn\progra2\furdomkingdoms\src\director.cpp
+1733711643 source:d:\utn\progra2\furdomkingdoms\src\director.cpp
 	<iostream>
 	"director.hpp"
 	"colisions.hpp"
