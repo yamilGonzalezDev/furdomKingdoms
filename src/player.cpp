@@ -3,8 +3,8 @@
 #include <iostream>
 
 Player::Player()
-    : _hp(100.f), _dmg(10.f), _armor(20.f), isMoving(false), isJumping(false),
-    isOnGround(true), isAttacking(false), canBeDamaged(true)
+    : _hp(1.f), _dmg(10.f), _armor(20.f), isMoving(false), isJumping(false),
+    isOnGround(true), isAttacking(false), canBeDamaged(true), isAlive(true)
 {
 
 }
@@ -53,6 +53,15 @@ void Player::timers(b2World* world, float deltaTime)
                 world->DestroyBody(sword);
                 sword = nullptr;
             }
+        }
+    }
+    if(!canBeDamaged)
+    {
+        elapsedDamageTime += deltaTime;
+        if(elapsedDamageTime >= damageCooldown)
+        {
+            canBeDamaged = true;
+            elapsedDamageTime = 0.f;
         }
     }
 }
@@ -125,12 +134,15 @@ void Player::keyboardInput(b2World* world)
 
 void Player::takeDmg(float inputDmg)
 {
-    _hp -= inputDmg;
-
-    if(_hp <= 0)
+    if(canBeDamaged)
     {
-        _hp = 0;
-        switchState(PlayerState::DEATH);
+        _hp -= inputDmg;
+
+        if(_hp <= 0)
+        {
+            _hp = 0;
+            switchState(PlayerState::DEATH);
+        }
     }
 }
 
@@ -175,15 +187,19 @@ void Player::setIsJumping(bool v){ isJumping = v; }
 
 void Player::setIsMoving(bool v) { isMoving = v; }
 
-PlayerState Player::getPlayerState() const { return currentState; }
-
 b2Vec2 Player::getPos() const { return playerBody->GetPosition(); }
 
 sf::Vector2f Player::getScale() const { return spriteScale; }
 
+PlayerState Player::getPlayerState() const { return currentState; }
+
 b2Body* Player::getBody() { if(playerBody) return playerBody; else return nullptr; }
 
+float Player::getHp() { return _hp; };
+
 float Player::dealDamage() { return _dmg; }
+
+void Player::setCanBeDamaged(bool v) { canBeDamaged = v; }
 
 /**PlayerAnimations**/
 
@@ -236,6 +252,16 @@ PlayerAnimations::PlayerAnimations()
           sf::IntRect(200, 222, CHARACTER_SIZE.x, CHARACTER_SIZE.y) }, 0.08f
     });
 
+    animations.emplace(PlayerState::DEATH, Animation{
+        { sf::IntRect(300, 296, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
+          sf::IntRect(0, 333, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
+          sf::IntRect(50, 333, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
+          sf::IntRect(100, 333, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
+          sf::IntRect(150, 333, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
+          sf::IntRect(200, 333, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
+          sf::IntRect(250, 333, CHARACTER_SIZE.x, CHARACTER_SIZE.y) }, 0.08f
+    });
+
     sprite.setTextureRect(animations.at(currentState).frames[0]);
     sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height / 2.f);
     sprite.setScale(1.5f, 1.5f);
@@ -243,6 +269,8 @@ PlayerAnimations::PlayerAnimations()
 
 void PlayerAnimations::setAnimation(PlayerState state)
 {
+    if(currentState == PlayerState::DEATH) return;
+
     currentState = state;
     auto it = animations.find(currentState);
     if(it != animations.end())
@@ -268,10 +296,16 @@ void PlayerAnimations::update(float deltaTime, b2Vec2 pos, sf::Vector2f spriteSc
 
     if(elapsedTime >= animations.at(currentState).frameDuration)
     {
+        if(currentState == PlayerState::DEATH && currentFrame == animations.at(currentState).frames.size() - 1)
+        {
+            gameOver = true;
+            return;
+        }
         currentFrame = (currentFrame + 1) % animations.at(currentState).frames.size();
         sprite.setTextureRect(animations.at(currentState).frames[currentFrame]);
         elapsedTime = 0.f;
     }
+
 }
 
 void PlayerAnimations::draw(sf::RenderWindow& window)

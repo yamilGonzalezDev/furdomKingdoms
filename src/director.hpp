@@ -16,7 +16,8 @@ enum class TransitionState
     NONE,
     FADINGOUT,
     LOADING,
-    FADINGIN
+    FADINGIN,
+    GAMEOVER
 };
 
 class Director
@@ -30,19 +31,20 @@ class Director
         const float HEIGHT;
         const float timeStep = 1.f/60.f;
         const float FLOORHEIGHT = 528.f;
+        const float speed = 200.f;
         const int velocityIterations = 6;
         const int positionIterations = 2;
-        const float speed = 200.f;
         sf::RenderWindow window;
         sf::View view;
+        sf::Text text;
+        sf::Font font;
         sf::Clock clock;
         FooDraw fooDrawInstance;
         SceneState nextScene;
         TransitionState transitionState;
-        bool loaded, fadingIn, fadingOut, drawNpcs, drawPlayer, changeScene, drawEnemies, transitioning;
+        bool drawEnemies, fadingIn, fadingOut, drawPlayer, changeScene, transitioning, gameOver;
         int alpha = 255;
-        float transitionTime = 0.f;
-        float maxTransitionTime;
+        float transitionTime = 0.f, maxTransitionTime, cooldownElapsed;
         sf::RectangleShape fadeRectangle, center;
 
         sf::Texture testText;

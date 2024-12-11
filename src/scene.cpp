@@ -352,10 +352,12 @@ void TestScene::render(sf::RenderWindow& window)
 {
     for(auto& enemy : enemyReferences)
     {
-        window.draw(enemy->getSprite());
+        window.draw(enemy->sprite);
     }
 
     playerAnimations.draw(window);
+
+    theWitch.render(window);
 }
 
 void TestScene::update(sf::RenderWindow& window, float deltaTime)
@@ -371,11 +373,18 @@ void TestScene::update(sf::RenderWindow& window, float deltaTime)
             ++it;
         }
     }
+
+    theWitch.update(deltaTime);
 }
 
 void TestScene::updatePlayer(float deltaTime, b2Vec2 pos, sf::Vector2f spriteScale, PlayerState state)
 {
     playerAnimations.update(deltaTime, pos, spriteScale, state);
+}
+
+bool TestScene::gameOverBool()
+{
+    return playerAnimations.getGameOver();
 }
 
 bool TestScene::shouldTransition() const

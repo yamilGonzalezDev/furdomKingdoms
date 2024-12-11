@@ -13,13 +13,12 @@ Director::Director() : WIDTH(1366), HEIGHT(768), fooDrawInstance(window)
     window.create(sf::VideoMode(WIDTH, HEIGHT), "Furdom Kingdoms");
     window.setFramerateLimit(60);
     nextScene = SceneState::TEST;
-    loaded = false;
-    drawNpcs = false;
+    gameOver = false;
     drawPlayer = false;
     drawEnemies = false;
     transitioning = true;
     transitionState = TransitionState::LOADING;
-    view.setSize(/*window.getSize().x, window.getSize().y*/window.getSize().x * 0.5f, window.getSize().y * 0.5f);
+    view.setSize(window.getSize().x * 0.5f, window.getSize().y * 0.5f);
     alpha = 0;
     fadeRectangle.setSize(sf::Vector2f(WIDTH, HEIGHT));
     fadeRectangle.setFillColor(sf::Color(0, 0, 0, alpha));
@@ -30,20 +29,16 @@ Director::Director() : WIDTH(1366), HEIGHT(768), fooDrawInstance(window)
     center.setOutlineColor(sf::Color::Red);
     center.setOutlineThickness(2.f);
 
-    if(!testText.loadFromFile("Textures/enemy/ghost/ghostSheet.png"))
-    {
-        std::cerr << "Error al cargar las texturas del ghost" << std::endl;
-    }
-
-    spriteTest.setTexture(testText);
-    spriteTest.setPosition(300.f, 300.f);
-    spriteTest.setScale(1.f, 1.f);
+    text.setFont(font);
+    text.setString("Game Over");
+    text.setCharacterSize(100);
+    text.setFillColor(sf::Color::Red);
+    text.setOutlineThickness(2.f);
+    text.setOutlineColor(sf::Color::White);
 }
 
 void Director::run() ///buclePrincipal();
 {
-    float cooldownTime = 1.0f;
-    float cooldownElapsed = cooldownTime;
     while(window.isOpen())
     {
         sf::Event event;
@@ -53,45 +48,26 @@ void Director::run() ///buclePrincipal();
             {
                 window.close();
             }
+
+            if(gameOver && cooldownElapsed >= 3.f && event.type == sf::Event::KeyPressed)
+            {
+                transitioning = true;
+                transitionState = TransitionState::LOADING;
+            }
         }
 
         float deltaTime = clock.restart().asSeconds();
 
-        cooldownElapsed += deltaTime;
-
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-        {
-            /*enemyFactory = std::make_unique<GhostFactory>();
-
-            enemies.push_back(enemyFactory->createEnemy(world, 800.f, 700.f));*/
-        }
-
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::R) && cooldownElapsed >= cooldownTime)
-        {
-            cooldownElapsed = 0.0f;
-
-            if(view.getSize().x == WIDTH)
-            {
-                view.setSize(WIDTH * 2.3f, HEIGHT * 2.3f);
-            }
-            else
-            {
-                view.setSize(WIDTH, HEIGHT);
-            }
-        }
-
-        debugA("Comienzo");
         updateScene(deltaTime);
-        debugA("UpdateScene");
-        if(!transitioning)
+        if(!gameOver)
         {
-            update(deltaTime);
-            debugA("update");
-            gameEvents();
-            debugA("gameEvents");
+            if(!transitioning)
+            {
+                update(deltaTime);
+                gameEvents();
+            }
         }
         render();
-        debugA("render");
     }
 }
 
@@ -105,11 +81,6 @@ void Director::update(float deltaTime)
             player->keyboardInput(world);
         }
     }
-    debugA("player");
-    if(drawNpcs)
-    {
-    }
-    debugA("npcs");
     if(drawEnemies)
     {
         for(auto it = enemies.begin(); it != enemies.end();)
@@ -131,12 +102,10 @@ void Director::update(float deltaTime)
             }
         }
     }
-    debugA("enemy");
 }
 
 void Director::updateScene(float deltaTime)
 {
-    debugA("Comienzo updateScene");
     if(!transitioning && currentScene != nullptr && currentScene->shouldTransition())
     {
         transitioning = true;
@@ -144,7 +113,7 @@ void Director::updateScene(float deltaTime)
         transitionState = TransitionState::FADINGOUT;
     }
 
-    if(transitioning)
+    if(transitioning || gameOver)
     {
         switch(transitionState)
         {
@@ -177,6 +146,17 @@ void Director::updateScene(float deltaTime)
             case TransitionState::FADINGIN:
                 fadeIn(deltaTime);
                 break;
+            case TransitionState::GAMEOVER:
+                {
+                    if(!font.loadFromFile("Textures/font/menuFont.ttf"))
+                    {
+                        std::cerr << "Error al cargar la fuente del menú" << std::endl;
+                        return;
+                    }
+                    fadeOut(deltaTime);
+                    if(cooldownElapsed <= 3.f) cooldownElapsed += deltaTime;
+                }
+                break;
             case TransitionState::NONE:
                 break;
             default:
@@ -186,6 +166,12 @@ void Director::updateScene(float deltaTime)
     else if(currentScene != nullptr)
     {
         if(drawPlayer) currentScene->updatePlayer(deltaTime, player->getPos(), player->getScale(), player->getPlayerState());
+        if(currentScene->gameOverBool())
+        {
+            cooldownElapsed = 0.f;
+            gameOver = true;
+            transitionState = TransitionState::GAMEOVER;
+        }
         currentScene->update(window, deltaTime);
     }
     debugA("Termino");
@@ -202,13 +188,10 @@ void Director::gameEvents()
 
 void Director::render()
 {
-    window.clear(sf::Color::White);
+    window.clear();
     if(currentScene != nullptr)
     {
         currentScene->render(window);
-    }
-    if(drawNpcs)
-    {
     }
     if(drawPlayer && player != nullptr)
     {
@@ -217,10 +200,7 @@ void Director::render()
     }
     if(world)
     {
-        ///world->DebugDraw();
-    }
-    if(drawEnemies)
-    {
+        world->DebugDraw();
     }
 
     if(transitioning)
@@ -228,6 +208,15 @@ void Director::render()
         fadeRectangle.setPosition(view.getCenter());
         window.draw(fadeRectangle);
     }
+
+    if(gameOver)
+    {
+        fadeRectangle.setPosition(view.getCenter());
+        text.setPosition(view.getCenter().x - (text.getLocalBounds().width / 2.f), view.getCenter().y - text.getLocalBounds().height);
+        window.draw(fadeRectangle);
+        window.draw(text);
+    }
+
     window.display();
 }
 
@@ -238,7 +227,7 @@ void Director::initMenuScene()
         delete world;
         world = nullptr;
     }
-    drawNpcs = false;
+    gameOver = false;
     drawPlayer = false;
     drawEnemies = true;
 
@@ -247,6 +236,8 @@ void Director::initMenuScene()
 
 void Director::initHouseScene()
 {
+    gameOver = false;
+
     initWorld(10.f);
 
     setScene(new HouseScene);
@@ -279,6 +270,8 @@ void Director::initHouseScene()
 
 void Director::initCityScene()
 {
+    gameOver = false;
+
     initWorld(10.f);
 
     setScene(new CityScene);
@@ -310,6 +303,8 @@ void Director::initCityScene()
 
 void Director::initBarScene()
 {
+    gameOver = false;
+
     initWorld(10.f);
 
     setScene(new BarScene);
@@ -335,6 +330,8 @@ void Director::initBarScene()
 
 void Director::initTestScene()
 {
+    gameOver = false;
+
     initWorld(9.8f);
 
     setScene(new TestScene);
@@ -346,6 +343,14 @@ void Director::initTestScene()
     boundFactory->createBound(world, 700.f, 700.f, 700.f, 1.f, Kind::FLOOR);
 
     enemyFactory = std::make_unique<GhostFactory>();
+
+    //enemies.push_back(enemyFactory->createEnemy(world, 800.f, 700.f));
+
+    enemyFactory = std::make_unique<SkeletonFactory>();
+
+    //enemies.push_back(enemyFactory->createEnemy(world, 600.f, 700.f));
+
+    enemyFactory = std::make_unique<GoblinFactory>();
 
     enemies.push_back(enemyFactory->createEnemy(world, 800.f, 700.f));
 
@@ -368,6 +373,8 @@ void Director::initTestScene()
 
 void Director::initWorld(float gravity)
 {
+    enemies.clear();
+
     if(world != nullptr)
     {
         cleanScene(world);
@@ -433,6 +440,10 @@ void Director::fadeOut(float deltaTime)
     }
     else
     {
+        if(gameOver)
+        {
+            return;
+        }
         transitionState = TransitionState::LOADING;
     }
 }

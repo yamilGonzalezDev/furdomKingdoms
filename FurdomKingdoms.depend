@@ -911,7 +911,7 @@
 	<vector>
 	<algorithm>
 
-1733876846 d:\utn\progra2\furdomkingdoms\src\player.hpp
+1733898492 d:\utn\progra2\furdomkingdoms\src\player.hpp
 	<SFML/Graphics.hpp>
 	<box2d/box2d.h>
 	<unordered_map>
@@ -1339,12 +1339,12 @@
 	<SFML/Graphics.hpp>
 	<box2d/box2d.h>
 
-1733884990 source:d:\utn\progra2\furdomkingdoms\src\enemy.cpp
+1733898534 source:d:\utn\progra2\furdomkingdoms\src\enemy.cpp
 	"enemy.hpp"
 	"entity.hpp"
 	<iostream>
 
-1733882398 d:\utn\progra2\furdomkingdoms\src\enemy.hpp
+1733893633 d:\utn\progra2\furdomkingdoms\src\enemy.hpp
 	<SFML/Graphics.hpp>
 	<box2d/box2d.h>
 	<string>
@@ -1370,7 +1370,7 @@
 1733500656 source:d:\utn\progra2\furdomkingdoms\src\main.cpp
 	"director.hpp"
 
-1733884472 d:\utn\progra2\furdomkingdoms\src\director.hpp
+1733903677 d:\utn\progra2\furdomkingdoms\src\director.hpp
 	<memory>
 	"enemy.hpp"
 	"npc.hpp"
@@ -1386,12 +1386,13 @@
 	<box2d/box2d.h>
 	<unordered_map>
 
-1733884566 d:\utn\progra2\furdomkingdoms\src\scene.hpp
+1733903852 d:\utn\progra2\furdomkingdoms\src\scene.hpp
 	<SFML/Graphics.hpp>
 	<iostream>
 	"observer.hpp"
 	"player.hpp"
 	"enemy.hpp"
+	"witch.hpp"
 
 1731599551 d:\utn\progra2\furdomkingdoms\src\foodraw.hpp
 	<SFML/Graphics.hpp>
@@ -1401,25 +1402,25 @@
 1731814404 source:d:\utn\progra2\furdomkingdoms\src\npc.cpp
 	"npc.hpp"
 
-1733875958 source:d:\utn\progra2\furdomkingdoms\src\player.cpp
+1733898461 source:d:\utn\progra2\furdomkingdoms\src\player.cpp
 	"player.hpp"
 	"entity.hpp"
 	<iostream>
 
-1733885122 source:d:\utn\progra2\furdomkingdoms\src\scene.cpp
+1733903879 source:d:\utn\progra2\furdomkingdoms\src\scene.cpp
 	"scene.hpp"
 	"entity.hpp"
 
 1730848689 source:d:\utn\progra2\furdomkingdoms\src\texts.cpp
 	"texts.hpp"
 
-1733885375 source:d:\utn\progra2\furdomkingdoms\src\director.cpp
+1733900967 source:d:\utn\progra2\furdomkingdoms\src\director.cpp
 	<iostream>
 	"director.hpp"
 	"colisions.hpp"
 	"entity.hpp"
 
-1733882316 source:d:\utn\progra2\furdomkingdoms\src\colisions.cpp
+1733896630 source:d:\utn\progra2\furdomkingdoms\src\colisions.cpp
 	"colisions.hpp"
 	<iostream>
 	"player.hpp"
@@ -1430,4 +1431,17 @@
 1733869699 d:\utn\progra2\furdomkingdoms\src\colisions.hpp
 	<box2d/box2d.h>
 	"observer.hpp"
+
+1733903578 source:d:\utn\progra2\furdomkingdoms\src\princess.cpp
+	"princess.hpp"
+
+1733903568 d:\utn\progra2\furdomkingdoms\src\princess.hpp
+	<SFML/Graphics.hpp>
+
+1733904193 d:\utn\progra2\furdomkingdoms\src\witch.hpp
+	<SFML/Graphics.hpp>
+
+1733904051 source:d:\utn\progra2\furdomkingdoms\src\witch.cpp
+	"witch.hpp"
+	<iostream>
 

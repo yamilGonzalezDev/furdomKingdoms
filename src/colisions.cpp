@@ -114,6 +114,22 @@ void Colision::BeginContact(b2Contact* contact)
 
         enemy->takeDmg(player->dealDamage());
     }
+
+    if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::ENEMY)
+    {
+        Enemy* enemy = reinterpret_cast<Enemy*>(tagB->object);
+        Player* player = reinterpret_cast<Player*>(tagA->object);
+        player->takeDmg(enemy->dealDmg());
+        player->setCanBeDamaged(false);
+    }
+
+    if(tagB->kind == Kind::PLAYER && tagA->kind == Kind::ENEMY)
+    {
+        Enemy* enemy = reinterpret_cast<Enemy*>(tagA->object);
+        Player* player = reinterpret_cast<Player*>(tagB->object);
+        player->takeDmg(enemy->dealDmg());
+        player->setCanBeDamaged(false);
+    }
 }
 
 void Colision::EndContact(b2Contact* contact)

@@ -23,6 +23,7 @@ class Enemy
     public:
         virtual ~Enemy() = default;
 
+        sf::Sprite sprite;
         virtual void setAnimation(EnemyState) = 0;
         virtual void update(float) = 0;
         virtual void logic(Player*) = 0;
@@ -43,7 +44,6 @@ class Ghost : public Enemy
         int currentFrame = 0;
         float elapsedTime = 0.0f, frameDuration = 0.f;
         bool isAlive = true;
-        sf::Sprite sprite;
         sf::Texture texture;
         b2Body* body;
         b2Body* enemySensor;
@@ -61,7 +61,7 @@ class Ghost : public Enemy
         void takeDmg(float) override;
         void destroy(b2World*) override;
         void render(sf::RenderWindow&) override;
-        float dealDmg() override;
+        float dealDmg() override { return _dmg; };
         float getHp() { return _hp; };
         bool getIsAlive() override { return isAlive; };
         sf::Sprite getSprite() override;
@@ -70,10 +70,10 @@ class Ghost : public Enemy
 class Skeleton : public Enemy
 {
     private:
+        const sf::Vector2i ENEMY_SIZE = {150, 150};
         int currentFrame = 0;
         float elapsedTime = 0.0f, frameDuration = 0.f;
         bool isAlive = true;
-        sf::Sprite sprite;
         sf::Texture texture;
         b2Body* body;
         b2Body* enemySensor;
@@ -81,7 +81,7 @@ class Skeleton : public Enemy
         std::unordered_map<EnemyState, Animation> animations;
         Animation* currentAnimation = nullptr;
 
-        void setAnimation(EnemyState) override {};
+        void setAnimation(EnemyState) override;
     public:
         Skeleton(b2World*, float, float);
 
@@ -91,19 +91,19 @@ class Skeleton : public Enemy
         void takeDmg(float) override;
         void destroy(b2World*) override;
         void render(sf::RenderWindow&) override;
-        float dealDmg() override;
+        float dealDmg() override { return _dmg; };
         float getHp() { return _hp; };
-        bool getIsAlive() override { return true; };
+        bool getIsAlive() override { return isAlive; };
         sf::Sprite getSprite() override;
 };
 
 class Goblin : public Enemy
 {
     private:
+        const sf::Vector2i ENEMY_SIZE = {150, 150};
         int currentFrame = 0;
         float elapsedTime = 0.0f, frameDuration = 0.f;
         bool isAlive = true;
-        sf::Sprite sprite;
         sf::Texture texture;
         b2Body* body;
         b2Body* enemySensor;
@@ -111,7 +111,7 @@ class Goblin : public Enemy
         std::unordered_map<EnemyState, Animation> animations;
         Animation* currentAnimation = nullptr;
 
-        void setAnimation(EnemyState) override {};
+        void setAnimation(EnemyState) override;
     public:
         Goblin(b2World*, float, float);
 
@@ -123,8 +123,8 @@ class Goblin : public Enemy
         void render(sf::RenderWindow&) override;
         float dealDmg() override;
         float getHp() { return _hp; };
-        bool getIsAlive() override { return true; };
-        sf::Sprite getSprite() override { return sprite; };
+        bool getIsAlive() override { return isAlive; };
+        sf::Sprite getSprite() override;
 };
 
 class EnemiesFactory

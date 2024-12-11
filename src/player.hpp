@@ -41,18 +41,21 @@ class Player
         void setIsMoving(bool);
         void setIsJumping(bool);
         void setIsOnGround(bool);
+        void setCanBeDamaged(bool);
 
         float dealDamage();
+        float getHp();
 
         b2Body* getBody();
         b2Vec2 getPos() const;
         sf::Vector2f getScale() const;
         PlayerState getPlayerState() const;
+        bool getIsAlive() const { return isAlive; };
     private:
         float _hp, _dmg, _armor;
-        float elapsedTime = 0.f, cooldown = 0.38f;
+        float elapsedTime = 0.f, elapsedDamageTime = 0.f, cooldown = 0.38f, damageCooldown = 0.38f;
         const float MOVE_SPEED = 10.f;
-        bool isMoving, isJumping, isOnGround, isAttacking, canBeDamaged;
+        bool isMoving, isJumping, isOnGround, isAttacking, canBeDamaged, isAlive;
         b2Vec2 velocity;
         b2Body* sword = nullptr;
         sf::Vector2f spriteScale = {1.5f, 1.5f};
@@ -67,6 +70,7 @@ class PlayerAnimations
         PlayerAnimations();
         void draw(sf::RenderWindow&);
         void update(float, b2Vec2, sf::Vector2f, PlayerState);
+        bool getGameOver() { return gameOver; };
     private:
         const sf::Vector2i CHARACTER_SIZE = {50, 37};
         sf::Sprite sprite;
@@ -77,6 +81,7 @@ class PlayerAnimations
         int currentFrame = 0;
         float elapsedTime = 0.0f;
         void setAnimation(PlayerState);
+        bool gameOver = false;
 };
 
 #endif // PLAYER_HPP_INCLUDED

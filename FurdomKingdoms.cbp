@@ -73,10 +73,14 @@
 		<Unit filename="src/observer.hpp" />
 		<Unit filename="src/player.cpp" />
 		<Unit filename="src/player.hpp" />
+		<Unit filename="src/princess.cpp" />
+		<Unit filename="src/princess.hpp" />
 		<Unit filename="src/scene.cpp" />
 		<Unit filename="src/scene.hpp" />
 		<Unit filename="src/texts.cpp" />
 		<Unit filename="src/texts.hpp" />
+		<Unit filename="src/witch.cpp" />
+		<Unit filename="src/witch.hpp" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

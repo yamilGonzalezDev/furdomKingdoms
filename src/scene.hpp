@@ -6,6 +6,7 @@
 #include "observer.hpp"
 #include "player.hpp"
 #include "enemy.hpp"
+#include "witch.hpp"
 
 enum class SceneState
 {
@@ -33,11 +34,13 @@ class Scene : public Observer
 
         virtual void updatePlayer(float, b2Vec2, sf::Vector2f, PlayerState) {};
 
+        virtual void setEnemySprites(const std::vector<Enemy*>& enemiesReferences) {};
+
         virtual bool shouldTransition() const { return false; };
 
-        virtual SceneState nextSceneState() const = 0;
+        virtual bool gameOverBool() { return false; };
 
-        virtual void setEnemySprites(const std::vector<Enemy*>& enemiesReferences) {};
+        virtual SceneState nextSceneState() const = 0;
 };
 
 class MenuScene : public Scene
@@ -155,11 +158,13 @@ class TestScene : public Scene
         void render(sf::RenderWindow&) override;
         void update(sf::RenderWindow&, float) override;
         void updatePlayer(float, b2Vec2, sf::Vector2f, PlayerState) override;
-        bool shouldTransition() const override;
-        SceneState nextSceneState() const override;
         void setEnemySprites(const std::vector<Enemy*>&) override;
+        bool shouldTransition() const override;
+        bool gameOverBool() override;
+        SceneState nextSceneState() const override;
     private:
         std::vector<Enemy*> enemyReferences;
+        Witch theWitch = Witch(700.f, 700.f);
 };
 
 #endif // SCENE_HPP_INCLUDED
