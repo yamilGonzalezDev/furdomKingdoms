@@ -1,0 +1,92 @@
+\doxysection{player.\+hpp}
+\hypertarget{player_8hpp_source}{}\label{player_8hpp_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ PLAYER\_HPP\_INCLUDED}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ PLAYER\_HPP\_INCLUDED}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <SFML/Graphics.hpp>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <box2d/box2d.h>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <unordered\_map>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}observer.hpp"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ PPM\ =\ 30.f;}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{enum\ class}\ PlayerState}
+\DoxyCodeLine{00012\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ IDLE,}
+\DoxyCodeLine{00014\ \ \ \ \ RUNNING,}
+\DoxyCodeLine{00015\ \ \ \ \ JUMPING,}
+\DoxyCodeLine{00016\ \ \ \ \ FALLING,}
+\DoxyCodeLine{00017\ \ \ \ \ ATTACKING,}
+\DoxyCodeLine{00018\ \ \ \ \ DEATH}
+\DoxyCodeLine{00019\ \};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{class_animation}{Animation}}}
+\DoxyCodeLine{00022\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ std::vector<sf::IntRect>\ frames;}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{float}\ frameDuration;}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{class_animation}{Animation}}()\ \{\};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{class_animation}{Animation}}(std::vector<sf::IntRect>\ frames,\ \textcolor{keywordtype}{float}\ duration)\ \ :\ frames(frames),\ frameDuration(duration)\{\};}
+\DoxyCodeLine{00029\ \};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_player}{Player}}}
+\DoxyCodeLine{00032\ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_player}{Player}}();}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_player}{\string~Player}}()\ \{\};}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ b2Body*\ playerBody;}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ keyboardInput(b2World*);}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ createPlayer(b2World*,\ \textcolor{keywordtype}{float},\ \textcolor{keywordtype}{float});}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ timers(b2World*,\ \textcolor{keywordtype}{float});}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ takeDmg(\textcolor{keywordtype}{float});}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setIsMoving(\textcolor{keywordtype}{bool});}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setIsJumping(\textcolor{keywordtype}{bool});}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setIsOnGround(\textcolor{keywordtype}{bool});}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setCanBeDamaged(\textcolor{keywordtype}{bool});}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ dealDamage();}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ getHp();}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ b2Body*\ getBody();}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ b2Vec2\ getPos()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ sf::Vector2f\ getScale()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ PlayerState\ getPlayerState()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ getIsAlive()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ isAlive;\ \};}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \_hp,\ \_dmg,\ \_armor;}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ elapsedTime\ =\ 0.f,\ elapsedDamageTime\ =\ 0.f,\ cooldown\ =\ 0.38f,\ damageCooldown\ =\ 0.38f;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ MOVE\_SPEED\ =\ 10.f;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isMoving,\ isJumping,\ isOnGround,\ isAttacking,\ canBeDamaged,\ isAlive;}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ b2Vec2\ velocity;}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ b2Body*\ sword\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ sf::Vector2f\ spriteScale\ =\ \{1.5f,\ 1.5f\};}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ PlayerState\ currentState\ =\ PlayerState::IDLE;}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ switchState(PlayerState);}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ createAttackHitbox(b2World*);}
+\DoxyCodeLine{00065\ \};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_player_animations}{PlayerAnimations}}}
+\DoxyCodeLine{00068\ \{}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_player_animations_a7d031015189b93132e4d999b6a455880}{PlayerAnimations}}();}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ draw(sf::RenderWindow\&);}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ update(\textcolor{keywordtype}{float},\ b2Vec2,\ sf::Vector2f,\ PlayerState);}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ getGameOver()\ \{\ \textcolor{keywordflow}{return}\ gameOver;\ \};}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ sf::Vector2i\ CHARACTER\_SIZE\ =\ \{50,\ 37\};}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ sf::Sprite\ sprite;}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ sf::Texture\ texture;}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ std::unordered\_map<PlayerState,\ Animation>\ animations;}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_animation}{Animation}}*\ currentAnimation\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ PlayerState\ currentState\ =\ PlayerState::IDLE;}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ currentFrame\ =\ 0;}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ elapsedTime\ =\ 0.0f;}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setAnimation(PlayerState);}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ gameOver\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00085\ \};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ PLAYER\_HPP\_INCLUDED}}
+
+\end{DoxyCode}

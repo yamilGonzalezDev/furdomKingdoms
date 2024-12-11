@@ -1,0 +1,29 @@
+\doxysection{npc.\+hpp}
+\hypertarget{npc_8hpp_source}{}\label{npc_8hpp_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ NPC\_HPP}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ NPC\_HPP}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <SFML/Graphics.hpp>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <box2d/box2d.h>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <unordered\_map>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{enum\ class}\ NpcState}
+\DoxyCodeLine{00009\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ Idle,}
+\DoxyCodeLine{00011\ \ \ \ \ Walking}
+\DoxyCodeLine{00012\ \};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_npc_animation}{NpcAnimation}}}
+\DoxyCodeLine{00015\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ std::vector<sf::IntRect>\ frames;}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{float}\ frameDuration;}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{struct_npc_animation}{NpcAnimation}}()\ \{\};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \mbox{\hyperlink{struct_npc_animation}{NpcAnimation}}(std::vector<sf::IntRect>\ frames,\ \textcolor{keywordtype}{float}\ duration)\ :\ frames(frames),\ frameDuration(duration)\ \{\};}
+\DoxyCodeLine{00022\ \};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ NPC\_H}}
+
+\end{DoxyCode}

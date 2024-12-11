@@ -1,0 +1,21 @@
+\doxysection{colisions.\+hpp}
+\hypertarget{colisions_8hpp_source}{}\label{colisions_8hpp_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ COLISIONS\_HPP\_INCLUDED}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ COLISIONS\_HPP\_INCLUDED}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <box2d/box2d.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}observer.hpp"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_colision}{Colision}}\ :\ \textcolor{keyword}{public}\ b2ContactListener}
+\DoxyCodeLine{00008\ \{}
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00010\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ BeginContact(b2Contact*\ contact)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00011\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ EndContact(b2Contact*\ contact)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ PreSolve(b2Contact*,\ \textcolor{keyword}{const}\ b2Manifold*)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ PostSolve(b2Contact*,\ \textcolor{keyword}{const}\ b2ContactImpulse*)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00014\ \};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ COLISIONS\_HPP\_INCLUDED}}
+
+\end{DoxyCode}

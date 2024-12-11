@@ -1,0 +1,27 @@
+\doxysection{Animation Struct Reference}
+\hypertarget{class_animation}{}\label{class_animation}\index{Animation@{Animation}}
+
+
+Collaboration diagram for Animation\+:
+% FIG 0
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_animation_a97885883caf1bdf71a413e30356fabb0}\label{class_animation_a97885883caf1bdf71a413e30356fabb0} 
+{\bfseries Animation} (std\+::vector$<$ sf\+::\+Int\+Rect $>$ \&frames, float duration)
+\item 
+\Hypertarget{class_animation_a7c41f36321ddf12fb82f42f7f8d5663e}\label{class_animation_a7c41f36321ddf12fb82f42f7f8d5663e} 
+void {\bfseries update} (float delta\+Time)
+\item 
+\Hypertarget{class_animation_a903eb4b61b8c7bc72bbedbdba4cbb501}\label{class_animation_a903eb4b61b8c7bc72bbedbdba4cbb501} 
+void {\bfseries reset} ()
+\item 
+\Hypertarget{class_animation_ad12abfb4e3c473b0186d76d038446dc4}\label{class_animation_ad12abfb4e3c473b0186d76d038446dc4} 
+{\bfseries Animation} (std\+::vector$<$ sf\+::\+Int\+Rect $>$ frames, float duration)
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+animations.\+hpp\item 
+player.\+hpp\end{DoxyCompactItemize}

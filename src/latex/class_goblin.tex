@@ -1,0 +1,169 @@
+\doxysection{Goblin Class Reference}
+\hypertarget{class_goblin}{}\label{class_goblin}\index{Goblin@{Goblin}}
+
+
+Inheritance diagram for Goblin\+:
+% FIG 0
+
+
+Collaboration diagram for Goblin\+:
+% FIG 1
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_goblin_a416d58e89f915c2657a15aa01cfb1b59}{Goblin}} (b2\+World \texorpdfstring{$\ast$}{*}, float, float)
+\item 
+void \mbox{\hyperlink{class_goblin_ae4fa35fd3722b8a9c3249e0ac6500193}{update}} (float) override
+\item 
+void \mbox{\hyperlink{class_goblin_a087526dc39fb2174a66302f27407638c}{logic}} (\mbox{\hyperlink{class_player}{Player}} \texorpdfstring{$\ast$}{*}) override
+\item 
+void \mbox{\hyperlink{class_goblin_aaed3908a320cb5c36ae06b5bb3cca3b9}{load\+Textures}} () override
+\item 
+void \mbox{\hyperlink{class_goblin_a05881ce576e444a8159829d3025629f1}{take\+Dmg}} (float) override
+\item 
+void \mbox{\hyperlink{class_goblin_ab178f1d4e079028f2dc470cf7e0f26e5}{destroy}} (b2\+World \texorpdfstring{$\ast$}{*}) override
+\item 
+void \mbox{\hyperlink{class_goblin_a3ebbd2ab1d8a3febb2c449a3c1b74caa}{render}} (sf\+::\+Render\+Window \&) override
+\item 
+float \mbox{\hyperlink{class_goblin_ac0108f7898b3aae7f4f4d7f3708280ff}{deal\+Dmg}} () override
+\item 
+float \mbox{\hyperlink{class_goblin_a47753f937a0b3b0a9331362b287c73cb}{get\+Hp}} ()
+\item 
+bool \mbox{\hyperlink{class_goblin_a9814aebe386fdb0e8eae4c107d5af497}{get\+Is\+Alive}} () override
+\item 
+sf\+::\+Sprite \mbox{\hyperlink{class_goblin_a234c1fb15b018e6cf6b396f23a004597}{get\+Sprite}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_enemy}{Enemy}}}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{class_enemy}{Enemy}}}
+\begin{DoxyCompactItemize}
+\item 
+sf\+::\+Sprite {\bfseries sprite}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_enemy}{Enemy}}}
+\begin{DoxyCompactItemize}
+\item 
+const float {\bfseries PPM} = 30.f
+\item 
+float {\bfseries \+\_\+dmg}
+\item 
+float {\bfseries \+\_\+hp}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_goblin_a416d58e89f915c2657a15aa01cfb1b59}\index{Goblin@{Goblin}!Goblin@{Goblin}}
+\index{Goblin@{Goblin}!Goblin@{Goblin}}
+\doxysubsubsection{\texorpdfstring{Goblin()}{Goblin()}}
+{\footnotesize\ttfamily \label{class_goblin_a416d58e89f915c2657a15aa01cfb1b59} 
+Goblin\+::\+Goblin (\begin{DoxyParamCaption}\item[{b2\+World \texorpdfstring{$\ast$}{*}}]{world}{, }\item[{float}]{x}{, }\item[{float}]{y}{}\end{DoxyParamCaption})}
+
+\doxylink{class_goblin}{Goblin} \doxylink{class_sensor}{Sensor}
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_goblin_ac0108f7898b3aae7f4f4d7f3708280ff}\index{Goblin@{Goblin}!dealDmg@{dealDmg}}
+\index{dealDmg@{dealDmg}!Goblin@{Goblin}}
+\doxysubsubsection{\texorpdfstring{dealDmg()}{dealDmg()}}
+{\footnotesize\ttfamily \label{class_goblin_ac0108f7898b3aae7f4f4d7f3708280ff} 
+float Goblin\+::deal\+Dmg (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_enemy}{Enemy}}.
+
+\Hypertarget{class_goblin_ab178f1d4e079028f2dc470cf7e0f26e5}\index{Goblin@{Goblin}!destroy@{destroy}}
+\index{destroy@{destroy}!Goblin@{Goblin}}
+\doxysubsubsection{\texorpdfstring{destroy()}{destroy()}}
+{\footnotesize\ttfamily \label{class_goblin_ab178f1d4e079028f2dc470cf7e0f26e5} 
+void Goblin\+::destroy (\begin{DoxyParamCaption}\item[{b2\+World \texorpdfstring{$\ast$}{*}}]{world}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_enemy}{Enemy}}.
+
+\Hypertarget{class_goblin_a47753f937a0b3b0a9331362b287c73cb}\index{Goblin@{Goblin}!getHp@{getHp}}
+\index{getHp@{getHp}!Goblin@{Goblin}}
+\doxysubsubsection{\texorpdfstring{getHp()}{getHp()}}
+{\footnotesize\ttfamily \label{class_goblin_a47753f937a0b3b0a9331362b287c73cb} 
+float Goblin\+::get\+Hp (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_enemy}{Enemy}}.
+
+\Hypertarget{class_goblin_a9814aebe386fdb0e8eae4c107d5af497}\index{Goblin@{Goblin}!getIsAlive@{getIsAlive}}
+\index{getIsAlive@{getIsAlive}!Goblin@{Goblin}}
+\doxysubsubsection{\texorpdfstring{getIsAlive()}{getIsAlive()}}
+{\footnotesize\ttfamily \label{class_goblin_a9814aebe386fdb0e8eae4c107d5af497} 
+bool Goblin\+::get\+Is\+Alive (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_enemy}{Enemy}}.
+
+\Hypertarget{class_goblin_a234c1fb15b018e6cf6b396f23a004597}\index{Goblin@{Goblin}!getSprite@{getSprite}}
+\index{getSprite@{getSprite}!Goblin@{Goblin}}
+\doxysubsubsection{\texorpdfstring{getSprite()}{getSprite()}}
+{\footnotesize\ttfamily \label{class_goblin_a234c1fb15b018e6cf6b396f23a004597} 
+sf\+::\+Sprite Goblin\+::get\+Sprite (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_enemy}{Enemy}}.
+
+\Hypertarget{class_goblin_aaed3908a320cb5c36ae06b5bb3cca3b9}\index{Goblin@{Goblin}!loadTextures@{loadTextures}}
+\index{loadTextures@{loadTextures}!Goblin@{Goblin}}
+\doxysubsubsection{\texorpdfstring{loadTextures()}{loadTextures()}}
+{\footnotesize\ttfamily \label{class_goblin_aaed3908a320cb5c36ae06b5bb3cca3b9} 
+void Goblin\+::load\+Textures (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_enemy}{Enemy}}.
+
+\Hypertarget{class_goblin_a087526dc39fb2174a66302f27407638c}\index{Goblin@{Goblin}!logic@{logic}}
+\index{logic@{logic}!Goblin@{Goblin}}
+\doxysubsubsection{\texorpdfstring{logic()}{logic()}}
+{\footnotesize\ttfamily \label{class_goblin_a087526dc39fb2174a66302f27407638c} 
+void Goblin\+::logic (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_enemy}{Enemy}}.
+
+\Hypertarget{class_goblin_a3ebbd2ab1d8a3febb2c449a3c1b74caa}\index{Goblin@{Goblin}!render@{render}}
+\index{render@{render}!Goblin@{Goblin}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_goblin_a3ebbd2ab1d8a3febb2c449a3c1b74caa} 
+void Goblin\+::render (\begin{DoxyParamCaption}\item[{sf\+::\+Render\+Window \&}]{window}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_enemy}{Enemy}}.
+
+\Hypertarget{class_goblin_a05881ce576e444a8159829d3025629f1}\index{Goblin@{Goblin}!takeDmg@{takeDmg}}
+\index{takeDmg@{takeDmg}!Goblin@{Goblin}}
+\doxysubsubsection{\texorpdfstring{takeDmg()}{takeDmg()}}
+{\footnotesize\ttfamily \label{class_goblin_a05881ce576e444a8159829d3025629f1} 
+void Goblin\+::take\+Dmg (\begin{DoxyParamCaption}\item[{float}]{dmg}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_enemy}{Enemy}}.
+
+\Hypertarget{class_goblin_ae4fa35fd3722b8a9c3249e0ac6500193}\index{Goblin@{Goblin}!update@{update}}
+\index{update@{update}!Goblin@{Goblin}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily \label{class_goblin_ae4fa35fd3722b8a9c3249e0ac6500193} 
+void Goblin\+::update (\begin{DoxyParamCaption}\item[{float}]{delta\+Time}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_enemy}{Enemy}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+enemy.\+hpp\item 
+enemy.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,126 @@
+\doxysection{Forest\+Scene Class Reference}
+\hypertarget{class_forest_scene}{}\label{class_forest_scene}\index{ForestScene@{ForestScene}}
+
+
+Inheritance diagram for Forest\+Scene\+:
+% FIG 0
+
+
+Collaboration diagram for Forest\+Scene\+:
+% FIG 1
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_forest_scene_a07b7853eccae4e4e81f7c2994e2120a6}{notify}} (Observer\+Events) override
+\item 
+void \mbox{\hyperlink{class_forest_scene_a770127e40d552cd7e947207e93cb6111}{render}} (sf\+::\+Render\+Window \&) override
+\item 
+void \mbox{\hyperlink{class_forest_scene_aa25da7d73e7e18fbfb9c3cbb0c59cea1}{update}} (sf\+::\+Render\+Window \&, float) override
+\item 
+void \mbox{\hyperlink{class_forest_scene_a3c89a3857f592b460e394284c44babc6}{update\+Player}} (float, b2\+Vec2, sf\+::\+Vector2f, Player\+State) override
+\item 
+bool \mbox{\hyperlink{class_forest_scene_a635153ab95aaa13ad01d9f71806f65ad}{should\+Transition}} () const override
+\item 
+Scene\+State \mbox{\hyperlink{class_forest_scene_abf305fe64451eaa8d12d35779aa913a7}{next\+Scene\+State}} () const override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_scene}{Scene}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void {\bfseries set\+Enemy\+Sprites} (const std\+::vector$<$ \mbox{\hyperlink{class_enemy}{Enemy}} \texorpdfstring{$\ast$}{*} $>$ \&enemies\+References)
+\item 
+virtual bool {\bfseries game\+Over\+Bool} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_observer}{Observer}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void {\bfseries sensor\+Notify} (bool)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_forest_scene_a44a679aba5b330a7fbca900c00acd525}\label{class_forest_scene_a44a679aba5b330a7fbca900c00acd525} 
+sf\+::\+Texture {\bfseries background\+Texture}
+\item 
+\Hypertarget{class_forest_scene_aaf642cdb045c312a5139eb7d5da92985}\label{class_forest_scene_aaf642cdb045c312a5139eb7d5da92985} 
+sf\+::\+Sprite {\bfseries background}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_scene}{Scene}}}
+\begin{DoxyCompactItemize}
+\item 
+const float {\bfseries WIDTH} = 1366
+\item 
+const float {\bfseries HEIGHT} = 768
+\item 
+\mbox{\hyperlink{class_player_animations}{Player\+Animations}} {\bfseries player\+Animations}
+\item 
+bool {\bfseries draw\+Player}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_forest_scene_abf305fe64451eaa8d12d35779aa913a7}\index{ForestScene@{ForestScene}!nextSceneState@{nextSceneState}}
+\index{nextSceneState@{nextSceneState}!ForestScene@{ForestScene}}
+\doxysubsubsection{\texorpdfstring{nextSceneState()}{nextSceneState()}}
+{\footnotesize\ttfamily \label{class_forest_scene_abf305fe64451eaa8d12d35779aa913a7} 
+Scene\+State Forest\+Scene\+::next\+Scene\+State (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_scene}{Scene}}.
+
+\Hypertarget{class_forest_scene_a07b7853eccae4e4e81f7c2994e2120a6}\index{ForestScene@{ForestScene}!notify@{notify}}
+\index{notify@{notify}!ForestScene@{ForestScene}}
+\doxysubsubsection{\texorpdfstring{notify()}{notify()}}
+{\footnotesize\ttfamily \label{class_forest_scene_a07b7853eccae4e4e81f7c2994e2120a6} 
+void Forest\+Scene\+::notify (\begin{DoxyParamCaption}\item[{Observer\+Events}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_observer}{Observer}}.
+
+\Hypertarget{class_forest_scene_a770127e40d552cd7e947207e93cb6111}\index{ForestScene@{ForestScene}!render@{render}}
+\index{render@{render}!ForestScene@{ForestScene}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_forest_scene_a770127e40d552cd7e947207e93cb6111} 
+void Forest\+Scene\+::render (\begin{DoxyParamCaption}\item[{sf\+::\+Render\+Window \&}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_scene}{Scene}}.
+
+\Hypertarget{class_forest_scene_a635153ab95aaa13ad01d9f71806f65ad}\index{ForestScene@{ForestScene}!shouldTransition@{shouldTransition}}
+\index{shouldTransition@{shouldTransition}!ForestScene@{ForestScene}}
+\doxysubsubsection{\texorpdfstring{shouldTransition()}{shouldTransition()}}
+{\footnotesize\ttfamily \label{class_forest_scene_a635153ab95aaa13ad01d9f71806f65ad} 
+bool Forest\+Scene\+::should\+Transition (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_scene}{Scene}}.
+
+\Hypertarget{class_forest_scene_aa25da7d73e7e18fbfb9c3cbb0c59cea1}\index{ForestScene@{ForestScene}!update@{update}}
+\index{update@{update}!ForestScene@{ForestScene}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily \label{class_forest_scene_aa25da7d73e7e18fbfb9c3cbb0c59cea1} 
+void Forest\+Scene\+::update (\begin{DoxyParamCaption}\item[{sf\+::\+Render\+Window \&}]{}{, }\item[{float}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_scene}{Scene}}.
+
+\Hypertarget{class_forest_scene_a3c89a3857f592b460e394284c44babc6}\index{ForestScene@{ForestScene}!updatePlayer@{updatePlayer}}
+\index{updatePlayer@{updatePlayer}!ForestScene@{ForestScene}}
+\doxysubsubsection{\texorpdfstring{updatePlayer()}{updatePlayer()}}
+{\footnotesize\ttfamily \label{class_forest_scene_a3c89a3857f592b460e394284c44babc6} 
+void Forest\+Scene\+::update\+Player (\begin{DoxyParamCaption}\item[{float}]{}{, }\item[{b2\+Vec2}]{}{, }\item[{sf\+::\+Vector2f}]{}{, }\item[{Player\+State}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_scene}{Scene}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+scene.\+hpp\end{DoxyCompactItemize}

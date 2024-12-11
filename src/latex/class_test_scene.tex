@@ -1,0 +1,147 @@
+\doxysection{Test\+Scene Class Reference}
+\hypertarget{class_test_scene}{}\label{class_test_scene}\index{TestScene@{TestScene}}
+
+
+Inheritance diagram for Test\+Scene\+:
+% FIG 0
+
+
+Collaboration diagram for Test\+Scene\+:
+% FIG 1
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_test_scene_a04fd916e8e52cd1335fc05e2ebf1c8df}{Test\+Scene}} ()
+\item 
+void \mbox{\hyperlink{class_test_scene_a36f8c25ec1d0617c8139e2a74496b632}{notify}} (Observer\+Events) override
+\item 
+void \mbox{\hyperlink{class_test_scene_a9aa966cccc72a4951aa83afbee34831e}{render}} (sf\+::\+Render\+Window \&) override
+\item 
+void \mbox{\hyperlink{class_test_scene_aa0e7bc0ac33a67fa6d83aa8565136869}{update}} (sf\+::\+Render\+Window \&, float) override
+\item 
+void \mbox{\hyperlink{class_test_scene_ad08a839ba0b7e6ca6a4e2150641f5171}{update\+Player}} (float, b2\+Vec2, sf\+::\+Vector2f, Player\+State) override
+\item 
+void \mbox{\hyperlink{class_test_scene_ab0069c9ea7173ee6c01c6f5e9de43159}{set\+Enemy\+Sprites}} (const std\+::vector$<$ \mbox{\hyperlink{class_enemy}{Enemy}} \texorpdfstring{$\ast$}{*} $>$ \&) override
+\item 
+bool \mbox{\hyperlink{class_test_scene_a09b2a867b253e13b6eafd55017c1483b}{should\+Transition}} () const override
+\item 
+bool \mbox{\hyperlink{class_test_scene_ad8461e0cc18a76c3911b59e0b53546e8}{game\+Over\+Bool}} () override
+\item 
+Scene\+State \mbox{\hyperlink{class_test_scene_a28b168e214d4038cc4e299848aebc61e}{next\+Scene\+State}} () const override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_scene}{Scene}}}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_observer}{Observer}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void {\bfseries sensor\+Notify} (bool)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_scene}{Scene}}}
+\begin{DoxyCompactItemize}
+\item 
+const float {\bfseries WIDTH} = 1366
+\item 
+const float {\bfseries HEIGHT} = 768
+\item 
+\mbox{\hyperlink{class_player_animations}{Player\+Animations}} {\bfseries player\+Animations}
+\item 
+bool {\bfseries draw\+Player}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_test_scene_a04fd916e8e52cd1335fc05e2ebf1c8df}\index{TestScene@{TestScene}!TestScene@{TestScene}}
+\index{TestScene@{TestScene}!TestScene@{TestScene}}
+\doxysubsubsection{\texorpdfstring{TestScene()}{TestScene()}}
+{\footnotesize\ttfamily \label{class_test_scene_a04fd916e8e52cd1335fc05e2ebf1c8df} 
+Test\+Scene\+::\+Test\+Scene (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+TEST 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_test_scene_ad8461e0cc18a76c3911b59e0b53546e8}\index{TestScene@{TestScene}!gameOverBool@{gameOverBool}}
+\index{gameOverBool@{gameOverBool}!TestScene@{TestScene}}
+\doxysubsubsection{\texorpdfstring{gameOverBool()}{gameOverBool()}}
+{\footnotesize\ttfamily \label{class_test_scene_ad8461e0cc18a76c3911b59e0b53546e8} 
+bool Test\+Scene\+::game\+Over\+Bool (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_scene}{Scene}}.
+
+\Hypertarget{class_test_scene_a28b168e214d4038cc4e299848aebc61e}\index{TestScene@{TestScene}!nextSceneState@{nextSceneState}}
+\index{nextSceneState@{nextSceneState}!TestScene@{TestScene}}
+\doxysubsubsection{\texorpdfstring{nextSceneState()}{nextSceneState()}}
+{\footnotesize\ttfamily \label{class_test_scene_a28b168e214d4038cc4e299848aebc61e} 
+Scene\+State Test\+Scene\+::next\+Scene\+State (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_scene}{Scene}}.
+
+\Hypertarget{class_test_scene_a36f8c25ec1d0617c8139e2a74496b632}\index{TestScene@{TestScene}!notify@{notify}}
+\index{notify@{notify}!TestScene@{TestScene}}
+\doxysubsubsection{\texorpdfstring{notify()}{notify()}}
+{\footnotesize\ttfamily \label{class_test_scene_a36f8c25ec1d0617c8139e2a74496b632} 
+void Test\+Scene\+::notify (\begin{DoxyParamCaption}\item[{Observer\+Events}]{event}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_observer}{Observer}}.
+
+\Hypertarget{class_test_scene_a9aa966cccc72a4951aa83afbee34831e}\index{TestScene@{TestScene}!render@{render}}
+\index{render@{render}!TestScene@{TestScene}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_test_scene_a9aa966cccc72a4951aa83afbee34831e} 
+void Test\+Scene\+::render (\begin{DoxyParamCaption}\item[{sf\+::\+Render\+Window \&}]{window}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_scene}{Scene}}.
+
+\Hypertarget{class_test_scene_ab0069c9ea7173ee6c01c6f5e9de43159}\index{TestScene@{TestScene}!setEnemySprites@{setEnemySprites}}
+\index{setEnemySprites@{setEnemySprites}!TestScene@{TestScene}}
+\doxysubsubsection{\texorpdfstring{setEnemySprites()}{setEnemySprites()}}
+{\footnotesize\ttfamily \label{class_test_scene_ab0069c9ea7173ee6c01c6f5e9de43159} 
+void Test\+Scene\+::set\+Enemy\+Sprites (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ \mbox{\hyperlink{class_enemy}{Enemy}} \texorpdfstring{$\ast$}{*} $>$ \&}]{enemy\+References}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_scene}{Scene}}.
+
+\Hypertarget{class_test_scene_a09b2a867b253e13b6eafd55017c1483b}\index{TestScene@{TestScene}!shouldTransition@{shouldTransition}}
+\index{shouldTransition@{shouldTransition}!TestScene@{TestScene}}
+\doxysubsubsection{\texorpdfstring{shouldTransition()}{shouldTransition()}}
+{\footnotesize\ttfamily \label{class_test_scene_a09b2a867b253e13b6eafd55017c1483b} 
+bool Test\+Scene\+::should\+Transition (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_scene}{Scene}}.
+
+\Hypertarget{class_test_scene_aa0e7bc0ac33a67fa6d83aa8565136869}\index{TestScene@{TestScene}!update@{update}}
+\index{update@{update}!TestScene@{TestScene}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily \label{class_test_scene_aa0e7bc0ac33a67fa6d83aa8565136869} 
+void Test\+Scene\+::update (\begin{DoxyParamCaption}\item[{sf\+::\+Render\+Window \&}]{window}{, }\item[{float}]{delta\+Time}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_scene}{Scene}}.
+
+\Hypertarget{class_test_scene_ad08a839ba0b7e6ca6a4e2150641f5171}\index{TestScene@{TestScene}!updatePlayer@{updatePlayer}}
+\index{updatePlayer@{updatePlayer}!TestScene@{TestScene}}
+\doxysubsubsection{\texorpdfstring{updatePlayer()}{updatePlayer()}}
+{\footnotesize\ttfamily \label{class_test_scene_ad08a839ba0b7e6ca6a4e2150641f5171} 
+void Test\+Scene\+::update\+Player (\begin{DoxyParamCaption}\item[{float}]{delta\+Time}{, }\item[{b2\+Vec2}]{pos}{, }\item[{sf\+::\+Vector2f}]{sprite\+Scale}{, }\item[{Player\+State}]{state}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_scene}{Scene}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+scene.\+hpp\item 
+scene.\+cpp\end{DoxyCompactItemize}

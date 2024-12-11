@@ -1,0 +1,49 @@
+\doxysection{Sensor Class Reference}
+\hypertarget{class_sensor}{}\label{class_sensor}\index{Sensor@{Sensor}}
+
+
+Inheritance diagram for Sensor\+:
+% FIG 0
+
+
+Collaboration diagram for Sensor\+:
+% FIG 1
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_sensor_ae34ed8855d5975e33ce9a12ed3995864}\label{class_sensor_ae34ed8855d5975e33ce9a12ed3995864} 
+{\bfseries Sensor} (b2\+World \texorpdfstring{$\ast$}{*}, float, float, float, float, Kind)
+\item 
+\Hypertarget{class_sensor_abe3c01ccbff712de44c736f1b241b8c7}\label{class_sensor_abe3c01ccbff712de44c736f1b241b8c7} 
+void {\bfseries debug\+Sensor} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_bounds}{Bounds}}}
+\begin{DoxyCompactItemize}
+\item 
+bool {\bfseries sensor\+Notify} (bool v)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_subject}{Subject}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries add\+Observer} (\mbox{\hyperlink{class_observer}{Observer}} \texorpdfstring{$\ast$}{*}observer)
+\item 
+void {\bfseries remove\+Observer} (\mbox{\hyperlink{class_observer}{Observer}} \texorpdfstring{$\ast$}{*}observer)
+\item 
+void {\bfseries event\+Trigger} (Observer\+Events event)
+\item 
+void {\bfseries sensor\+Trigger} (bool v)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_bounds}{Bounds}}}
+\begin{DoxyCompactItemize}
+\item 
+const float {\bfseries PPM} = 30.f
+\item 
+b2\+Body \texorpdfstring{$\ast$}{*} {\bfseries body}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+limits.\+hpp\item 
+limits.\+cpp\end{DoxyCompactItemize}

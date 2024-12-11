@@ -1,0 +1,175 @@
+\doxysection{scene.\+hpp}
+\hypertarget{scene_8hpp_source}{}\label{scene_8hpp_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ SCENE\_HPP\_INCLUDED}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ SCENE\_HPP\_INCLUDED}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <SFML/Graphics.hpp>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}observer.hpp"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}player.hpp"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}enemy.hpp"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}witch.hpp"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{enum\ class}\ SceneState}
+\DoxyCodeLine{00012\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ MENU,}
+\DoxyCodeLine{00014\ \ \ \ \ HOUSE,}
+\DoxyCodeLine{00015\ \ \ \ \ CITY,}
+\DoxyCodeLine{00016\ \ \ \ \ BAR,}
+\DoxyCodeLine{00017\ \ \ \ \ TEST,}
+\DoxyCodeLine{00018\ \ \ \ \ DEFAULT}
+\DoxyCodeLine{00019\ \};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_scene}{Scene}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_observer}{Observer}}}
+\DoxyCodeLine{00022\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ WIDTH\ =\ 1366;}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ HEIGHT\ =\ 768;}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_player_animations}{PlayerAnimations}}\ playerAnimations;}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ drawPlayer;}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_scene}{\string~Scene}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ render(sf::RenderWindow\&)\ =\ 0;}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ update(sf::RenderWindow\&,\ \textcolor{keywordtype}{float})\ =\ 0;}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ updatePlayer(\textcolor{keywordtype}{float},\ b2Vec2,\ sf::Vector2f,\ PlayerState)\ \{\};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ setEnemySprites(\textcolor{keyword}{const}\ std::vector<Enemy*>\&\ enemiesReferences)\ \{\};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ shouldTransition()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};\ \};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ gameOverBool()\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};\ \};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ SceneState\ nextSceneState()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00044\ \};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_menu_scene}{MenuScene}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_scene}{Scene}}}
+\DoxyCodeLine{00047\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_menu_scene_afcc0dcde491eac4e970d68e8896bf4cb}{MenuScene}}();}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ notify(ObserverEvents)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ render(sf::RenderWindow\&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ update(sf::RenderWindow\&,\ \textcolor{keywordtype}{float})\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ shouldTransition()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ SceneState\ nextSceneState()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ sf::Texture\ backgroundTexture;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ sf::Sprite\ background;}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ sf::Font\ font;}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ sf::Text\ menuOptions[3];}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ currentOption\ =\ 0;}
+\DoxyCodeLine{00062\ \};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_house_scene}{HouseScene}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_scene}{Scene}}}
+\DoxyCodeLine{00065\ \{}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_house_scene_a2d21b256fd5ae1692f57e65457248abf}{HouseScene}}();}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ notify(ObserverEvents)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ render(sf::RenderWindow\&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ update(sf::RenderWindow\&,\ \textcolor{keywordtype}{float})\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ updatePlayer(\textcolor{keywordtype}{float},\ b2Vec2,\ sf::Vector2f,\ PlayerState)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ shouldTransition()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ SceneState\ nextSceneState()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ sf::Texture\ candleText,\ tableText,\ houseText,\ bedText,\ layerTexture1,\ layerTexture2,\ layerTexture3,\ layerTexture4,\ layerTexture5;}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ sf::Sprite\ candle,\ table,\ house,\ bed,\ layer1,\ layer2,\ layer3,\ layer4,\ layer5;}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ startCinematic(\textcolor{keywordtype}{bool});}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ parallaxFactor5\ =\ .04f;}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ parallaxFactor4\ =\ .08f;}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ parallaxFactor3\ =\ .032f;}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ parallaxFactor2\ =\ .018f;}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ parallaxFactor1\ =\ .020f;}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ transition\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00085\ \};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_city_scene}{CityScene}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_scene}{Scene}}}
+\DoxyCodeLine{00088\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_city_scene_a699655df0a04a0885cc6fccf17951fb6}{CityScene}}();}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ sensorNotify(\textcolor{keywordtype}{bool})\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ notify(ObserverEvents)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ render(sf::RenderWindow\&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ update(sf::RenderWindow\&,\ \textcolor{keywordtype}{float})\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ updatePlayer(\textcolor{keywordtype}{float},\ b2Vec2,\ sf::Vector2f,\ PlayerState)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ shouldTransition()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ SceneState\ nextSceneState()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ sf::Texture\ backgroundTexture;}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ sf::Sprite\ background;}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ transition\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ sensorActive\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00104\ \};}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_forest_scene}{ForestScene}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_scene}{Scene}}}
+\DoxyCodeLine{00107\ \{}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_forest_scene}{ForestScene}}();}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ notify(ObserverEvents)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ render(sf::RenderWindow\&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ update(sf::RenderWindow\&,\ \textcolor{keywordtype}{float})\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ updatePlayer(\textcolor{keywordtype}{float},\ b2Vec2,\ sf::Vector2f,\ PlayerState)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ shouldTransition()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ SceneState\ nextSceneState()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ sf::Texture\ backgroundTexture;}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ sf::Sprite\ background;}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00120\ \};}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \textcolor{comment}{/*class\ Castle\ :\ public\ Scene}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\{}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ public:}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ \ \ \ Castle();}}
+\DoxyCodeLine{00126\ \textcolor{comment}{}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ \ \ \ void\ notify(ObserverEvents)\ override;}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ \ \ \ void\ update(sf::RenderWindow\&,\ float)\ override;}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ \ \ \ void\ render(sf::RenderWindow\&)\ override;}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ \ \ \ bool\ shouldTransition()\ const\ override;}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ \ \ \ SceneState\ nextSceneState()\ const\ override;}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\};*/}}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_bar_scene}{BarScene}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_scene}{Scene}}}
+\DoxyCodeLine{00135\ \{}
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_bar_scene_a77be37ea6a736eca3613f81cc77a6381}{BarScene}}();}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ notify(ObserverEvents)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ render(sf::RenderWindow\&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ update(sf::RenderWindow\&,\ \textcolor{keywordtype}{float})\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ updatePlayer(\textcolor{keywordtype}{float},\ b2Vec2,\ sf::Vector2f,\ PlayerState)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ shouldTransition()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ SceneState\ nextSceneState()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ sf::Texture\ barTexture;}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ sf::Sprite\ bar;}
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ transition\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \};}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_test_scene}{TestScene}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_scene}{Scene}}}
+\DoxyCodeLine{00153\ \{}
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_test_scene_a04fd916e8e52cd1335fc05e2ebf1c8df}{TestScene}}();}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ notify(ObserverEvents)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ render(sf::RenderWindow\&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ update(sf::RenderWindow\&,\ \textcolor{keywordtype}{float})\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ updatePlayer(\textcolor{keywordtype}{float},\ b2Vec2,\ sf::Vector2f,\ PlayerState)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setEnemySprites(\textcolor{keyword}{const}\ std::vector<Enemy*>\&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ shouldTransition()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ gameOverBool()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ SceneState\ nextSceneState()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ std::vector<Enemy*>\ enemyReferences;}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_witch}{Witch}}\ theWitch\ =\ \mbox{\hyperlink{class_witch}{Witch}}(700.f,\ 700.f);}
+\DoxyCodeLine{00168\ \};}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ SCENE\_HPP\_INCLUDED}}
+
+\end{DoxyCode}

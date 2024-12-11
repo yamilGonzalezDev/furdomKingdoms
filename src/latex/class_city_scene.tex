@@ -1,0 +1,146 @@
+\doxysection{City\+Scene Class Reference}
+\hypertarget{class_city_scene}{}\label{class_city_scene}\index{CityScene@{CityScene}}
+
+
+Inheritance diagram for City\+Scene\+:
+% FIG 0
+
+
+Collaboration diagram for City\+Scene\+:
+% FIG 1
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_city_scene_a699655df0a04a0885cc6fccf17951fb6}{City\+Scene}} ()
+\item 
+void \mbox{\hyperlink{class_city_scene_aac5e034f6005488caed2923c4ce0c527}{sensor\+Notify}} (bool) override
+\item 
+void \mbox{\hyperlink{class_city_scene_a879bc458d97809104452ff6afc231767}{notify}} (Observer\+Events) override
+\item 
+void \mbox{\hyperlink{class_city_scene_a57c13808cbbbf04e3003c0dd8f04ce4b}{render}} (sf\+::\+Render\+Window \&) override
+\item 
+void \mbox{\hyperlink{class_city_scene_a4c89eb50d65efa4667bb00a2b3dc0e19}{update}} (sf\+::\+Render\+Window \&, float) override
+\item 
+void \mbox{\hyperlink{class_city_scene_ab4f46bd581616bd008937df0b2cea477}{update\+Player}} (float, b2\+Vec2, sf\+::\+Vector2f, Player\+State) override
+\item 
+bool \mbox{\hyperlink{class_city_scene_a49660562a31c689bee3f04217bf3c265}{should\+Transition}} () const override
+\item 
+Scene\+State \mbox{\hyperlink{class_city_scene_a1f1400fd2cb3f64e3adb107f4362d3f1}{next\+Scene\+State}} () const override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_scene}{Scene}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void {\bfseries set\+Enemy\+Sprites} (const std\+::vector$<$ \mbox{\hyperlink{class_enemy}{Enemy}} \texorpdfstring{$\ast$}{*} $>$ \&enemies\+References)
+\item 
+virtual bool {\bfseries game\+Over\+Bool} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_observer}{Observer}}}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_city_scene_ab1b566c1c179a73b483656584fadd8a5}\label{class_city_scene_ab1b566c1c179a73b483656584fadd8a5} 
+sf\+::\+Texture {\bfseries background\+Texture}
+\item 
+\Hypertarget{class_city_scene_a0f5ddd691f8f584a0688cf587bcb74ae}\label{class_city_scene_a0f5ddd691f8f584a0688cf587bcb74ae} 
+sf\+::\+Sprite {\bfseries background}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_scene}{Scene}}}
+\begin{DoxyCompactItemize}
+\item 
+const float {\bfseries WIDTH} = 1366
+\item 
+const float {\bfseries HEIGHT} = 768
+\item 
+\mbox{\hyperlink{class_player_animations}{Player\+Animations}} {\bfseries player\+Animations}
+\item 
+bool {\bfseries draw\+Player}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_city_scene_a699655df0a04a0885cc6fccf17951fb6}\index{CityScene@{CityScene}!CityScene@{CityScene}}
+\index{CityScene@{CityScene}!CityScene@{CityScene}}
+\doxysubsubsection{\texorpdfstring{CityScene()}{CityScene()}}
+{\footnotesize\ttfamily \label{class_city_scene_a699655df0a04a0885cc6fccf17951fb6} 
+City\+Scene\+::\+City\+Scene (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+CIUDAD 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_city_scene_a1f1400fd2cb3f64e3adb107f4362d3f1}\index{CityScene@{CityScene}!nextSceneState@{nextSceneState}}
+\index{nextSceneState@{nextSceneState}!CityScene@{CityScene}}
+\doxysubsubsection{\texorpdfstring{nextSceneState()}{nextSceneState()}}
+{\footnotesize\ttfamily \label{class_city_scene_a1f1400fd2cb3f64e3adb107f4362d3f1} 
+Scene\+State City\+Scene\+::next\+Scene\+State (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_scene}{Scene}}.
+
+\Hypertarget{class_city_scene_a879bc458d97809104452ff6afc231767}\index{CityScene@{CityScene}!notify@{notify}}
+\index{notify@{notify}!CityScene@{CityScene}}
+\doxysubsubsection{\texorpdfstring{notify()}{notify()}}
+{\footnotesize\ttfamily \label{class_city_scene_a879bc458d97809104452ff6afc231767} 
+void City\+Scene\+::notify (\begin{DoxyParamCaption}\item[{Observer\+Events}]{event}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_observer}{Observer}}.
+
+\Hypertarget{class_city_scene_a57c13808cbbbf04e3003c0dd8f04ce4b}\index{CityScene@{CityScene}!render@{render}}
+\index{render@{render}!CityScene@{CityScene}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_city_scene_a57c13808cbbbf04e3003c0dd8f04ce4b} 
+void City\+Scene\+::render (\begin{DoxyParamCaption}\item[{sf\+::\+Render\+Window \&}]{window}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_scene}{Scene}}.
+
+\Hypertarget{class_city_scene_aac5e034f6005488caed2923c4ce0c527}\index{CityScene@{CityScene}!sensorNotify@{sensorNotify}}
+\index{sensorNotify@{sensorNotify}!CityScene@{CityScene}}
+\doxysubsubsection{\texorpdfstring{sensorNotify()}{sensorNotify()}}
+{\footnotesize\ttfamily \label{class_city_scene_aac5e034f6005488caed2923c4ce0c527} 
+void City\+Scene\+::sensor\+Notify (\begin{DoxyParamCaption}\item[{bool}]{v}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_observer}{Observer}}.
+
+\Hypertarget{class_city_scene_a49660562a31c689bee3f04217bf3c265}\index{CityScene@{CityScene}!shouldTransition@{shouldTransition}}
+\index{shouldTransition@{shouldTransition}!CityScene@{CityScene}}
+\doxysubsubsection{\texorpdfstring{shouldTransition()}{shouldTransition()}}
+{\footnotesize\ttfamily \label{class_city_scene_a49660562a31c689bee3f04217bf3c265} 
+bool City\+Scene\+::should\+Transition (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_scene}{Scene}}.
+
+\Hypertarget{class_city_scene_a4c89eb50d65efa4667bb00a2b3dc0e19}\index{CityScene@{CityScene}!update@{update}}
+\index{update@{update}!CityScene@{CityScene}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily \label{class_city_scene_a4c89eb50d65efa4667bb00a2b3dc0e19} 
+void City\+Scene\+::update (\begin{DoxyParamCaption}\item[{sf\+::\+Render\+Window \&}]{window}{, }\item[{float}]{delta\+Time}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_scene}{Scene}}.
+
+\Hypertarget{class_city_scene_ab4f46bd581616bd008937df0b2cea477}\index{CityScene@{CityScene}!updatePlayer@{updatePlayer}}
+\index{updatePlayer@{updatePlayer}!CityScene@{CityScene}}
+\doxysubsubsection{\texorpdfstring{updatePlayer()}{updatePlayer()}}
+{\footnotesize\ttfamily \label{class_city_scene_ab4f46bd581616bd008937df0b2cea477} 
+void City\+Scene\+::update\+Player (\begin{DoxyParamCaption}\item[{float}]{delta\+Time}{, }\item[{b2\+Vec2}]{pos}{, }\item[{sf\+::\+Vector2f}]{sprite\+Scale}{, }\item[{Player\+State}]{state}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_scene}{Scene}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+scene.\+hpp\item 
+scene.\+cpp\end{DoxyCompactItemize}
