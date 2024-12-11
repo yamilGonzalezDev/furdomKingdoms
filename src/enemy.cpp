@@ -358,7 +358,6 @@ void Skeleton::setAnimation(EnemyState state)
 void Skeleton::takeDmg(float dmg)
 {
     _hp -= dmg;
-    std::cout << _hp << std::endl;
     if(_hp <= 0)
     {
         _hp = 0;
@@ -552,7 +551,6 @@ void Goblin::setAnimation(EnemyState state)
 void Goblin::takeDmg(float dmg)
 {
     _hp -= dmg;
-    std::cout << _hp << std::endl;
     if(_hp <= 0)
     {
         _hp = 0;

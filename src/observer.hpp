@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include "sceneState.hpp"
 
 enum class ObserverEvents
 {
@@ -17,7 +18,7 @@ class Observer
     public:
         virtual ~Observer() = default;
         virtual void notify(ObserverEvents) = 0;
-        virtual void sensorNotify(bool) {};
+        virtual void sensorNotify(bool, SceneState) {};
 };
 
 class Subject
@@ -48,11 +49,11 @@ class Subject
             }
         }
 
-        void sensorTrigger(bool v)
+        void sensorTrigger(bool v, SceneState nextScene)
         {
             for(Observer* observer : observers)
             {
-                observer->sensorNotify(v);
+                observer->sensorNotify(v, nextScene);
             }
         }
 };

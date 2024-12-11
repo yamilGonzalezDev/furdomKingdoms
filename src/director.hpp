@@ -10,6 +10,7 @@
 #include "scene.hpp"
 #include "fooDraw.hpp"
 #include "observer.hpp"
+#include "sceneState.hpp"
 
 enum class TransitionState
 {
@@ -45,7 +46,7 @@ class Director
         bool drawEnemies, fadingIn, fadingOut, drawPlayer, changeScene, transitioning, gameOver;
         int alpha = 255;
         float transitionTime = 0.f, maxTransitionTime, cooldownElapsed;
-        sf::RectangleShape fadeRectangle, center;
+        sf::RectangleShape fadeRectangle;
 
         sf::Texture testText;
         sf::Sprite spriteTest;
@@ -71,6 +72,9 @@ class Director
         void initMenuScene();
         void initHouseScene();
         void initBarScene();
+        void initForestScene();
+        void initDungeonScene();
+        void initCastleScene();
         void initTestScene();
         void setScene(Scene*);
         void cleanScene(b2World*);

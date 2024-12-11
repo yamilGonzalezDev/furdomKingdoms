@@ -1,5 +1,6 @@
 #include "scene.hpp"
 #include "entity.hpp"
+#include "sceneState.hpp"
 
 /**MENU**/
 MenuScene::MenuScene()
@@ -246,13 +247,78 @@ CityScene::CityScene()
 {
     drawPlayer = false;
 
-    if(!backgroundTexture.loadFromFile("Textures/cityLevel/city.png"))
+    if(!backgroundTexture.loadFromFile("Textures/City/mapppppp.png"))
     {
         std::cerr << "Error al cargar las texturas de la ciudad" << std::endl;
     }
 
+    if(!cartelTexture.loadFromFile("Textures/City/cartel.png"))
+    {
+        std::cerr << "Error al cargar las texturas de la ciudad" << std::endl;
+    }
+
+    if(!barrilTexture.loadFromFile("Textures/City/barrilete.png"))
+    {
+        std::cerr << "Error al cargar las texturas de la ciudad" << std::endl;
+    }
+
+    if(!farolasTexture.loadFromFile("Textures/City/farolas.png"))
+    {
+        std::cerr << "Error al cargar las texturas de la ciudad" << std::endl;
+    }
+
+    if(!fozaTexture.loadFromFile("Textures/City/zanja.png"))
+    {
+        std::cerr << "Error al cargar las texturas de la ciudad" << std::endl;
+    }
+
+    if(!carretaTexture.loadFromFile("Textures/City/carretilla.png"))
+    {
+        std::cerr << "Error al cargar las texturas de la ciudad" << std::endl;
+    }
+
+    if(!cajasTexture.loadFromFile("Textures/City/cajuelas.png"))
+    {
+        std::cerr << "Error al cargar las texturas de la ciudad" << std::endl;
+    }
+
+
+
     background.setTexture(backgroundTexture);
-    background.setPosition(0.f, 450.f);
+    background.setPosition(0.f, 320.f);
+
+    cartel.setTexture(cartelTexture);
+    cartel.setPosition(480.f,630.f);
+
+    barril.setTexture(barrilTexture);
+    barril.setPosition(460.f,674.f);
+
+    barril2.setTexture(barrilTexture);
+    barril2.setPosition(500.f,674.f);
+
+    farolas.setTexture(farolasTexture);
+    farolas.setPosition(500.f,597.f);
+
+    farolas2.setTexture(farolasTexture);
+    farolas2.setPosition(580.f,597.f);
+
+    cajas.setTexture(cajasTexture);
+    cajas.setPosition(20.f,638.f);
+
+    foza.setTexture(fozaTexture);
+    foza.setPosition(1139.f,643.f);
+
+    carreta.setTexture(carretaTexture);
+    carreta.setPosition(700.f,630.f);
+
+    auto dog = std::make_unique<Dog>(190.f, 690.f);
+    npcs.push_back(std::move(dog));
+
+    auto farmer = std::make_unique<Farmer>(300.f, 685.f);
+    npcs.push_back(std::move(farmer));
+
+    auto farmerGirl = std::make_unique<FarmerGirl>(450.f, 683.f);
+    npcs.push_back(std::move(farmerGirl));
 }
 
 void CityScene::update(sf::RenderWindow& window, float deltaTime)
@@ -260,6 +326,10 @@ void CityScene::update(sf::RenderWindow& window, float deltaTime)
     if(sensorActive && sf::Keyboard::isKeyPressed(sf::Keyboard::E))
     {
         transition = true;
+    }
+
+    for(auto& npc : npcs){
+        npc->update(deltaTime);
     }
 }
 
@@ -271,44 +341,136 @@ void CityScene::updatePlayer(float deltaTime, b2Vec2 pos, sf::Vector2f spriteSca
 void CityScene::render(sf::RenderWindow& window)
 {
     window.draw(background);
-    playerAnimations.draw(window);
-}
+    window.draw(cartel);
+    window.draw(barril);
 
+    for(auto& npc : npcs){
+        npc->render(window);
+    }
+    playerAnimations.draw(window);
+    window.draw(foza);
+    window.draw(barril2);
+    window.draw(farolas2);
+    window.draw(farolas);
+    window.draw(cajas);
+    window.draw(carreta);
+}
 bool CityScene::shouldTransition() const
 {
     return transition;
 }
 
-void CityScene::sensorNotify(bool v)
+void CityScene::sensorNotify(bool v, SceneState nextState)
 {
     sensorActive = v;
+    nextScene = nextState;
+
 }
 
 void CityScene::notify(ObserverEvents event)
 {
     if(event == ObserverEvents::DEFAULT) std::cout << "Default" << std::endl;
+
+
+    if(event == ObserverEvents::TRANSITION)
+    {
+        transition = true;
+    }
 }
 
 SceneState CityScene::nextSceneState() const
 {
-    return SceneState::BAR;
+    return nextScene;
 }
 
 /**BAR**/
 
 BarScene::BarScene()
 {
-    if(!barTexture.loadFromFile("Textures/barLevel/bar.png"))
+    if(!barTexture.loadFromFile("Textures/Taverna/bar.png"))
     {
         std::cerr << "Error al cargar la textura" << std::endl;
     }
 
+        if(!arcadeTexture.loadFromFile("Textures/Taverna/arcade.png"))
+    {
+        std::cerr << "Error al cargar la textura" << std::endl;
+    }
+
+
+        if(!pisoTexture.loadFromFile("Textures/Taverna/piso.png"))
+    {
+        std::cerr << "Error al cargar la textura" << std::endl;
+    }
+
+
+        if(!nubesTexture.loadFromFile("Textures/Taverna/nubes.png"))
+    {
+        std::cerr << "Error al cargar la textura" << std::endl;
+    }
+
+
+        if(!castillosTexture.loadFromFile("Textures/Taverna/castillos.png"))
+    {
+        std::cerr << "Error al cargar la textura" << std::endl;
+    }
+
+    if(!mesaTexture.loadFromFile("Textures/Taverna/barTable.png"))
+    {
+        std::cerr << "Error al cargar la textura" << std::endl;
+    }
+
+        if(!copaTexture.loadFromFile("Textures/Taverna/copita.png"))
+    {
+        std::cerr << "Error al cargar la textura" << std::endl;
+    }
+
+    if(!music.openFromFile("Textures/Taverna/musiquita.mp3")){
+        std::cerr <<"Error al cargar la musica"<<std::endl;
+    }
+
+    music.setLoop(true);
+    music.setVolume(10.f);
+
+    music.play();
+
+
+    piso.setTexture(pisoTexture);
+    piso.setPosition(-380.f ,320.f);
+    castillos.setTexture(castillosTexture);
+    castillos.setPosition(-380.f,305.f);
+    nubes.setTexture(nubesTexture);
+    nubes.setPosition(-380.f,300.f);
+    arcade.setTexture(arcadeTexture);
+    arcade.setPosition(215.f , 630.f);
+    arcade.setScale(0.6f, 0.6f);
+    mesa.setTexture(mesaTexture);
+    mesa.setPosition(100.f,663.f);
+
+    copa.setTexture(copaTexture);
+    copa.setPosition(150.f,658.f);
+    copa.setScale(0.6f,0.6f);
+
     bar.setTexture(barTexture);
+    bar.setPosition(0.f, 390.f);
+
+    auto marcianito = std::make_unique<Marcianito>(332.f,645.f);
+    npcs.push_back(std::move(marcianito));
+
+    auto barman = std::make_unique<Barman>(230.f, 680.f);
+    npcs.push_back(std::move(barman));
 }
 
 void BarScene::update(sf::RenderWindow& window, float deltaTime)
 {
+if(sensorActive && sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+    {
+        transition = true;
+    }
 
+    for(auto& npc : npcs){
+        npc->update(deltaTime);
+    }
 }
 
 void BarScene::updatePlayer(float deltaTime, b2Vec2 pos, sf::Vector2f spriteScale, PlayerState state)
@@ -318,23 +480,238 @@ void BarScene::updatePlayer(float deltaTime, b2Vec2 pos, sf::Vector2f spriteScal
 
 void BarScene::render(sf::RenderWindow& window)
 {
+
+    window.draw(piso);
+    window.draw(nubes);
+    window.draw(castillos);
     window.draw(bar);
+    window.draw(arcade);
+    for (auto& npc : npcs){
+    npc->render(window);
+    }
+    window.draw(mesa);
+    window.draw(copa);
     playerAnimations.draw(window);
+
 }
 
 SceneState BarScene::nextSceneState() const
 {
-    return SceneState::DEFAULT;
+    return SceneState::CITY;
 }
 
 void BarScene::notify(ObserverEvents event)
 {
     if(event == ObserverEvents::TRANSITION) transition = true;
+      if(event == ObserverEvents::TRANSITION)
+    {
+        transition = true;
+    }
 }
 
 bool BarScene::shouldTransition() const
 {
     return transition;
+}
+
+void BarScene::sensorNotify(bool v,SceneState nextState)
+{
+    sensorActive = v;
+    if(nextState == SceneState::BAR){
+    nextScene = SceneState::CITY;
+    }
+}
+
+/*BOSQUE*/
+
+ForestScene::ForestScene()
+{
+    if(!backgroundTexture.loadFromFile("Textures/Forest/elbosquedemo2.png"))
+    {
+        std::cerr << "Error al cargar la textura" << std::endl;
+    }
+    if(!fondoTexture.loadFromFile("Textures/Forest/fondo.png"))
+    {
+        std::cerr << "Error al cargar la textura" << std::endl;
+    }
+     if(!plantaTexture.loadFromFile("Textures/Forest/plantitas.png"))
+    {
+        std::cerr << "Error al cargar la textura" << std::endl;
+    }
+
+    background.setTexture(backgroundTexture);
+    background.setPosition(0.f, 400.f);
+
+    planta.setTexture(plantaTexture);
+    planta.setPosition(0.f, 400.f);
+
+    fondo.setTexture(fondoTexture);
+    fondo.setPosition(-500.f, 150.f);
+    fondo.setScale(1.6f,1.6f);
+}
+
+void ForestScene::update(sf::RenderWindow& window, float deltaTime)
+{
+if(sensorActive && sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+    {
+        transition = true;
+    }
+
+    for(auto& npc : npcs){
+        npc->update(deltaTime);
+    }
+}
+
+void ForestScene::updatePlayer(float deltaTime, b2Vec2 pos, sf::Vector2f spriteScale, PlayerState state)
+{
+    playerAnimations.update(deltaTime, pos, spriteScale, state);
+}
+
+void ForestScene::render(sf::RenderWindow& window)
+{
+    window.draw(fondo);
+    window.draw(background);
+
+
+    for (auto& npc : npcs){
+    npc->render(window);
+    }
+
+    playerAnimations.draw(window);
+    window.draw(planta);
+
+}
+
+SceneState ForestScene::nextSceneState() const
+{
+    return SceneState::DUNGEON;
+}
+
+void ForestScene::notify(ObserverEvents event)
+{
+    if(event == ObserverEvents::TRANSITION) transition = true;
+}
+
+bool ForestScene::shouldTransition() const
+{
+    return transition;
+}
+
+void ForestScene::sensorNotify(bool v,SceneState nextState)
+{
+    sensorActive = v;
+}
+
+/*DUNGEON*/
+
+DungeonScene::DungeonScene()
+{
+    if(!backgroundTexture.loadFromFile("Textures/Dungeon/map.png"))
+    {
+        std::cerr << "Error al cargar la textura" << std::endl;
+    }
+
+    background.setTexture(backgroundTexture);
+    background.setPosition(0.f, 400.f);
+}
+
+void DungeonScene::update(sf::RenderWindow& window, float deltaTime)
+{
+
+
+    for(auto& npc : npcs){
+        npc->update(deltaTime);
+    }
+}
+
+void DungeonScene::updatePlayer(float deltaTime, b2Vec2 pos, sf::Vector2f spriteScale, PlayerState state)
+{
+    playerAnimations.update(deltaTime, pos, spriteScale, state);
+}
+
+void DungeonScene::render(sf::RenderWindow& window)
+{
+
+    window.draw(background);
+
+    playerAnimations.draw(window);
+}
+
+SceneState DungeonScene::nextSceneState() const
+{
+    return SceneState::CASTLE;
+}
+
+void DungeonScene::notify(ObserverEvents event)
+{
+    if(event == ObserverEvents::TRANSITION) transition = true;
+}
+
+bool DungeonScene::shouldTransition() const
+{
+    return transition;
+}
+
+void DungeonScene::sensorNotify(bool v,SceneState nextState)
+{
+    if(nextState == SceneState::DUNGEON){
+    nextScene = SceneState::CASTLE;
+    }
+}
+
+/*CASTILLO*/
+CastleScene::CastleScene()
+{
+    if(!backgroundTexture.loadFromFile("Textures/Castle/castle.png"))
+    {
+        std::cerr << "Error al cargar la textura" << std::endl;
+    }
+
+    background.setTexture(backgroundTexture);
+    background.setPosition(0.f, 16.f);
+}
+
+void CastleScene::update(sf::RenderWindow& window, float deltaTime)
+{
+
+    for(auto& npc : npcs){
+        npc->update(deltaTime);
+    }
+}
+
+void CastleScene::updatePlayer(float deltaTime, b2Vec2 pos, sf::Vector2f spriteScale, PlayerState state)
+{
+    playerAnimations.update(deltaTime, pos, spriteScale, state);
+}
+
+void CastleScene::render(sf::RenderWindow& window)
+{
+
+    window.draw(background);
+
+    playerAnimations.draw(window);
+}
+
+SceneState CastleScene::nextSceneState() const
+{
+    return SceneState::DEFAULT;
+}
+
+void CastleScene::notify(ObserverEvents event)
+{
+    if(event == ObserverEvents::TRANSITION) transition = true;
+}
+
+bool CastleScene::shouldTransition() const
+{
+    return transition;
+}
+
+void CastleScene::sensorNotify(bool v,SceneState nextState)
+{
+    if(nextState == SceneState::DUNGEON){
+    nextScene = SceneState::DEFAULT;
+    }
 }
 
 /**TEST**/

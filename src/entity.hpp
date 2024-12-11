@@ -20,7 +20,6 @@
 enum class Kind
 {
     PLAYER,
-    PLAYERSWORD,
     ENEMY,
     NPC,
     FLOOR,
@@ -28,8 +27,13 @@ enum class Kind
     WALLS,
     HOUSESENSOR,
     BARDOOR,
-    GAMESENSOR,
-    ENEMYSENSOR
+    ARCADE,
+    ADUNGEON,
+    NEXTSCENE,
+    ENEMYSENSOR,
+    CASTLE,
+    PLAYERSWORD,
+    DEAD
 };
 
 typedef struct

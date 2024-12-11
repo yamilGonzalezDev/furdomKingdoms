@@ -1,0 +1,82 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "bosque.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "Plant.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "bosque.tmx": {
+            "scale": 1,
+            "selectedLayer": 9,
+            "viewCenter": {
+                "x": 2053.5,
+                "y": 287
+            }
+        },
+        "clouds_mid.tsx": {
+            "scaleInDock": 1
+        },
+        "clouds_mid_t.tsx": {
+            "scaleInDock": 0.33,
+            "scaleInEditor": 1
+        },
+        "dungeon.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "elbosquedemo1.tsx": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        },
+        "far_mountains.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "grassy_mountains.tsx": {
+            "scaleInDock": 1
+        },
+        "middle.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "sky.tsx": {
+            "scaleInDock": 1
+        }
+    },
+    "last.imagePath": "C:/Users/marti/OneDrive - frgp.utn.edu.ar/segundo-cuatrimestre/proyectos/proyectos/FurdomKingdoms-main/FurdomKingdoms-main/Textures/Dungeon",
+    "map.height": 25,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 188,
+    "openFiles": [
+        "bosque.tmx",
+        "elbosquedemo1.tsx",
+        "Plant.tsx",
+        "middle.tsx",
+        "far_mountains.tsx",
+        "clouds_mid_t.tsx"
+    ],
+    "project": "forest.tiled-project",
+    "recentFiles": [
+        "clouds_mid_t.tsx",
+        "far_mountains.tsx",
+        "middle.tsx",
+        "Plant.tsx",
+        "elbosquedemo1.tsx",
+        "bosque.tmx",
+        "dungeon.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}

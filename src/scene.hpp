@@ -2,21 +2,14 @@
 #define SCENE_HPP_INCLUDED
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
+#include <memory>
 #include "observer.hpp"
 #include "player.hpp"
 #include "enemy.hpp"
 #include "witch.hpp"
-
-enum class SceneState
-{
-    MENU,
-    HOUSE,
-    CITY,
-    BAR,
-    TEST,
-    DEFAULT
-};
+#include "npc.hpp"
 
 class Scene : public Observer
 {
@@ -25,6 +18,7 @@ class Scene : public Observer
         const float HEIGHT = 768;
         PlayerAnimations playerAnimations;
         bool drawPlayer;
+        SceneState nextScene;
     public:
         virtual ~Scene() = default;
 
@@ -89,7 +83,7 @@ class CityScene : public Scene
     public:
         CityScene();
 
-        void sensorNotify(bool) override;
+        void sensorNotify(bool,SceneState)override;
         void notify(ObserverEvents) override;
         void render(sf::RenderWindow&) override;
         void update(sf::RenderWindow&, float) override;
@@ -98,9 +92,34 @@ class CityScene : public Scene
         SceneState nextSceneState() const override;
         sf::Texture backgroundTexture;
         sf::Sprite background;
+
+        sf::Texture cartelTexture;
+        sf::Sprite cartel;
+
+        sf::Texture barrilTexture;
+        sf::Sprite barril;
+        sf::Sprite barril2;
+
+        sf::Texture farolasTexture ;
+        sf::Sprite farolas;
+        sf::Sprite farolas2;
+
+        sf::Texture cajasTexture ;
+        sf::Sprite cajas;
+
+        sf::Texture carretaTexture ;
+        sf::Sprite carreta;
+
+        sf::Texture fozaTexture ;
+        sf::Sprite foza;
+
+
+
+        std::vector<std::unique_ptr<Npc>> npcs;
     private:
         bool transition = false;
         bool sensorActive = false;
+
 };
 
 class ForestScene : public Scene
@@ -108,6 +127,7 @@ class ForestScene : public Scene
     public:
         ForestScene();
 
+        void sensorNotify(bool,SceneState)override;
         void notify(ObserverEvents) override;
         void render(sf::RenderWindow&) override;
         void update(sf::RenderWindow&, float) override;
@@ -116,26 +136,63 @@ class ForestScene : public Scene
         SceneState nextSceneState() const override;
         sf::Texture backgroundTexture;
         sf::Sprite background;
+
+        sf::Texture plantaTexture;
+        sf::Sprite planta;
+
+        sf::Texture fondoTexture;
+        sf::Sprite fondo;
+        std::vector<std::unique_ptr<Npc>> npcs;
     private:
+    bool sensorActive = false;
+    bool transition = false;
 };
 
-/*class Castle : public Scene
+class DungeonScene : public Scene
 {
     public:
-        Castle();
+        DungeonScene();
 
+        void sensorNotify(bool,SceneState)override;
+        void notify(ObserverEvents) override;
+        void render(sf::RenderWindow&) override;
+        void update(sf::RenderWindow&, float) override;
+        void updatePlayer(float, b2Vec2, sf::Vector2f, PlayerState) override;
+        bool shouldTransition() const override;
+        SceneState nextSceneState() const override;
+        sf::Texture backgroundTexture;
+        sf::Sprite background;
+        std::vector<std::unique_ptr<Npc>> npcs;
+        private:
+        bool transition = false;
+
+};
+
+class CastleScene : public Scene
+{
+    public:
+        CastleScene();
+
+        void sensorNotify(bool,SceneState)override;
         void notify(ObserverEvents) override;
         void update(sf::RenderWindow&, float) override;
         void render(sf::RenderWindow&) override;
         bool shouldTransition() const override;
+        void updatePlayer(float, b2Vec2, sf::Vector2f, PlayerState) override;
         SceneState nextSceneState() const override;
-};*/
+        sf::Texture backgroundTexture;
+        sf::Sprite background;
+        std::vector<std::unique_ptr<Npc>> npcs;
+        private:
+        bool transition = false;
+
+};
 
 class BarScene : public Scene
 {
     public:
         BarScene();
-
+        void sensorNotify(bool,SceneState)override;
         void notify(ObserverEvents) override;
         void render(sf::RenderWindow&) override;
         void update(sf::RenderWindow&, float) override;
@@ -144,8 +201,23 @@ class BarScene : public Scene
         SceneState nextSceneState() const override;
         sf::Texture barTexture;
         sf::Sprite bar;
+        sf::Texture arcadeTexture;
+        sf::Sprite arcade;
+        sf::Texture pisoTexture;
+        sf::Sprite piso;
+        sf::Texture nubesTexture;
+        sf::Sprite nubes;
+        sf::Texture castillosTexture;
+        sf::Sprite castillos;
+        sf::Texture mesaTexture;
+        sf::Sprite mesa;
+        sf::Music music;
+        sf::Texture copaTexture;
+        sf::Sprite copa;
+        std::vector<std::unique_ptr<Npc>> npcs;
     private:
         bool transition = false;
+        bool sensorActive = false;
 
 };
 

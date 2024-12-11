@@ -4,6 +4,7 @@
 #include "entity.hpp"
 #include "limits.hpp"
 #include "enemy.hpp"
+#include "sceneState.hpp"
 
 void Colision::BeginContact(b2Contact* contact)
 {
@@ -58,25 +59,40 @@ void Colision::BeginContact(b2Contact* contact)
     if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::BARDOOR)
     {
         Sensor* sensor = reinterpret_cast<Sensor*>(tagA->object);
-        sensor->sensorTrigger(true);
+        sensor->sensorTrigger(true, SceneState::BAR);
     }
 
     if(tagB->kind == Kind::PLAYER && tagA->kind == Kind::BARDOOR)
     {
         Sensor* sensor = reinterpret_cast<Sensor*>(tagA->object);
-        sensor->sensorTrigger(true);
+        sensor->sensorTrigger(true, SceneState::BAR);
     }
 
-    if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::GAMESENSOR)
-    {
-        Sensor* sensor = reinterpret_cast<Sensor*>(tagB->object);
-        sensor->sensorTrigger(true);
-    }
-
-    if(tagB->kind == Kind::PLAYER && tagA->kind == Kind::GAMESENSOR)
+    if(tagB->kind == Kind::PLAYER && tagA->kind == Kind::NEXTSCENE)
     {
         Sensor* sensor = reinterpret_cast<Sensor*>(tagA->object);
-        sensor->sensorTrigger(true);
+        sensor->eventTrigger(ObserverEvents::TRANSITION);
+        sensor->sensorTrigger(true, SceneState::FOREST);
+    }
+
+    if(tagB->kind == Kind::NEXTSCENE && tagA->kind == Kind::PLAYER)
+    {
+        Sensor* sensor = reinterpret_cast<Sensor*>(tagB->object);
+        sensor->eventTrigger(ObserverEvents::TRANSITION);
+        sensor->sensorTrigger(true, SceneState::FOREST);
+    }
+
+    if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::ADUNGEON)
+    {
+        Sensor* sensor = reinterpret_cast<Sensor*>(tagA->object);
+        sensor->eventTrigger(ObserverEvents::TRANSITION);
+        sensor->sensorTrigger(true, SceneState::DUNGEON);
+    }
+    if(tagB->kind == Kind::PLAYER && tagA->kind == Kind::ADUNGEON)
+    {
+        Sensor* sensor = reinterpret_cast<Sensor*>(tagA->object);
+        sensor->eventTrigger(ObserverEvents::TRANSITION);
+        sensor->sensorTrigger(true, SceneState::DUNGEON);
     }
 
     if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::ENEMYSENSOR)
@@ -130,6 +146,19 @@ void Colision::BeginContact(b2Contact* contact)
         player->takeDmg(enemy->dealDmg());
         player->setCanBeDamaged(false);
     }
+
+    if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::CASTLE)
+    {
+        Sensor* sensor = reinterpret_cast<Sensor*>(tagA->object);
+        sensor->eventTrigger(ObserverEvents::TRANSITION);
+        sensor->sensorTrigger(true, SceneState::CASTLE);
+    }
+    if(tagB->kind == Kind::PLAYER && tagA->kind == Kind::CASTLE)
+    {
+        Sensor* sensor = reinterpret_cast<Sensor*>(tagA->object);
+        sensor->eventTrigger(ObserverEvents::TRANSITION);
+        sensor->sensorTrigger(true, SceneState::CASTLE);
+    }
 }
 
 void Colision::EndContact(b2Contact* contact)
@@ -159,13 +188,13 @@ void Colision::EndContact(b2Contact* contact)
     if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::BARDOOR)
     {
         Sensor* sensor = reinterpret_cast<Sensor*>(tagA->object);
-        sensor->sensorTrigger(false);
+        sensor->sensorTrigger(false, SceneState::BAR);
     }
 
     if(tagB->kind == Kind::PLAYER && tagA->kind == Kind::BARDOOR)
     {
         Sensor* sensor = reinterpret_cast<Sensor*>(tagA->object);
-        sensor->sensorTrigger(false);
+        sensor->sensorTrigger(false, SceneState::BAR);
     }
 
     if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::ENEMYSENSOR)

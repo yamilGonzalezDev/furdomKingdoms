@@ -55,7 +55,8 @@
 			<Add directory="SFML/lib" />
 			<Add directory="box2d-2.4.2/lib" />
 		</Linker>
-		<Unit filename="src/animationManager.hpp" />
+		<Unit filename="src/Witch.cpp" />
+		<Unit filename="src/animations.hpp" />
 		<Unit filename="src/colisions.cpp" />
 		<Unit filename="src/colisions.hpp" />
 		<Unit filename="src/director.cpp" />
@@ -77,9 +78,9 @@
 		<Unit filename="src/princess.hpp" />
 		<Unit filename="src/scene.cpp" />
 		<Unit filename="src/scene.hpp" />
+		<Unit filename="src/sceneState.hpp" />
 		<Unit filename="src/texts.cpp" />
 		<Unit filename="src/texts.hpp" />
-		<Unit filename="src/witch.cpp" />
 		<Unit filename="src/witch.hpp" />
 		<Extensions />
 	</Project>

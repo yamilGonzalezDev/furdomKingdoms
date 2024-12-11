@@ -3,7 +3,7 @@
 #include <iostream>
 
 Player::Player()
-    : _hp(1.f), _dmg(10.f), _armor(20.f), isMoving(false), isJumping(false),
+    : _hp(100.f), _dmg(10.f), _armor(20.f), isMoving(false), isJumping(false),
     isOnGround(true), isAttacking(false), canBeDamaged(true), isAlive(true)
 {
 
@@ -136,7 +136,9 @@ void Player::takeDmg(float inputDmg)
 {
     if(canBeDamaged)
     {
-        _hp -= inputDmg;
+        unsigned int totalDamage = _armor - inputDmg;
+
+        _hp -= totalDamage;
 
         if(_hp <= 0)
         {
@@ -196,6 +198,8 @@ PlayerState Player::getPlayerState() const { return currentState; }
 b2Body* Player::getBody() { if(playerBody) return playerBody; else return nullptr; }
 
 float Player::getHp() { return _hp; };
+
+void Player::setHp(float valor) { _hp = valor; };
 
 float Player::dealDamage() { return _dmg; }
 

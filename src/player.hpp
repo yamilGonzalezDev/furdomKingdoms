@@ -42,6 +42,7 @@ class Player
         void setIsJumping(bool);
         void setIsOnGround(bool);
         void setCanBeDamaged(bool);
+        void setHp(float);
 
         float dealDamage();
         float getHp();
