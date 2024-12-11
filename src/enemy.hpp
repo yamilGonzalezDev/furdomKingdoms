@@ -5,101 +5,156 @@
 #include <box2d/box2d.h>
 #include <string>
 #include "texts.hpp"
+#include "player.hpp"
 
 enum class EnemyState
 {
-    IDLE,
-    PATROLLING,
-    ATTACKING
+    ENEMYIDLE,
+    ENEMYATTACKING,
+    CHASING,
+    ENEMYDEAD
 };
 
 class Enemy
 {
     protected:
         const float PPM = 30.f;
+        float _dmg, _hp;
     public:
         virtual ~Enemy() = default;
 
-        virtual void logic() = 0;
-        virtual void createBody(b2World*, float, float, float, float) = 0;
+        virtual void setAnimation(EnemyState) = 0;
         virtual void update(float) = 0;
+        virtual void logic(Player*) = 0;
         virtual void loadTextures() = 0;
+        virtual void takeDmg(float) = 0;
+        virtual void destroy(b2World*) = 0;
         virtual void render(sf::RenderWindow&) = 0;
+        virtual float dealDmg() = 0;
+        virtual float getHp() { return 2.f; };
+        virtual bool getIsAlive() { return true; };
+        virtual sf::Sprite getSprite() = 0;
 };
 
 class Ghost : public Enemy
 {
     private:
-        int currentFrame;
-        float elapsedTime;
-        float frameDuration = 0.f;
-        sf::IntRect animations[4];
+        const sf::Vector2i ENEMY_SIZE = {80, 80};
+        int currentFrame = 0;
+        float elapsedTime = 0.0f, frameDuration = 0.f;
+        bool isAlive = true;
         sf::Sprite sprite;
         sf::Texture texture;
         b2Body* body;
+        b2Body* enemySensor;
+        EnemyState currentState = EnemyState::ENEMYIDLE;
+        std::unordered_map<EnemyState, Animation> animations;
+        Animation* currentAnimation = nullptr;
+
+        void setAnimation(EnemyState);
     public:
-        Ghost();
-        void logic() override;
-        void createBody(b2World*, float, float, float, float) override;
+        Ghost(b2World*, float, float);
+
         void update(float) override;
+        void logic(Player*) override;
         void loadTextures() override;
+        void takeDmg(float) override;
+        void destroy(b2World*) override;
         void render(sf::RenderWindow&) override;
+        float dealDmg() override;
+        float getHp() { return _hp; };
+        bool getIsAlive() override { return isAlive; };
+        sf::Sprite getSprite() override;
 };
 
-class Enemy2 : public Enemy
+class Skeleton : public Enemy
 {
     private:
+        int currentFrame = 0;
+        float elapsedTime = 0.0f, frameDuration = 0.f;
+        bool isAlive = true;
         sf::Sprite sprite;
         sf::Texture texture;
+        b2Body* body;
+        b2Body* enemySensor;
+        EnemyState currentState = EnemyState::ENEMYIDLE;
+        std::unordered_map<EnemyState, Animation> animations;
+        Animation* currentAnimation = nullptr;
+
+        void setAnimation(EnemyState) override {};
     public:
-        void logic() override;
-        void createBody(b2World*, float, float, float, float) override;
+        Skeleton(b2World*, float, float);
+
         void update(float) override;
+        void logic(Player*) override;
         void loadTextures() override;
+        void takeDmg(float) override;
+        void destroy(b2World*) override;
         void render(sf::RenderWindow&) override;
+        float dealDmg() override;
+        float getHp() { return _hp; };
+        bool getIsAlive() override { return true; };
+        sf::Sprite getSprite() override;
 };
 
-class Enemy3 : public Enemy
+class Goblin : public Enemy
 {
     private:
+        int currentFrame = 0;
+        float elapsedTime = 0.0f, frameDuration = 0.f;
+        bool isAlive = true;
         sf::Sprite sprite;
         sf::Texture texture;
+        b2Body* body;
+        b2Body* enemySensor;
+        EnemyState currentState = EnemyState::ENEMYIDLE;
+        std::unordered_map<EnemyState, Animation> animations;
+        Animation* currentAnimation = nullptr;
+
+        void setAnimation(EnemyState) override {};
     public:
-        void logic() override;
-        void createBody(b2World*, float, float, float, float) override;
+        Goblin(b2World*, float, float);
+
         void update(float) override;
+        void logic(Player*) override;
         void loadTextures() override;
+        void takeDmg(float) override;
+        void destroy(b2World*) override;
         void render(sf::RenderWindow&) override;
+        float dealDmg() override;
+        float getHp() { return _hp; };
+        bool getIsAlive() override { return true; };
+        sf::Sprite getSprite() override { return sprite; };
 };
 
-class EnemyFactory
+class EnemiesFactory
 {
     public:
-        virtual ~EnemyFactory();
-        Enemy* createEnemy(b2World*, int, float, float, float, float);
+        virtual ~EnemiesFactory() = default;
+        virtual Enemy* createEnemy(b2World*, float, float) = 0;
 };
 
-class GhostFactory : public EnemyFactory
+class GhostFactory : public EnemiesFactory
 {
-    Enemy* createEnemy(b2World*, int, float, float, float, float)
+    Enemy* createEnemy(b2World* world, float x, float y) override
     {
-        return new Ghost;
+        return new Ghost(world, x, y);
     };
 };
 
-class Enemy2Factory : public EnemyFactory
+class SkeletonFactory : public EnemiesFactory
 {
-    Enemy* createEnemy(b2World*, int, float, float, float, float)
+    Enemy* createEnemy(b2World* world, float x, float y) override
     {
-        return new Enemy2;
+        return new Skeleton(world, x, y);
     };
 };
 
-class Enemy3Factory : public EnemyFactory
+class GoblinFactory : public EnemiesFactory
 {
-    Enemy* createEnemy(b2World*, int, float, float, float, float)
+    Enemy* createEnemy(b2World* world, float x, float y) override
     {
-        return new Enemy3;
+        return new Goblin(world, x, y);
     };
 };
 

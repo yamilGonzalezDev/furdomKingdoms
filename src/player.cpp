@@ -3,7 +3,8 @@
 #include <iostream>
 
 Player::Player()
-    : isMoving(false), isJumping(false), isOnGround(true), isAttacking(false)
+    : _hp(100.f), _dmg(10.f), _armor(20.f), isMoving(false), isJumping(false),
+    isOnGround(true), isAttacking(false), canBeDamaged(true)
 {
 
 }
@@ -23,7 +24,7 @@ void Player::createPlayer(b2World* world, float posX, float posY)
     fixtureDef.density = 1.f;
     fixtureDef.friction = 0.3f;
     fixtureDef.filter.categoryBits = CATEGORY_PLAYER;
-    fixtureDef.filter.maskBits = CATEGORY_LIMITS | CATEGORY_GROUND | CATEGORY_FLOOR | CATEGORY_SENSOR;
+    fixtureDef.filter.maskBits = CATEGORY_LIMITS | CATEGORY_GROUND | CATEGORY_FLOOR | CATEGORY_SENSOR | CATEGORY_ENEMYSENSOR | CATEGORY_ENEMY;
     playerBody->CreateFixture(&fixtureDef);
 
     initBody(playerBody, Kind::PLAYER, this);
@@ -38,56 +39,134 @@ void Player::switchState(PlayerState state)
     currentState = state;
 }
 
-void Player::keyboardInput()
+void Player::timers(b2World* world, float deltaTime)
+{
+    if(isAttacking)
+    {
+        elapsedTime += deltaTime;
+        if(elapsedTime >= cooldown)
+        {
+            isAttacking = false;
+            elapsedTime = 0.f;
+            if(sword != nullptr)
+            {
+                world->DestroyBody(sword);
+                sword = nullptr;
+            }
+        }
+    }
+}
+
+void Player::keyboardInput(b2World* world)
 {
     velocity = playerBody->GetLinearVelocity();
 
-    if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && !isAttacking && isOnGround)
+    if(isAttacking)
     {
-        switchState(PlayerState::Attacking);
+        velocity = {0.f, 0.f};
+        playerBody->SetLinearVelocity(velocity);
         return;
     }
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && isOnGround && !isJumping)
+    if(!isAttacking)
     {
-        velocity.y = -10;
-        switchState(PlayerState::Jumping);
-        spriteScale = {1.5f, 1.5f};
-        isJumping = true;
-    }
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && isOnGround)
+        {
+            switchState(PlayerState::ATTACKING);
+            isAttacking = true;
+            if(sword == nullptr)
+            {
+                createAttackHitbox(world);
+            }
+            return;
+        }
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-    {
-        velocity.x = -MOVE_SPEED;
-        spriteScale = {-1.5, 1.5};
-        setIsMoving(true);
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && isOnGround && !isJumping)
+        {
+            velocity.y = -10;
+            switchState(PlayerState::JUMPING);
+            isJumping = true;
+        }
+
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        {
+            velocity.x = -MOVE_SPEED;
+            spriteScale = {-1.5, 1.5};
+            setIsMoving(true);
+        }
+        else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        {
+            velocity.x = MOVE_SPEED;
+            spriteScale = {1.5f, 1.5f};
+            setIsMoving(true);
+        }
+        else
+        {
+            velocity.x = 0.f;
+            setIsMoving(false);
+        }
+
+        if (velocity.y > 0 && !isOnGround)
+        {
+            switchState(PlayerState::FALLING);
+        }
+        else if (!isMoving && isOnGround && !isJumping)
+        {
+            switchState(PlayerState::IDLE);
+        }
+        else if (isMoving && isOnGround && !isJumping)
+        {
+            switchState(PlayerState::RUNNING);
+        }
+
+        playerBody->SetLinearVelocity(velocity);
     }
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+}
+
+void Player::takeDmg(float inputDmg)
+{
+    _hp -= inputDmg;
+
+    if(_hp <= 0)
     {
-        velocity.x = MOVE_SPEED;
-        spriteScale = {1.5f, 1.5f};
-        setIsMoving(true);
+        _hp = 0;
+        switchState(PlayerState::DEATH);
+    }
+}
+
+void Player::createAttackHitbox(b2World* world)
+{
+    b2Vec2 swordPos = playerBody->GetPosition();
+
+    if(spriteScale.x > 0)
+    {
+        swordPos.x += 20.f / PPM;
     }
     else
     {
-        velocity.x = 0.f;
-        setIsMoving(false);
+        swordPos.x -= 20.f / PPM;
     }
 
-    if (velocity.y > 0 && !isOnGround)
-    {
-        switchState(PlayerState::Falling);
-    }
-    else if (!isMoving && isOnGround && !isJumping)
-    {
-        switchState(PlayerState::Idle);
-    }
-    else if (isMoving && isOnGround && !isJumping)
-    {
-        switchState(PlayerState::Running);
-    }
+    b2BodyDef swordBodyDef;
+    swordBodyDef.type = b2_dynamicBody;
+    swordBodyDef.position.Set(swordPos.x, swordPos.y);
+    sword = world->CreateBody(&swordBodyDef);
 
-    playerBody->SetLinearVelocity(velocity);
+    b2PolygonShape attackBox;
+    attackBox.SetAsBox(15.f / PPM, 20.f / PPM);
+
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &attackBox;
+    fixtureDef.density = 0.f;
+    fixtureDef.friction = 0.f;
+    fixtureDef.filter.categoryBits = CATEGORY_SWORD;
+    fixtureDef.filter.maskBits = CATEGORY_ENEMY;
+
+    sword->CreateFixture(&fixtureDef);
+
+    sword->SetBullet(true);
+
+    initBody(sword, Kind::PLAYERSWORD, this);
 }
 
 void Player::setIsOnGround(bool v){ isOnGround = v; }
@@ -104,10 +183,7 @@ sf::Vector2f Player::getScale() const { return spriteScale; }
 
 b2Body* Player::getBody() { if(playerBody) return playerBody; else return nullptr; }
 
-Player::~Player()
-{
-
-}
+float Player::dealDamage() { return _dmg; }
 
 /**PlayerAnimations**/
 
@@ -120,14 +196,14 @@ PlayerAnimations::PlayerAnimations()
 
     sprite.setTexture(texture);
 
-    animations.emplace(PlayerState::Idle, Animation{
+    animations.emplace(PlayerState::IDLE, Animation{
         { sf::IntRect(0, 0, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
           sf::IntRect(50, 0, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
           sf::IntRect(100, 0, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
           sf::IntRect(150, 0, CHARACTER_SIZE.x, CHARACTER_SIZE.y) }, 0.15f
     });
 
-    animations.emplace(PlayerState::Running, Animation{
+    animations.emplace(PlayerState::RUNNING, Animation{
         { sf::IntRect(50, 37, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
           sf::IntRect(100, 37, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
           sf::IntRect(150, 37, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
@@ -136,7 +212,7 @@ PlayerAnimations::PlayerAnimations()
           sf::IntRect(300, 37, CHARACTER_SIZE.x, CHARACTER_SIZE.y) }, 0.1f
     });
 
-    animations.emplace(PlayerState::Jumping, Animation{
+    animations.emplace(PlayerState::JUMPING, Animation{
         { sf::IntRect(0, 74, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
           sf::IntRect(50, 74, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
           sf::IntRect(100, 74, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
@@ -147,14 +223,17 @@ PlayerAnimations::PlayerAnimations()
           sf::IntRect(0, 111, CHARACTER_SIZE.x, CHARACTER_SIZE.y) }, 0.082f
     });
 
-    animations.emplace(PlayerState::Falling, Animation{
+    animations.emplace(PlayerState::FALLING, Animation{
         { sf::IntRect(50, 111, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
           sf::IntRect(100, 111, CHARACTER_SIZE.x, CHARACTER_SIZE.y) }, 0.2f
     });
 
-    animations.emplace(PlayerState::Attacking, Animation{
-        { sf::IntRect(0, 148, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
-          sf::IntRect(50, 148, CHARACTER_SIZE.x, CHARACTER_SIZE.y) }, 0.08f
+    animations.emplace(PlayerState::ATTACKING, Animation{
+        { sf::IntRect(0, 222, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
+          sf::IntRect(50, 222, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
+          sf::IntRect(100, 222, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
+          sf::IntRect(150, 222, CHARACTER_SIZE.x, CHARACTER_SIZE.y),
+          sf::IntRect(200, 222, CHARACTER_SIZE.x, CHARACTER_SIZE.y) }, 0.08f
     });
 
     sprite.setTextureRect(animations.at(currentState).frames[0]);

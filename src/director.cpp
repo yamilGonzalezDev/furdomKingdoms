@@ -12,13 +12,10 @@ Director::Director() : WIDTH(1366), HEIGHT(768), fooDrawInstance(window)
 {
     window.create(sf::VideoMode(WIDTH, HEIGHT), "Furdom Kingdoms");
     window.setFramerateLimit(60);
-    nextScene = SceneState::House;
+    nextScene = SceneState::TEST;
     loaded = false;
     drawNpcs = false;
-    cargando = false;
-    aclarando = false;
     drawPlayer = false;
-    oscureciendo = true;
     drawEnemies = false;
     transitioning = true;
     transitionState = TransitionState::LOADING;
@@ -32,10 +29,21 @@ Director::Director() : WIDTH(1366), HEIGHT(768), fooDrawInstance(window)
     center.setOrigin(0.f, HEIGHT / 2.f);
     center.setOutlineColor(sf::Color::Red);
     center.setOutlineThickness(2.f);
+
+    if(!testText.loadFromFile("Textures/enemy/ghost/ghostSheet.png"))
+    {
+        std::cerr << "Error al cargar las texturas del ghost" << std::endl;
+    }
+
+    spriteTest.setTexture(testText);
+    spriteTest.setPosition(300.f, 300.f);
+    spriteTest.setScale(1.f, 1.f);
 }
 
 void Director::run() ///buclePrincipal();
 {
+    float cooldownTime = 1.0f;
+    float cooldownElapsed = cooldownTime;
     while(window.isOpen())
     {
         sf::Event event;
@@ -49,22 +57,28 @@ void Director::run() ///buclePrincipal();
 
         float deltaTime = clock.restart().asSeconds();
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-        {
-            /*static float cd = 0.f;
-            cd += deltaTime;
-                if(cd >= 2.f)
-                {
-                    if(someBool) someBool = false;
-                    else someBool = true;
-                    cd = 0.f;
-                }*/
+        cooldownElapsed += deltaTime;
 
-                /*sf::Vector2f imprimir = window.getView().getCenter();
-                std::cout << "x: " << imprimir.x << ", y: " << imprimir.y << std::endl;*/
-                view.setSize(WIDTH, HEIGHT);
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+        {
+            /*enemyFactory = std::make_unique<GhostFactory>();
+
+            enemies.push_back(enemyFactory->createEnemy(world, 800.f, 700.f));*/
         }
 
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::R) && cooldownElapsed >= cooldownTime)
+        {
+            cooldownElapsed = 0.0f;
+
+            if(view.getSize().x == WIDTH)
+            {
+                view.setSize(WIDTH * 2.3f, HEIGHT * 2.3f);
+            }
+            else
+            {
+                view.setSize(WIDTH, HEIGHT);
+            }
+        }
 
         debugA("Comienzo");
         updateScene(deltaTime);
@@ -87,7 +101,8 @@ void Director::update(float deltaTime)
     {
         if(window.hasFocus())
         {
-            player->keyboardInput();
+            player->timers(world, deltaTime);
+            player->keyboardInput(world);
         }
     }
     debugA("player");
@@ -97,12 +112,31 @@ void Director::update(float deltaTime)
     debugA("npcs");
     if(drawEnemies)
     {
+        for(auto it = enemies.begin(); it != enemies.end();)
+        {
+            Enemy* enemy = *it;
+
+            enemy->logic(player);
+            enemy->update(deltaTime);
+            enemy->render(window);
+
+            if(!enemy->getIsAlive())
+            {
+                enemy->destroy(world);
+                it = enemies.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
     }
     debugA("enemy");
 }
 
 void Director::updateScene(float deltaTime)
 {
+    debugA("Comienzo updateScene");
     if(!transitioning && currentScene != nullptr && currentScene->shouldTransition())
     {
         transitioning = true;
@@ -120,19 +154,22 @@ void Director::updateScene(float deltaTime)
             case TransitionState::LOADING:
                 switch(nextScene)
                 {
-                    case SceneState::Menu:
+                    case SceneState::MENU:
                         initMenuScene();
                         break;
-                    case SceneState::House:
+                    case SceneState::HOUSE:
                         initHouseScene();
                         break;
-                    case SceneState::City:
+                    case SceneState::CITY:
                         initCityScene();
                         break;
-                    case SceneState::Bar:
+                    case SceneState::BAR:
                         initBarScene();
                         break;
-                    case SceneState::Default:
+                    case SceneState::TEST:
+                        initTestScene();
+                        break;
+                    case SceneState::DEFAULT:
                         break;
                 }
                 transitionState = TransitionState::FADINGIN;
@@ -151,6 +188,7 @@ void Director::updateScene(float deltaTime)
         if(drawPlayer) currentScene->updatePlayer(deltaTime, player->getPos(), player->getScale(), player->getPlayerState());
         currentScene->update(window, deltaTime);
     }
+    debugA("Termino");
 }
 
 void Director::gameEvents()
@@ -159,11 +197,12 @@ void Director::gameEvents()
     {
         world->Step(timeStep, velocityIterations, positionIterations);
     }
+    debugA("Termino");
 }
 
 void Director::render()
 {
-    window.clear(sf::Color::Cyan);
+    window.clear(sf::Color::White);
     if(currentScene != nullptr)
     {
         currentScene->render(window);
@@ -173,19 +212,12 @@ void Director::render()
     }
     if(drawPlayer && player != nullptr)
     {
-        if(someBool)
-        {
-            view.setCenter(player->getPos().x * PPM, (player->getPos().y * PPM) - 50);
-            window.setView(view);
-        }        else
-        {
-            float deltuvieja = clock.restart().asSeconds();
-            zoomOut(window, 1.5f, 0.1f * deltuvieja);
-        }
+        view.setCenter(player->getPos().x * PPM, (player->getPos().y * PPM) - 50);
+        window.setView(view);
     }
     if(world)
     {
-        world->DebugDraw();
+        ///world->DebugDraw();
     }
     if(drawEnemies)
     {
@@ -215,15 +247,17 @@ void Director::initMenuScene()
 
 void Director::initHouseScene()
 {
-    initWorld();
+    initWorld(10.f);
 
     setScene(new HouseScene);
 
     boundFactory = std::make_unique<SensorFactory>();
 
-    /*sensor = boundFactory->createBound(world, 1000.f, 670.f, 100.f, 50.f, Kind::HOUSESENSOR);
+    sensor = boundFactory->createBound(world, 1000.f, 670.f, 100.f, 50.f, Kind::HOUSESENSOR);
 
-    sensor->addObserver(currentScene);*/
+    sensor->addObserver(currentScene);
+
+    boundFactory->createBound(world, 576.f, 712.f, 221.f, 8.f, Kind::FLOOR);
 
     drawPlayer = true;
 
@@ -233,9 +267,9 @@ void Director::initHouseScene()
 
     boundFactory->createWall(world, 791.f, 622.f, 8.f, 32.f, Kind::WALLS);
 
-    boundFactory->createWall(world, 576.f, 560.f, 272.f, 32.f, Kind::LIMITS);
-
     boundFactory->createBound(world, 577.f, 712.f, 223.f, 8.f, Kind::FLOOR);
+
+    boundFactory->createWall(world, 576.f, 560.f, 272.f, 32.f, Kind::LIMITS);
 
     boundFactory->createBound(world, 0.f, 723.f, 3000.f, 0.f, Kind::FLOOR);
 
@@ -245,7 +279,7 @@ void Director::initHouseScene()
 
 void Director::initCityScene()
 {
-    initWorld();
+    initWorld(10.f);
 
     setScene(new CityScene);
 
@@ -276,7 +310,7 @@ void Director::initCityScene()
 
 void Director::initBarScene()
 {
-    initWorld();
+    initWorld(10.f);
 
     setScene(new BarScene);
 
@@ -290,7 +324,7 @@ void Director::initBarScene()
 
     if(player != nullptr)
     {
-        player->playerBody->SetTransform(b2Vec2(0.f / PPM, 670.f / PPM), 0.0f);
+        player->playerBody->SetTransform(b2Vec2(4.f / PPM, 676.f / PPM), 0.0f);
     }
     else
     {
@@ -299,7 +333,40 @@ void Director::initBarScene()
     }
 }
 
-void Director::initWorld()
+void Director::initTestScene()
+{
+    initWorld(9.8f);
+
+    setScene(new TestScene);
+
+    boundFactory = std::make_unique<SensorFactory>();
+
+    boundFactory = std::make_unique<LimitsFactory>();
+
+    boundFactory->createBound(world, 700.f, 700.f, 700.f, 1.f, Kind::FLOOR);
+
+    enemyFactory = std::make_unique<GhostFactory>();
+
+    enemies.push_back(enemyFactory->createEnemy(world, 800.f, 700.f));
+
+    drawPlayer = true;
+
+    drawEnemies = true;
+
+    if(player != nullptr)
+    {
+        player->playerBody->SetTransform(b2Vec2(4.f / PPM, 676.f / PPM), 0.0f);
+    }
+    else
+    {
+        player = new Player;
+        player->createPlayer(world, 4.f, 676.f);
+    }
+
+    currentScene->setEnemySprites(enemies);
+}
+
+void Director::initWorld(float gravity)
 {
     if(world != nullptr)
     {
@@ -307,7 +374,7 @@ void Director::initWorld()
     }
     else
     {
-        world = new b2World(b2Vec2(0.f, 10.f));
+        world = new b2World(b2Vec2(0.f, gravity));
     }
 
     if(colisionCheck == nullptr)
@@ -388,25 +455,6 @@ void Director::fadeIn(float deltaTime)
     }
 }
 
-void Director::zoomOut(sf::RenderWindow& window, float zoomTarget, float zoomSpeed)
-{
-    static float currentZoom = 1.0f;
-
-    if(currentZoom < zoomTarget)
-    {
-        currentZoom += zoomSpeed;
-
-        if (currentZoom > zoomTarget)
-        {
-            currentZoom = zoomTarget;
-        }
-
-        sf::View view = window.getView();
-        view.setSize(window.getDefaultView().getSize() * currentZoom);
-        window.setView(view);
-    }
-}
-
 Director::~Director()
 {
 
@@ -417,8 +465,6 @@ Director::~Director()
             for(b2Body* body = world->GetBodyList(); body != nullptr;body = body->GetNext())
             {
                 UserdataTag* tag = reinterpret_cast<UserdataTag*>(body->GetUserData().pointer);
-
-                //std::cout << "Tag kind: " << static_cast<int>(tag->kind) << std::endl;
 
                 delete tag;
 

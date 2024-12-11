@@ -13,7 +13,7 @@ Limits::Limits(b2World* world, float x, float y, float width, float height, Kind
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &box;
-    fixtureDef.friction = .3f;
+    fixtureDef.friction = 0.f;
     fixtureDef.density = 0.f;
     fixtureDef.filter.categoryBits = CATEGORY_LIMITS;
     fixtureDef.filter.maskBits = 0xFFFF;

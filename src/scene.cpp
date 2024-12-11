@@ -108,7 +108,7 @@ void MenuScene::notify(ObserverEvents event)
 
 SceneState MenuScene::nextSceneState() const
 {
-    return SceneState::House;
+    return SceneState::HOUSE;
 }
 
 /**CASA**/
@@ -237,7 +237,7 @@ void HouseScene::notify(ObserverEvents event)
 
 SceneState HouseScene::nextSceneState() const
 {
-    return SceneState::City;
+    return SceneState::CITY;
 }
 
 /**CIUDAD**/
@@ -291,7 +291,7 @@ void CityScene::notify(ObserverEvents event)
 
 SceneState CityScene::nextSceneState() const
 {
-    return SceneState::Bar;
+    return SceneState::BAR;
 }
 
 /**BAR**/
@@ -324,7 +324,7 @@ void BarScene::render(sf::RenderWindow& window)
 
 SceneState BarScene::nextSceneState() const
 {
-    return SceneState::Default;
+    return SceneState::DEFAULT;
 }
 
 void BarScene::notify(ObserverEvents event)
@@ -335,4 +335,60 @@ void BarScene::notify(ObserverEvents event)
 bool BarScene::shouldTransition() const
 {
     return transition;
+}
+
+/**TEST**/
+
+TestScene::TestScene()
+{
+}
+
+void TestScene::notify(ObserverEvents event)
+{
+    if(event != ObserverEvents::DEFAULT) return;
+}
+
+void TestScene::render(sf::RenderWindow& window)
+{
+    for(auto& enemy : enemyReferences)
+    {
+        window.draw(enemy->getSprite());
+    }
+
+    playerAnimations.draw(window);
+}
+
+void TestScene::update(sf::RenderWindow& window, float deltaTime)
+{
+    for(auto it = enemyReferences.begin(); it != enemyReferences.end();)
+    {
+        if(!(*it)->getIsAlive())
+        {
+            it = enemyReferences.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+}
+
+void TestScene::updatePlayer(float deltaTime, b2Vec2 pos, sf::Vector2f spriteScale, PlayerState state)
+{
+    playerAnimations.update(deltaTime, pos, spriteScale, state);
+}
+
+bool TestScene::shouldTransition() const
+{
+    return false;
+}
+
+SceneState TestScene::nextSceneState() const
+{
+    return SceneState::DEFAULT;
+}
+
+void TestScene::setEnemySprites(const std::vector<Enemy*>& enemyReferences)
+{
+    this->enemyReferences = enemyReferences;
 }

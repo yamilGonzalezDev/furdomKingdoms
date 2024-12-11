@@ -39,26 +39,20 @@ class Director
         FooDraw fooDrawInstance;
         SceneState nextScene;
         TransitionState transitionState;
-        bool loaded;
-        bool fadingIn;
-        bool fadingOut;
-        bool drawNpcs;
-        bool cargando;
-        bool aclarando;
-        bool drawPlayer;
-        bool changeScene;
-        bool drawEnemies;
-        bool oscureciendo;
-        bool transitioning;
+        bool loaded, fadingIn, fadingOut, drawNpcs, drawPlayer, changeScene, drawEnemies, transitioning;
         int alpha = 255;
         float transitionTime = 0.f;
         float maxTransitionTime;
         sf::RectangleShape fadeRectangle, center;
 
-        b2World* world = nullptr;
-        b2Vec2 gravity;
+        sf::Texture testText;
+        sf::Sprite spriteTest;
 
+        b2World* world = nullptr;
+
+        std::vector<Enemy*> enemies;
         std::unique_ptr<BoundsFactory> boundFactory;
+        std::unique_ptr<EnemiesFactory> enemyFactory;
         Bounds* sensor = nullptr;
         Enemy* enemy = nullptr;
         Player* player = nullptr;
@@ -70,18 +64,19 @@ class Director
         void gameEvents();
         void render();
 
-        void initWorld();
+        void initWorld(float);
         void initCityScene();
         void initMenuScene();
         void initHouseScene();
         void initBarScene();
+        void initTestScene();
         void setScene(Scene*);
         void cleanScene(b2World*);
         void fadeOut(float);
         void fadeIn(float);
+        void Garcha(b2World* world);
 
-        void zoomOut(sf::RenderWindow&, float, float);
-        bool someBool = true;
+        b2Vec2 getMousePositionInWorld(const sf::RenderWindow&);
 };
 
 #endif // DIRECTOR_HPP_INCLUDED

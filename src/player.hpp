@@ -10,11 +10,12 @@ const float PPM = 30.f;
 
 enum class PlayerState
 {
-    Idle,
-    Running,
-    Jumping,
-    Falling,
-    Attacking
+    IDLE,
+    RUNNING,
+    JUMPING,
+    FALLING,
+    ATTACKING,
+    DEATH
 };
 
 struct Animation
@@ -31,29 +32,33 @@ class Player
 {
     public:
         Player();
-        ~Player();
+        ~Player() {};
         b2Body* playerBody;
-        void keyboardInput();
+        void keyboardInput(b2World*);
         void createPlayer(b2World*, float, float);
-
+        void timers(b2World*, float);
+        void takeDmg(float);
         void setIsMoving(bool);
         void setIsJumping(bool);
         void setIsOnGround(bool);
+
+        float dealDamage();
 
         b2Body* getBody();
         b2Vec2 getPos() const;
         sf::Vector2f getScale() const;
         PlayerState getPlayerState() const;
     private:
+        float _hp, _dmg, _armor;
+        float elapsedTime = 0.f, cooldown = 0.38f;
         const float MOVE_SPEED = 10.f;
-        PlayerState currentState = PlayerState::Idle;
-        bool isMoving;
-        bool isJumping;
-        bool isOnGround;
-        bool isAttacking;
+        bool isMoving, isJumping, isOnGround, isAttacking, canBeDamaged;
         b2Vec2 velocity;
+        b2Body* sword = nullptr;
         sf::Vector2f spriteScale = {1.5f, 1.5f};
+        PlayerState currentState = PlayerState::IDLE;
         void switchState(PlayerState);
+        void createAttackHitbox(b2World*);
 };
 
 class PlayerAnimations
@@ -68,7 +73,7 @@ class PlayerAnimations
         sf::Texture texture;
         std::unordered_map<PlayerState, Animation> animations;
         Animation* currentAnimation = nullptr;
-        PlayerState currentState = PlayerState::Idle;
+        PlayerState currentState = PlayerState::IDLE;
         int currentFrame = 0;
         float elapsedTime = 0.0f;
         void setAnimation(PlayerState);

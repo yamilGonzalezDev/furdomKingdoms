@@ -5,14 +5,16 @@
 #include <iostream>
 #include "observer.hpp"
 #include "player.hpp"
+#include "enemy.hpp"
 
 enum class SceneState
 {
-    Menu,
-    House,
-    City,
-    Bar,
-    Default
+    MENU,
+    HOUSE,
+    CITY,
+    BAR,
+    TEST,
+    DEFAULT
 };
 
 class Scene : public Observer
@@ -35,6 +37,7 @@ class Scene : public Observer
 
         virtual SceneState nextSceneState() const = 0;
 
+        virtual void setEnemySprites(const std::vector<Enemy*>& enemiesReferences) {};
 };
 
 class MenuScene : public Scene
@@ -146,12 +149,17 @@ class BarScene : public Scene
 class TestScene : public Scene
 {
     public:
+        TestScene();
+
         void notify(ObserverEvents) override;
         void render(sf::RenderWindow&) override;
         void update(sf::RenderWindow&, float) override;
         void updatePlayer(float, b2Vec2, sf::Vector2f, PlayerState) override;
         bool shouldTransition() const override;
         SceneState nextSceneState() const override;
+        void setEnemySprites(const std::vector<Enemy*>&) override;
+    private:
+        std::vector<Enemy*> enemyReferences;
 };
 
 #endif // SCENE_HPP_INCLUDED
