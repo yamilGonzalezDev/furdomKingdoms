@@ -1,15 +1,17 @@
 #ifndef DIRECTOR_HPP_INCLUDED
 #define DIRECTOR_HPP_INCLUDED
 
+#include <SFML/Graphics.hpp>
+#include <box2d/box2d.h>
 #include <memory>
 #include "enemy.hpp"
-#include "npc.hpp"
-#include "player.hpp"
+//#include "npc.hpp"
+//#include "player.hpp"
 #include "limits.hpp"
 #include "colisions.hpp"
 #include "scene.hpp"
 #include "fooDraw.hpp"
-#include "observer.hpp"
+//#include "observer.hpp"
 #include "sceneState.hpp"
 
 enum class TransitionState

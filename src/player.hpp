@@ -55,7 +55,7 @@ class Player
     private:
         float _hp, _dmg, _armor;
         float elapsedTime = 0.f, elapsedDamageTime = 0.f, cooldown = 0.38f, damageCooldown = 0.38f;
-        const float MOVE_SPEED = 100.f;
+        const float MOVE_SPEED = 10.f;
         bool isMoving, isJumping, isOnGround, isAttacking, canBeDamaged, isAlive;
         b2Vec2 velocity;
         b2Body* sword = nullptr;

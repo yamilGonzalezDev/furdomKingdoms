@@ -1,5 +1,4 @@
 #include "colisions.hpp"
-#include <iostream>
 #include "player.hpp"
 #include "entity.hpp"
 #include "limits.hpp"
@@ -149,7 +148,7 @@ void Colision::BeginContact(b2Contact* contact)
 
     if(tagA->kind == Kind::PLAYER && tagB->kind == Kind::CASTLE)
     {
-        Sensor* sensor = reinterpret_cast<Sensor*>(tagA->object);
+        Sensor* sensor = reinterpret_cast<Sensor*>(tagB->object);
         sensor->eventTrigger(ObserverEvents::TRANSITION);
         sensor->sensorTrigger(true, SceneState::CASTLE);
     }
