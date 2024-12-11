@@ -912,7 +912,7 @@
 	<algorithm>
 	"sceneState.hpp"
 
-1733917654 d:\utn\progra2\furdomkingdoms\src\player.hpp
+1733918184 d:\utn\progra2\furdomkingdoms\src\player.hpp
 	<SFML/Graphics.hpp>
 	<box2d/box2d.h>
 	<unordered_map>
@@ -1422,7 +1422,7 @@
 	"entity.hpp"
 	<iostream>
 
-1733916398 source:d:\utn\progra2\furdomkingdoms\src\scene.cpp
+1733919375 source:d:\utn\progra2\furdomkingdoms\src\scene.cpp
 	"scene.hpp"
 	"entity.hpp"
 	"sceneState.hpp"
@@ -1430,7 +1430,7 @@
 1730848689 source:d:\utn\progra2\furdomkingdoms\src\texts.cpp
 	"texts.hpp"
 
-1733917480 source:d:\utn\progra2\furdomkingdoms\src\director.cpp
+1733919865 source:d:\utn\progra2\furdomkingdoms\src\director.cpp
 	<iostream>
 	"director.hpp"
 	"colisions.hpp"

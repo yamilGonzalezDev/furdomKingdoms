@@ -534,16 +534,9 @@ ForestScene::ForestScene()
     {
         std::cerr << "Error al cargar la textura" << std::endl;
     }
-     if(!plantaTexture.loadFromFile("Textures/Forest/plantitas.png"))
-    {
-        std::cerr << "Error al cargar la textura" << std::endl;
-    }
 
     background.setTexture(backgroundTexture);
     background.setPosition(0.f, 400.f);
-
-    planta.setTexture(plantaTexture);
-    planta.setPosition(0.f, 400.f);
 
     fondo.setTexture(fondoTexture);
     fondo.setPosition(-500.f, 150.f);
@@ -552,7 +545,7 @@ ForestScene::ForestScene()
 
 void ForestScene::update(sf::RenderWindow& window, float deltaTime)
 {
-if(sensorActive && sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+    if(sensorActive && sf::Keyboard::isKeyPressed(sf::Keyboard::E))
     {
         transition = true;
     }
@@ -617,8 +610,6 @@ DungeonScene::DungeonScene()
 
 void DungeonScene::update(sf::RenderWindow& window, float deltaTime)
 {
-
-
     for(auto& npc : npcs){
         npc->update(deltaTime);
     }
@@ -631,7 +622,6 @@ void DungeonScene::updatePlayer(float deltaTime, b2Vec2 pos, sf::Vector2f sprite
 
 void DungeonScene::render(sf::RenderWindow& window)
 {
-
     window.draw(background);
 
     playerAnimations.draw(window);
@@ -654,9 +644,6 @@ bool DungeonScene::shouldTransition() const
 
 void DungeonScene::sensorNotify(bool v,SceneState nextState)
 {
-    if(nextState == SceneState::DUNGEON){
-    nextScene = SceneState::CASTLE;
-    }
 }
 
 /*CASTILLO*/

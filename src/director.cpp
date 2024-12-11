@@ -7,7 +7,7 @@ Director::Director() : WIDTH(1366), HEIGHT(768), fooDrawInstance(window)
 {
     window.create(sf::VideoMode(WIDTH, HEIGHT), "Furdom Kingdoms");
     window.setFramerateLimit(60);
-    nextScene = SceneState::TEST;
+    nextScene = SceneState::CITY;
     gameOver = false;
     drawPlayer = false;
     drawEnemies = false;
@@ -49,16 +49,21 @@ void Director::run() ///buclePrincipal();
 
         float deltaTime = clock.restart().asSeconds();
 
+        std::cout << "Mensaje comienzo" << std::endl;
         updateScene(deltaTime);
+        std::cout << "Mensaje updateScene" << std::endl;
         if(!gameOver)
         {
             if(!transitioning)
             {
                 update(deltaTime);
+                std::cout << "Mensaje de update" << std::endl;
                 gameEvents();
+                std::cout << "Mensaje de gameEvents" << std::endl;
             }
         }
         render();
+        std::cout << "Mensaje render" << std::endl;
     }
 }
 
@@ -99,9 +104,11 @@ void Director::updateScene(float deltaTime)
 {
     if(!transitioning && currentScene != nullptr && currentScene->shouldTransition())
     {
+        std::cout << "Entro" << std::endl;
         transitioning = true;
         nextScene = currentScene->nextSceneState();
         transitionState = TransitionState::FADINGOUT;
+        std::cout << "transitioning" << transitioning << std::endl;
     }
 
     if(transitioning || gameOver)
@@ -178,10 +185,12 @@ void Director::updateScene(float deltaTime)
 
 void Director::gameEvents()
 {
+    std::cout << "Entro" << std::endl;
     if(world != nullptr)
     {
         world->Step(timeStep, velocityIterations, positionIterations);
     }
+    std::cout << "Llego" << std::endl;
 }
 
 void Director::render()
@@ -586,11 +595,11 @@ void Director::initCastleScene()
 
     setScene(new CastleScene);
 
-    drawPlayer = true;
-
     boundFactory = std::make_unique<LimitsFactory>();
 
     boundFactory->createBound(world, 0.f, 723.f, 3000.f, 0.f, Kind::FLOOR);
+
+    drawPlayer = true;
 
     if(player != nullptr)
     {

@@ -153,6 +153,7 @@ void Colision::BeginContact(b2Contact* contact)
         sensor->eventTrigger(ObserverEvents::TRANSITION);
         sensor->sensorTrigger(true, SceneState::CASTLE);
     }
+
     if(tagB->kind == Kind::PLAYER && tagA->kind == Kind::CASTLE)
     {
         Sensor* sensor = reinterpret_cast<Sensor*>(tagA->object);
